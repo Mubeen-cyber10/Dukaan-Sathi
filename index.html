@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dukaan Saathi – Digital Khata & Storefront for Pakistani Shops</title>
+  <meta name="description" content="Dukaan Saathi is a calm, tamper-evident digital khata, storefront, inventory & order tracker for local shopkeepers in Pakistan.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <!-- PUBLIC HEADER (Sticky 68px) -->
+  <header class="pub-header">
+    <div class="container pub-navbar">
+      <a href="index.html" class="brand-logo" aria-label="Dukaan Saathi Home">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>Dukaan Saathi</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link nav-link--active">Home</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="security.html" class="nav-link">Security</a></li>
+        </ul>
+      </nav>
+
+      <div class="pub-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <a href="login.html" class="btn btn--outline btn--sm">Log in</a>
+        <a href="login.html" class="btn btn--primary btn--sm">Get started</a>
+        <button class="hamburger" aria-label="Toggle mobile menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SLIDE-DOWN MENU -->
+  <div class="mobile-nav-menu">
+    <a href="index.html" class="nav-link nav-link--active">Home</a>
+    <a href="features.html" class="nav-link">Features</a>
+    <a href="pricing.html" class="nav-link">Pricing</a>
+    <a href="security.html" class="nav-link">Security</a>
+    <hr style="border:none; border-top: 1px solid var(--border);">
+    <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Log in</a>
+    <a href="login.html" class="btn btn--primary w-full" style="text-align:center;">Get started free</a>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Trusted by 10,000+ local shopkeepers</span>
+        </div>
+        <h1 class="hero-title">Your shop's khata & orders, <span>safe and warm.</span></h1>
+        <p class="hero-subtitle">Record credit sales (udhaar), track payments, manage stock and give your customers peace of mind. Built specifically for local Pakistani dukaans.</p>
+        <div class="flex gap-16" style="flex-wrap: wrap;">
+          <a href="login.html" class="btn btn--primary btn--lg">Open your digital shop</a>
+          <a href="features.html" class="btn btn--outline btn--lg">Explore features</a>
+        </div>
+      </div>
+
+      <!-- PHONE-STYLE KHATA APP MOCKUP -->
+      <div>
+        <div class="phone-mockup">
+          <div class="phone-header">
+            <div class="flex justify-between items-center mb-8">
+              <div>
+                <span class="text-xs text-muted" style="color: rgba(255,255,255,0.8);">Bismillah General Store</span>
+                <h4 style="font-size: 1.1rem; font-weight: 700;">Digital Khata</h4>
+              </div>
+              <span class="badge" style="background: rgba(255,255,255,0.2); color:#fff;">Live Demo</span>
+            </div>
+            <div class="flex justify-between items-center" style="margin-top: 12px; background: rgba(0,0,0,0.15); padding: 10px 14px; border-radius: 10px;">
+              <span class="text-sm">Total Udhaar Due</span>
+              <span class="text-lg font-bold tabular-nums">Rs. 55,800</span>
+            </div>
+          </div>
+
+          <div class="phone-body">
+            <div class="phone-card">
+              <div class="flex items-center gap-12">
+                <div class="avatar">AR</div>
+                <div>
+                  <div class="font-semibold text-sm">Ahmed Raza</div>
+                  <div class="text-xs text-muted">0300-***-**45</div>
+                </div>
+              </div>
+              <span class="badge badge--due tabular-nums">Rs. 4,500 due</span>
+            </div>
+
+            <div class="phone-card">
+              <div class="flex items-center gap-12">
+                <div class="avatar" style="background: var(--success-soft); color: var(--success);">SM</div>
+                <div>
+                  <div class="font-semibold text-sm">Sana Malik</div>
+                  <div class="text-xs text-muted">Cleared Today</div>
+                </div>
+              </div>
+              <span class="badge badge--settled">Settled</span>
+            </div>
+
+            <div class="phone-card">
+              <div class="flex items-center gap-12">
+                <div class="avatar">BH</div>
+                <div>
+                  <div class="font-semibold text-sm">Bilal Hussain</div>
+                  <div class="text-xs text-muted">0321-***-**12</div>
+                </div>
+              </div>
+              <span class="badge badge--due tabular-nums">Rs. 12,000 due</span>
+            </div>
+
+            <a href="login.html" class="btn btn--primary btn--sm w-full" style="margin-top: 8px;">+ Record New Entry</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP WITH COUNT-UP -->
+  <section class="stats-strip">
+    <div class="container stats-grid">
+      <div>
+        <div class="stat-val count-up" data-target="10000" data-suffix="+">0</div>
+        <div class="text-sm text-muted font-medium">Active Dukaans</div>
+      </div>
+      <div>
+        <div class="stat-val count-up" data-target="50" data-prefix="Rs. " data-suffix="M+">0</div>
+        <div class="text-sm text-muted font-medium">Udhaar Recorded</div>
+      </div>
+      <div>
+        <div class="stat-val count-up" data-target="99.9" data-suffix="%">0</div>
+        <div class="text-sm text-muted font-medium">Uptime Guarantee</div>
+      </div>
+      <div>
+        <div class="stat-val count-up" data-target="0" data-prefix="Rs. ">0</div>
+        <div class="text-sm text-muted font-medium">Commission Fees</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-STEP HOW IT WORKS -->
+  <section style="padding: 80px 0;">
+    <div class="container">
+      <div class="text-center" style="max-width: 600px; margin: 0 auto 48px;">
+        <span class="hero-pill">Simple Onboarding</span>
+        <h2 class="text-3xl font-extrabold mb-12">How Dukaan Saathi Works</h2>
+        <p class="text-muted">No expensive POS devices needed. Start tracking your shop's credit ledger in 3 quick steps.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card text-center">
+          <div class="brand-icon" style="margin: 0 auto 20px; width: 48px; height: 48px; font-size: 1.25rem;">1</div>
+          <h3 class="text-xl font-bold mb-8">Set Up Your Shop</h3>
+          <p class="text-muted text-sm">Register your shop name, add your staff, and choose your local currency settings.</p>
+        </div>
+
+        <div class="card text-center">
+          <div class="brand-icon" style="margin: 0 auto 20px; width: 48px; height: 48px; font-size: 1.25rem;">2</div>
+          <h3 class="text-xl font-bold mb-8">Add Customers</h3>
+          <p class="text-muted text-sm">Add customer names and phone numbers. Import existing paper register balances seamlessly.</p>
+        </div>
+
+        <div class="card text-center">
+          <div class="brand-icon" style="margin: 0 auto 20px; width: 48px; height: 48px; font-size: 1.25rem;">3</div>
+          <h3 class="text-xl font-bold mb-8">Log Udhaar & Payments</h3>
+          <p class="text-muted text-sm">Record credit sales (+ Give) and payments (- Get). Every transaction is locked into the tamper-evident ledger.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOPKEEPER TESTIMONIALS -->
+  <section style="padding: 80px 0; background-color: var(--surface-2);">
+    <div class="container">
+      <div class="text-center" style="max-width: 600px; margin: 0 auto 48px;">
+        <h2 class="text-3xl font-extrabold mb-12">Loved by Local Shopkeepers</h2>
+        <p class="text-muted">See what shop owners across Multan, Lahore and Karachi say about Dukaan Saathi.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <p class="text-sm mb-16" style="font-style: italic;">"Paper khata registers used to get damaged or disputed. Dukaan Saathi gives my customers confidence because every payment is recorded with a clear timestamp."</p>
+          <div class="flex items-center gap-12">
+            <div class="avatar">HS</div>
+            <div>
+              <div class="font-bold text-sm">Hamza Sahab</div>
+              <div class="text-xs text-muted">Bismillah General Store, Multan</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="text-sm mb-16" style="font-style: italic;">"The best part is zero commission. I pay a small monthly subscription and keep 100% of my profits. The dark mode is also very easy on the eyes at night."</p>
+          <div class="flex items-center gap-12">
+            <div class="avatar">TM</div>
+            <div>
+              <div class="font-bold text-sm">Tariq Mehmood</div>
+              <div class="text-xs text-muted">Tariq Traders, Lahore</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="text-sm mb-16" style="font-style: italic;">"My staff can log customer credits on their phone while I monitor the total outstanding from home. Multi-factor auth keeps our store data safe."</p>
+          <div class="flex items-center gap-12">
+            <div class="avatar">AR</div>
+            <div>
+              <div class="font-bold text-sm">Ahmed Raza</div>
+              <div class="text-xs text-muted">Raza Mart, Karachi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ACCORDION -->
+  <section style="padding: 80px 0;">
+    <div class="container" style="max-width: 800px;">
+      <div class="text-center mb-32">
+        <h2 class="text-3xl font-extrabold mb-12">Frequently Asked Questions</h2>
+        <p class="text-muted">Got questions about Dukaan Saathi? We've got answers.</p>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion-item accordion-item--open">
+          <button class="accordion-header">
+            <span>Is Dukaan Saathi completely free to start?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <p class="text-muted text-sm">Yes! The Free plan gives you complete digital khata access for up to 25 customers with zero credit card required.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span>Can entries be edited or deleted once created?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <p class="text-muted text-sm">No. To ensure complete audit integrity and prevent fraud, entries in Dukaan Saathi are append-only. Any corrections must be added as a new reversal or adjustment entry.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span>Is my shop data isolated from other shops?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <p class="text-muted text-sm">Absolutly. Dukaan Saathi enforces strict multi-tenant isolation so no other shop owner or customer can view your store's inventory, orders, or khata balances.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section style="padding: 60px 0; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); color: #fff;">
+    <div class="container text-center">
+      <h2 class="text-3xl font-extrabold mb-16">Ready to digitize your dukaan today?</h2>
+      <p style="opacity: 0.9; max-width: 500px; margin: 0 auto 28px;">Join thousands of shopkeepers managing their credit ledgers with zero hassle.</p>
+      <a href="login.html" class="btn btn--lg" style="background: #fff; color: var(--primary); font-weight: 700;">Get Started Now – Free</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background-color: var(--surface); border-top: 1px solid var(--border); padding: 60px 0 30px;">
+    <div class="container">
+      <div class="grid-4" style="margin-bottom: 40px;">
+        <div>
+          <a href="index.html" class="brand-logo mb-16">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            </div>
+            <span>Dukaan Saathi</span>
+          </a>
+          <p class="text-sm text-muted">A calm, trustworthy digital partner for local shopkeepers across Pakistan.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-sm mb-16" style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Product</h4>
+          <div class="flex flex-col gap-8 text-sm">
+            <a href="features.html" class="text-muted">Features</a>
+            <a href="pricing.html" class="text-muted">Pricing</a>
+            <a href="security.html" class="text-muted">Security Architecture</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-sm mb-16" style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Application</h4>
+          <div class="flex flex-col gap-8 text-sm">
+            <a href="login.html" class="text-muted">Shop Owner Portal</a>
+            <a href="app-dashboard.html" class="text-muted">Live Prototype Dashboard</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-sm mb-16" style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Course Project</h4>
+          <p class="text-xs text-muted">Secure Software Development course project. Front-end prototype build for semester evaluation.</p>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); padding-top: 24px;" class="flex justify-between items-center flex-wrap gap-12 text-xs text-muted">
+        <div>&copy; 2026 Dukaan Saathi. Built with warm orange fintech aesthetics.</div>
+        <div>Ahmad Abdullah (23F-3027) &bull; Muhammad Mubeen (23F-3055)</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

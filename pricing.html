@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Plans – Dukaan Saathi</title>
+  <meta name="description" content="Simple, transparent pricing for Pakistani local shops with zero commission.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <!-- PUBLIC HEADER (Sticky 68px) -->
+  <header class="pub-header">
+    <div class="container pub-navbar">
+      <a href="index.html" class="brand-logo" aria-label="Dukaan Saathi Home">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>Dukaan Saathi</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link nav-link--active">Pricing</a></li>
+          <li><a href="security.html" class="nav-link">Security</a></li>
+        </ul>
+      </nav>
+
+      <div class="pub-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <a href="login.html" class="btn btn--outline btn--sm">Log in</a>
+        <a href="login.html" class="btn btn--primary btn--sm">Get started</a>
+        <button class="hamburger" aria-label="Toggle mobile menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SLIDE-DOWN MENU -->
+  <div class="mobile-nav-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="features.html" class="nav-link">Features</a>
+    <a href="pricing.html" class="nav-link nav-link--active">Pricing</a>
+    <a href="security.html" class="nav-link">Security</a>
+    <hr style="border:none; border-top: 1px solid var(--border);">
+    <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Log in</a>
+    <a href="login.html" class="btn btn--primary w-full" style="text-align:center;">Get started free</a>
+  </div>
+
+  <section style="padding: 60px 0 80px;">
+    <div class="container">
+      <div class="text-center" style="max-width: 600px; margin: 0 auto 40px;">
+        <span class="hero-pill">Transparent Subscription</span>
+        <h1 class="text-4xl font-extrabold mb-16">Zero Commission. Flat Pricing.</h1>
+        <p class="text-muted text-lg">Choose a plan that fits your dukaan's size. Upgrade or downgrade anytime.</p>
+
+        <!-- MONTHLY / YEARLY TOGGLE -->
+        <div class="chip-group justify-center" style="margin-top: 24px;">
+          <button class="chip chip--active" id="btn-billing-monthly">Monthly Billing</button>
+          <button class="chip" id="btn-billing-yearly">Yearly Billing <span class="badge badge--settled" style="margin-left:4px;">Save 20%</span></button>
+        </div>
+      </div>
+
+      <!-- PRICING CARDS GRID -->
+      <div class="grid-3" style="align-items: stretch;">
+        <!-- FREE PLAN -->
+        <div class="card flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold mb-8">Free Starter</h3>
+            <p class="text-sm text-muted mb-24">Ideal for small neighborhood shops starting out with credit ledgers.</p>
+            <div class="mb-24">
+              <span class="text-3xl font-extrabold tabular-nums price-val" data-monthly="Rs. 0" data-yearly="Rs. 0">Rs. 0</span>
+              <span class="text-muted text-sm price-period">/ month</span>
+            </div>
+            <hr style="border:none; border-top: 1px solid var(--border); margin-bottom: 24px;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;" class="text-sm text-muted mb-32">
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 1 Shop Tenant</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Up to 25 Khata Customers</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Append-Only Ledger</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Basic Reports</li>
+            </ul>
+          </div>
+          <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Start Free Plan</a>
+        </div>
+
+        <!-- STANDARD PLAN (HIGHLIGHTED) -->
+        <div class="card flex flex-col justify-between" style="border: 2px solid var(--primary); position: relative; box-shadow: var(--shadow);">
+          <span class="badge" style="position: absolute; top: -12px; right: 24px; background: var(--primary); color: #fff; padding: 4px 14px; font-weight: 700;">Most Popular</span>
+          <div>
+            <h3 class="text-xl font-bold mb-8">Standard Shop</h3>
+            <p class="text-sm text-muted mb-24">For growing local general stores needing full inventory & staff accounts.</p>
+            <div class="mb-24">
+              <span class="text-3xl font-extrabold tabular-nums price-val" data-monthly="Rs. 1,500" data-yearly="Rs. 1,200">Rs. 1,500</span>
+              <span class="text-muted text-sm price-period">/ month</span>
+            </div>
+            <hr style="border:none; border-top: 1px solid var(--border); margin-bottom: 24px;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;" class="text-sm text-muted mb-32">
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Khata Customers</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Full 6 Core Modules</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 3 Staff Accounts with Roles</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Low-Stock Alerts</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Priority WhatsApp Support</li>
+            </ul>
+          </div>
+          <a href="login.html" class="btn btn--primary w-full" style="text-align:center;">Get Started Standard</a>
+        </div>
+
+        <!-- PRO PLAN -->
+        <div class="card flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold mb-8">Multi-Branch Pro</h3>
+            <p class="text-sm text-muted mb-24">For merchants running multiple shop branches across Pakistan.</p>
+            <div class="mb-24">
+              <span class="text-3xl font-extrabold tabular-nums price-val" data-monthly="Rs. 3,500" data-yearly="Rs. 2,800">Rs. 3,500</span>
+              <span class="text-muted text-sm price-period">/ month</span>
+            </div>
+            <hr style="border:none; border-top: 1px solid var(--border); margin-bottom: 24px;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;" class="text-sm text-muted mb-32">
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Up to 5 Shop Tenants</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Everything</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 10 Staff Accounts</li>
+              <li class="flex items-center gap-8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Dedicated Account Manager</li>
+            </ul>
+          </div>
+          <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Contact Sales</a>
+        </div>
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <div style="margin-top: 80px;">
+        <h2 class="text-2xl font-extrabold text-center mb-32">Plan Feature Comparison</h2>
+        <div class="table-container" style="display: block;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Free</th>
+                <th>Standard (Rs. 1,500)</th>
+                <th>Pro (Rs. 3,500)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-semibold">Khata Customer Limit</td>
+                <td>25 Customers</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Tamper-Evident Ledger</td>
+                <td>Included</td>
+                <td>Included</td>
+                <td>Included</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Order Status Tracker</td>
+                <td>Basic</td>
+                <td>Full 6 States</td>
+                <td>Full 6 States</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Staff Roles (Cashiers)</td>
+                <td>0</td>
+                <td>3 Staff</td>
+                <td>10 Staff</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Multi-Factor Auth (MFA)</td>
+                <td>Included</td>
+                <td>Included</td>
+                <td>Included</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background-color: var(--surface); border-top: 1px solid var(--border); padding: 40px 0;">
+    <div class="container text-center text-sm text-muted">
+      &copy; 2026 Dukaan Saathi &bull; Simple Transparent Pricing
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    const btnMonthly = document.getElementById('btn-billing-monthly');
+    const btnYearly = document.getElementById('btn-billing-yearly');
+    const priceVals = document.querySelectorAll('.price-val');
+    const pricePeriods = document.querySelectorAll('.price-period');
+
+    btnMonthly.addEventListener('click', () => {
+      btnMonthly.classList.add('chip--active');
+      btnYearly.classList.remove('chip--active');
+      priceVals.forEach(el => {
+        el.textContent = el.getAttribute('data-monthly');
+      });
+      pricePeriods.forEach(el => el.textContent = '/ month');
+    });
+
+    btnYearly.addEventListener('click', () => {
+      btnYearly.classList.add('chip--active');
+      btnMonthly.classList.remove('chip--active');
+      priceVals.forEach(el => {
+        el.textContent = el.getAttribute('data-yearly');
+      });
+      pricePeriods.forEach(el => el.textContent = '/ month (billed yearly)');
+    });
+  </script>
+</body>
+</html>

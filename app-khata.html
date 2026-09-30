@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Khata – Dukaan Saathi App</title>
+  <meta name="description" content="Tamper-evident credit ledger management.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <div class="app-layout">
+    <!-- APP SIDEBAR -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="index.html" class="brand-logo mb-24">
+          <div class="brand-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </div>
+          <span>Dukaan Saathi</span>
+        </a>
+
+        <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
+          <div class="text-xs text-muted">ACTIVE SHOP</div>
+          <div class="font-bold text-sm">Bismillah General Store</div>
+          <div class="badge badge--role mt-4">Shop Owner</div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="app-dashboard.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="app-khata.html" class="sidebar-link sidebar-link--active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Digital Khata</span>
+          </a>
+          <a href="app-orders.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span>Orders</span>
+          </a>
+          <a href="app-inventory.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <span>Inventory</span>
+          </a>
+          <a href="app-reports.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Reports</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="text-xs text-muted text-center">Multan Tenant Isolated &bull; v2.4</div>
+    </aside>
+
+    <!-- MAIN APP CONTENT -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="flex items-center gap-12">
+          <h2 class="text-lg font-bold">Tamper-Evident Khata Ledger</h2>
+          <span class="badge badge--due">Append-Only Mode</span>
+        </div>
+
+        <div class="flex items-center gap-16">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+          <div class="user-menu-wrapper">
+            <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
+              <span class="text-sm font-semibold">Hamza Sahab</span>
+            </button>
+            <div class="user-menu-dropdown">
+              <a href="login.html" class="dropdown-item dropdown-item--danger">Log Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- TOOLBAR: SEARCH, FILTERS, SORT & NEW ENTRY BUTTON -->
+        <div class="card mb-24" style="padding: 18px 24px;">
+          <div class="flex justify-between items-center flex-wrap gap-16">
+            <div class="flex items-center gap-12 flex-1" style="min-width: 280px;">
+              <div class="input-wrapper" style="max-width: 320px;">
+                <input class="input" type="search" id="khata-search" placeholder="Search customer name or phone...">
+              </div>
+
+              <!-- Filter Chips -->
+              <div class="chip-group" id="khata-chips">
+                <button class="chip chip--active" data-filter="all">All</button>
+                <button class="chip" data-filter="due">Has Dues</button>
+                <button class="chip" data-filter="settled">Settled</button>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-12">
+              <select class="input" id="khata-sort" style="width: auto; padding: 10px 14px;">
+                <option value="due-desc">Highest Due First</option>
+                <option value="recent">Recent Activity</option>
+                <option value="name-asc">Name A-Z</option>
+              </select>
+
+              <button class="btn btn--primary" id="btn-open-new-entry">+ New Entry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKELETON SHIMMER CONTAINER (Simulates 500ms load) -->
+        <div id="skeleton-loader" class="flex flex-col gap-12 mb-24">
+          <div class="skeleton" style="height: 54px;"></div>
+          <div class="skeleton" style="height: 54px;"></div>
+          <div class="skeleton" style="height: 54px;"></div>
+          <div class="skeleton" style="height: 54px;"></div>
+        </div>
+
+        <!-- CUSTOMER DATA TABLE (Desktop View) -->
+        <div class="table-container hidden" id="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Masked Phone</th>
+                <th>Last Activity</th>
+                <th>Khata Balance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="khata-tbody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- MOBILE CUSTOMER CARDS VIEW -->
+        <div class="mobile-card-list hidden" id="mobile-cards">
+          <!-- Dynamically rendered for mobile screens -->
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="khata-empty-state" class="card text-center hidden" style="padding: 48px;">
+          <div class="brand-icon mb-16" style="margin: 0 auto; width: 48px; height: 48px; background: var(--surface-2); color: var(--text-muted);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3 class="font-bold text-lg mb-8">No Matching Customers Found</h3>
+          <p class="text-sm text-muted">Try adjusting your search query or filter chip selection.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SLIDE-OVER TIMELINE DRAWER -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <div class="drawer" id="customer-drawer">
+    <div class="drawer-header">
+      <div>
+        <h3 class="font-bold text-lg" id="drawer-name">Customer Name</h3>
+        <span class="text-xs text-muted" id="drawer-phone">0300-***-**45</span>
+      </div>
+      <button class="btn btn--icon" id="btn-close-drawer">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <!-- Balance Card -->
+      <div class="card mb-20" style="background: var(--surface-2);">
+        <div class="text-xs text-muted font-semibold uppercase mb-4">Current Outstanding Balance</div>
+        <div class="text-3xl font-extrabold tabular-nums" id="drawer-balance">Rs. 0</div>
+      </div>
+
+      <!-- Append-Only Lock Notice -->
+      <div class="badge badge--role w-full justify-center mb-20" style="padding: 8px; font-size: 0.8rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Entries are append-only. No edit or delete permitted.</span>
+      </div>
+
+      <h4 class="font-bold text-sm mb-12">Transaction Timeline History</h4>
+      <div class="timeline" id="drawer-timeline">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2-STEP NEW KHATA ENTRY MODAL -->
+  <div class="modal-backdrop" id="modal-entry-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg" id="modal-entry-title">Record New Khata Entry</h3>
+        <button class="btn btn--icon" id="btn-close-entry-modal">&times;</button>
+      </div>
+
+      <!-- STEP 1: FORM -->
+      <div class="modal-body" id="entry-step-1">
+        <div class="form-group">
+          <label class="form-label" for="entry-customer-select">Select Customer</label>
+          <select class="input" id="entry-customer-select">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Entry Type</label>
+          <div class="chip-group">
+            <button class="chip chip--active" id="type-credit" type="button">+ Credit Sale (Give)</button>
+            <button class="chip" id="type-payment" type="button">- Payment Received (Get)</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="entry-amount">Amount (PKR)</label>
+          <input class="input tabular-nums" type="number" id="entry-amount" placeholder="e.g. 1500" min="1" max="500000">
+          <div class="input-error-msg hidden" id="entry-amount-err">Enter a valid positive amount up to Rs. 500,000</div>
+        </div>
+
+        <div class="form-group">
+          <div class="flex justify-between items-center">
+            <label class="form-label" for="entry-note">Transaction Note (Optional)</label>
+            <span class="text-xs text-muted" id="note-counter">0 / 120</span>
+          </div>
+          <input class="input" type="text" id="entry-note" maxlength="120" placeholder="e.g. Cooking oil 5L & flour ration">
+        </div>
+      </div>
+
+      <!-- STEP 2: CONFIRMATION -->
+      <div class="modal-body hidden" id="entry-step-2">
+        <div class="card text-center" style="background: var(--surface-2);">
+          <div class="badge mb-12" id="confirm-badge">Credit Sale</div>
+          <div class="text-3xl font-extrabold tabular-nums mb-8" id="confirm-amount-display">Rs. 0</div>
+          <div class="text-sm font-semibold mb-4" id="confirm-customer-display">Customer Name</div>
+          <div class="text-xs text-muted" id="confirm-note-display">No note provided</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-entry-back-cancel">Cancel</button>
+        <button class="btn btn--primary" id="btn-entry-next-confirm">Review Entry &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <nav class="mobile-tab-bar">
+    <a href="app-dashboard.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="app-khata.html" class="tab-item tab-item--active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Khata</span>
+    </a>
+    <a href="app-orders.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>Orders</span>
+    </a>
+    <a href="app-inventory.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Stock</span>
+    </a>
+    <a href="app-reports.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Reports</span>
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    let customers = DS_DATA.getCustomers();
+    let currentFilter = 'all';
+    let currentSort = 'due-desc';
+    let searchQuery = '';
+    let selectedType = 'credit'; // 'credit' | 'payment'
+    let modalStep = 1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check URL Query Parameters (e.g. ?filter=due or ?openModal=true)
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('filter')) {
+        currentFilter = params.get('filter');
+        document.querySelectorAll('#khata-chips .chip').forEach(c => {
+          if (c.getAttribute('data-filter') === currentFilter) {
+            c.classList.add('chip--active');
+          } else {
+            c.classList.remove('chip--active');
+          }
+        });
+      }
+
+      // Simulate 500ms Skeleton Loader
+      setTimeout(() => {
+        document.getElementById('skeleton-loader').classList.add('hidden');
+        document.getElementById('table-wrapper').classList.remove('hidden');
+        document.getElementById('mobile-cards').classList.remove('hidden');
+        renderCustomerList();
+
+        if (params.get('openModal') === 'true') {
+          openNewEntryModal();
+        }
+      }, 500);
+
+      // Event Listeners for Toolbar
+      document.getElementById('khata-search').addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        renderCustomerList();
+      });
+
+      document.querySelectorAll('#khata-chips .chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#khata-chips .chip').forEach(c => c.classList.remove('chip--active'));
+          btn.classList.add('chip--active');
+          currentFilter = btn.getAttribute('data-filter');
+          renderCustomerList();
+        });
+      });
+
+      document.getElementById('khata-sort').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderCustomerList();
+      });
+
+      document.getElementById('btn-open-new-entry').addEventListener('click', openNewEntryModal);
+      document.getElementById('btn-close-drawer').addEventListener('click', closeDrawer);
+      document.getElementById('drawer-backdrop').addEventListener('click', closeDrawer);
+      document.getElementById('btn-close-entry-modal').addEventListener('click', closeNewEntryModal);
+      document.getElementById('modal-entry-backdrop').addEventListener('click', (e) => {
+        if (e.target.id === 'modal-entry-backdrop') closeNewEntryModal();
+      });
+
+      // Segmented Type Selector inside Modal
+      document.getElementById('type-credit').addEventListener('click', () => {
+        selectedType = 'credit';
+        document.getElementById('type-credit').classList.add('chip--active');
+        document.getElementById('type-payment').classList.remove('chip--active');
+      });
+      document.getElementById('type-payment').addEventListener('click', () => {
+        selectedType = 'payment';
+        document.getElementById('type-payment').classList.add('chip--active');
+        document.getElementById('type-credit').classList.remove('chip--active');
+      });
+
+      // Character counter
+      document.getElementById('entry-note').addEventListener('input', (e) => {
+        document.getElementById('note-counter').textContent = `${e.target.value.length} / 120`;
+      });
+
+      // Next / Confirm Button Click
+      document.getElementById('btn-entry-next-confirm').addEventListener('click', handleModalNextConfirm);
+      document.getElementById('btn-entry-back-cancel').addEventListener('click', handleModalBackCancel);
+    });
+
+    function renderCustomerList() {
+      let filtered = customers.filter(c => {
+        const matchesSearch = c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery);
+        if (!matchesSearch) return false;
+        if (currentFilter === 'due') return c.balance > 0;
+        if (currentFilter === 'settled') return c.balance === 0;
+        return true;
+      });
+
+      if (currentSort === 'due-desc') filtered.sort((a,b) => b.balance - a.balance);
+      else if (currentSort === 'recent') filtered.sort((a,b) => b.lastActivity.localeCompare(a.lastActivity));
+      else if (currentSort === 'name-asc') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+      const emptyState = document.getElementById('khata-empty-state');
+      if (!filtered.length) {
+        emptyState.classList.remove('hidden');
+        document.getElementById('table-wrapper').classList.add('hidden');
+        document.getElementById('mobile-cards').classList.add('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+      document.getElementById('table-wrapper').classList.remove('hidden');
+      document.getElementById('mobile-cards').classList.remove('hidden');
+
+      // Desktop Table Render
+      const tbody = document.getElementById('khata-tbody');
+      tbody.innerHTML = filtered.map(c => `
+        <tr onclick="openDrawer(${c.id})">
+          <td>
+            <div class="flex items-center gap-12">
+              <div class="avatar">${getInitials(c.name)}</div>
+              <span class="font-bold">${c.name}</span>
+            </div>
+          </td>
+          <td class="text-muted text-sm">${c.phone}</td>
+          <td class="text-muted text-sm">${c.lastActivity}</td>
+          <td>
+            ${c.balance > 0 
+              ? `<span class="badge badge--due tabular-nums">${formatMoney(c.balance)} due</span>` 
+              : `<span class="badge badge--settled">Settled</span>`}
+          </td>
+          <td><button class="btn btn--ghost btn--sm" style="color:var(--primary);">View Ledger &rarr;</button></td>
+        </tr>
+      `).join('');
+
+      // Mobile Cards Render
+      const mobileCards = document.getElementById('mobile-cards');
+      mobileCards.innerHTML = filtered.map(c => `
+        <div class="card card--interactive" onclick="openDrawer(${c.id})">
+          <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-10">
+              <div class="avatar">${getInitials(c.name)}</div>
+              <div>
+                <div class="font-bold text-sm">${c.name}</div>
+                <div class="text-xs text-muted">${c.phone}</div>
+              </div>
+            </div>
+            ${c.balance > 0 
+              ? `<span class="badge badge--due tabular-nums">${formatMoney(c.balance)} due</span>` 
+              : `<span class="badge badge--settled">Settled</span>`}
+          </div>
+          <div class="text-xs text-muted">Last activity: ${c.lastActivity}</div>
+        </div>
+      `).join('');
+    }
+
+    /* SLIDE-OVER TIMELINE DRAWER */
+    function openDrawer(id) {
+      const c = customers.find(item => item.id === id);
+      if (!c) return;
+
+      document.getElementById('drawer-name').textContent = c.name;
+      document.getElementById('drawer-phone').textContent = c.phone;
+      document.getElementById('drawer-balance').textContent = c.balance > 0 ? `${formatMoney(c.balance)} due` : 'Settled (Rs. 0)';
+      document.getElementById('drawer-balance').style.color = c.balance > 0 ? 'var(--danger)' : 'var(--success)';
+
+      const timeline = document.getElementById('drawer-timeline');
+      timeline.innerHTML = c.entries.slice().reverse().map(e => `
+        <div class="timeline-item">
+          <div class="timeline-dot ${e.type === 'credit' ? 'timeline-dot--danger' : 'timeline-dot--success'}"></div>
+          <div class="timeline-card">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-sm">${e.type === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)'}</span>
+              <span class="font-extrabold tabular-nums text-sm" style="color: ${e.type === 'credit' ? 'var(--danger)' : 'var(--success)'};">
+                ${formatMoney(e.amount)}
+              </span>
+            </div>
+            <div class="text-xs text-muted mb-4">${e.note || 'No transaction note'}</div>
+            <div class="flex justify-between items-center text-xs text-muted">
+              <span>${e.date} &bull; ${e.recordedBy}</span>
+              <span class="tabular-nums">Bal: ${formatMoney(e.runningBalance)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('drawer-backdrop').classList.add('drawer-backdrop--open');
+      document.getElementById('customer-drawer').classList.add('drawer--open');
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawer-backdrop').classList.remove('drawer-backdrop--open');
+      document.getElementById('customer-drawer').classList.remove('drawer--open');
+    }
+
+    /* 2-STEP NEW ENTRY MODAL */
+    function openNewEntryModal() {
+      modalStep = 1;
+      const select = document.getElementById('entry-customer-select');
+      select.innerHTML = customers.map(c => `<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+      document.getElementById('entry-amount').value = '';
+      document.getElementById('entry-note').value = '';
+      document.getElementById('note-counter').textContent = '0 / 120';
+      document.getElementById('entry-amount-err').classList.add('hidden');
+
+      showModalStep(1);
+      document.getElementById('modal-entry-backdrop').classList.add('modal-backdrop--open');
+    }
+
+    function closeNewEntryModal() {
+      document.getElementById('modal-entry-backdrop').classList.remove('modal-backdrop--open');
+    }
+
+    function showModalStep(step) {
+      modalStep = step;
+      if (step === 1) {
+        document.getElementById('modal-entry-title').textContent = 'Record New Khata Entry';
+        document.getElementById('entry-step-1').classList.remove('hidden');
+        document.getElementById('entry-step-2').classList.add('hidden');
+        document.getElementById('btn-entry-back-cancel').textContent = 'Cancel';
+        document.getElementById('btn-entry-next-confirm').textContent = 'Review Entry \u2192';
+      } else {
+        document.getElementById('modal-entry-title').textContent = 'Confirm Transaction';
+        document.getElementById('entry-step-1').classList.add('hidden');
+        document.getElementById('entry-step-2').classList.remove('hidden');
+
+        const custId = parseInt(document.getElementById('entry-customer-select').value, 10);
+        const cust = customers.find(c => c.id === custId);
+        const amount = parseFloat(document.getElementById('entry-amount').value);
+        const note = document.getElementById('entry-note').value.trim();
+
+        document.getElementById('confirm-badge').textContent = selectedType === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)';
+        document.getElementById('confirm-badge').className = `badge ${selectedType === 'credit' ? 'badge--due' : 'badge--settled'} mb-12`;
+        document.getElementById('confirm-amount-display').textContent = formatMoney(amount);
+        document.getElementById('confirm-customer-display').textContent = cust ? cust.name : '';
+        document.getElementById('confirm-note-display').textContent = note ? `Note: ${note}` : 'No note provided';
+
+        document.getElementById('btn-entry-back-cancel').textContent = '\u2190 Back';
+        document.getElementById('btn-entry-next-confirm').textContent = 'Confirm & Lock Entry';
+      }
+    }
+
+    function handleModalNextConfirm() {
+      if (modalStep === 1) {
+        const amountVal = parseFloat(document.getElementById('entry-amount').value);
+        if (!amountVal || amountVal <= 0 || amountVal > 500000) {
+          document.getElementById('entry-amount-err').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('entry-amount-err').classList.add('hidden');
+        showModalStep(2);
+      } else {
+        // Submit entry
+        const custId = parseInt(document.getElementById('entry-customer-select').value, 10);
+        const cust = customers.find(c => c.id === custId);
+        const amount = parseFloat(document.getElementById('entry-amount').value);
+        const note = document.getElementById('entry-note').value.trim();
+        const now = new Date().toISOString().split('T')[0];
+
+        if (selectedType === 'credit') {
+          cust.balance += amount;
+        } else {
+          cust.balance = Math.max(0, cust.balance - amount);
+        }
+        cust.lastActivity = now;
+
+        const newEntry = {
+          id: Date.now(),
+          date: now,
+          type: selectedType,
+          amount: amount,
+          note: note,
+          runningBalance: cust.balance,
+          recordedBy: 'Shop Owner'
+        };
+        cust.entries.push(newEntry);
+
+        DS_DATA.saveCustomers(customers);
+        DS_DATA.addAudit(`${selectedType === 'credit' ? 'Credit sale' : 'Payment'} ${formatMoney(amount)} logged for ${cust.name}`);
+
+        closeNewEntryModal();
+        renderCustomerList();
+        showToast(`${selectedType === 'credit' ? 'Credit sale' : 'Payment'} ${formatMoney(amount)} recorded successfully!`, 'success');
+      }
+    }
+
+    function handleModalBackCancel() {
+      if (modalStep === 2) {
+        showModalStep(1);
+      } else {
+        closeNewEntryModal();
+      }
+    }
+  </script>
+</body>
+</html>

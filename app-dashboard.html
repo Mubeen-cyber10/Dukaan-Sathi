@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Dukaan Saathi App</title>
+  <meta name="description" content="Shop owner digital khata dashboard.">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <div class="app-layout">
+    <!-- APP SIDEBAR (Desktop 260px Sticky Grid) -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="index.html" class="brand-logo mb-24">
+          <div class="brand-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </div>
+          <span>Dukaan Saathi</span>
+        </a>
+
+        <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
+          <div class="text-xs text-muted">ACTIVE SHOP</div>
+          <div class="font-bold text-sm" id="sb-shop-name">Bismillah General Store</div>
+          <div class="badge badge--role mt-4">Shop Owner</div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="app-dashboard.html" class="sidebar-link sidebar-link--active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="app-khata.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Digital Khata</span>
+          </a>
+          <a href="app-orders.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span>Orders</span>
+          </a>
+          <a href="app-inventory.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <span>Inventory</span>
+          </a>
+          <a href="app-reports.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Reports</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="text-xs text-muted text-center">
+        Multan Tenant Isolated &bull; v2.4
+      </div>
+    </aside>
+
+    <!-- MAIN APP CONTENT AREA -->
+    <main class="app-main">
+      <!-- APP TOP BAR -->
+      <header class="app-topbar">
+        <div class="flex items-center gap-12">
+          <h2 class="text-lg font-bold">Store Overview</h2>
+          <span class="badge badge--role">Multan Branch</span>
+        </div>
+
+        <div class="flex items-center gap-16">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+
+          <!-- Notification Bell -->
+          <button class="btn btn--icon" id="btn-bell" aria-label="Notifications" style="position:relative;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span style="position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--primary);"></span>
+          </button>
+
+          <!-- User Menu Avatar Dropdown -->
+          <div class="user-menu-wrapper">
+            <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
+              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+
+            <div class="user-menu-dropdown">
+              <div style="padding: 8px 12px; border-bottom: 1px solid var(--border);" class="text-xs">
+                <div class="font-bold">Hamza Sahab</div>
+                <div class="text-muted">Shop Owner Admin</div>
+              </div>
+              <a href="security.html" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Security Settings
+              </a>
+              <a href="login.html" class="dropdown-item dropdown-item--danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Log Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- GREETING BANNER -->
+        <div class="mb-32">
+          <h1 class="text-3xl font-extrabold" id="greeting-text">Assalam o Alaikum, Hamza Sahab</h1>
+          <p class="text-muted text-sm mt-4">Here is your daily khata summary and store status for Bismillah General Store.</p>
+        </div>
+
+        <!-- 4 CLICKABLE SUMMARY CARDS -->
+        <div class="grid-4 mb-32">
+          <!-- Card 1: Navigates to app-khata.html?filter=due -->
+          <a href="app-khata.html?filter=due" class="card card--interactive flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-12">
+              <span class="text-xs text-muted font-semibold uppercase">Total Udhaar Due</span>
+              <div class="brand-icon" style="width:32px; height:32px; background: var(--danger-soft); color: var(--danger);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold tabular-nums text-danger" id="stat-total-due">Rs. 55,800</div>
+            <div class="text-xs text-muted mt-8">Click to view 7 debtor accounts &rarr;</div>
+          </a>
+
+          <!-- Card 2: Navigates to app-khata.html?filter=settled -->
+          <a href="app-khata.html?filter=settled" class="card card--interactive flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-12">
+              <span class="text-xs text-muted font-semibold uppercase">Received Today</span>
+              <div class="brand-icon" style="width:32px; height:32px; background: var(--success-soft); color: var(--success);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold tabular-nums text-success" id="stat-received-today">Rs. 4,000</div>
+            <div class="text-xs text-muted mt-8">Click to view settled accounts &rarr;</div>
+          </a>
+
+          <!-- Card 3: Navigates to app-khata.html?filter=due -->
+          <a href="app-khata.html?filter=due" class="card card--interactive flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-12">
+              <span class="text-xs text-muted font-semibold uppercase">Customers with Dues</span>
+              <div class="brand-icon" style="width:32px; height:32px; background: var(--primary-soft); color: var(--primary);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold tabular-nums" id="stat-customer-dues">7</div>
+            <div class="text-xs text-muted mt-8">Out of 10 total registered &rarr;</div>
+          </a>
+
+          <!-- Card 4: Navigates to app-khata.html -->
+          <a href="app-khata.html" class="card card--interactive flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-12">
+              <span class="text-xs text-muted font-semibold uppercase">Entries Logged</span>
+              <div class="brand-icon" style="width:32px; height:32px; background: var(--surface-2); color: var(--text);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+            </div>
+            <div class="text-2xl font-extrabold tabular-nums" id="stat-entries-today">5</div>
+            <div class="text-xs text-muted mt-8">3 credit sales, 2 payments &rarr;</div>
+          </a>
+        </div>
+
+        <!-- QUICK ACTIONS BAR -->
+        <div class="card mb-32" style="background: var(--surface-2);">
+          <div class="flex justify-between items-center flex-wrap gap-16">
+            <div>
+              <h3 class="font-bold text-base mb-4">Quick Store Actions</h3>
+              <p class="text-xs text-muted">Perform frequent shopkeeper tasks in one click.</p>
+            </div>
+            <div class="flex gap-12" style="flex-wrap: wrap;">
+              <a href="app-khata.html?openModal=true" class="btn btn--primary btn--sm">+ New Khata Entry</a>
+              <a href="app-inventory.html?openModal=true" class="btn btn--outline btn--sm">+ Add Product</a>
+              <a href="app-orders.html" class="btn btn--outline btn--sm">View Orders</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- TWO COLUMN LAYOUT: BAR CHART & AUDIT LOG -->
+        <div class="grid-2">
+          <!-- WEEKLY COLLECTIONS BAR CHART -->
+          <div class="card">
+            <div class="flex justify-between items-center mb-16">
+              <h3 class="font-bold text-lg">Weekly Collections (PKR)</h3>
+              <span class="badge badge--settled">7-Day Trend</span>
+            </div>
+
+            <div class="chart-container">
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 45%;"><span class="chart-tooltip">Mon: Rs. 8,500</span></div>
+                <span class="text-xs text-muted">Mon</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 65%;"><span class="chart-tooltip">Tue: Rs. 12,000</span></div>
+                <span class="text-xs text-muted">Tue</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 35%;"><span class="chart-tooltip">Wed: Rs. 6,000</span></div>
+                <span class="text-xs text-muted">Wed</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 80%;"><span class="chart-tooltip">Thu: Rs. 15,000</span></div>
+                <span class="text-xs text-muted">Thu</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 75%;"><span class="chart-tooltip">Fri: Rs. 14,000</span></div>
+                <span class="text-xs text-muted">Fri</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 95%; background-color: var(--primary);"><span class="chart-tooltip">Sat: Rs. 18,500</span></div>
+                <span class="text-xs text-muted">Sat</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="chart-bar" style="height: 55%;"><span class="chart-tooltip">Sun: Rs. 10,000</span></div>
+                <span class="text-xs text-muted">Sun</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT AUDIT ACTIVITY -->
+          <div class="card">
+            <div class="flex justify-between items-center mb-16">
+              <h3 class="font-bold text-lg">Recent Store Activity</h3>
+              <a href="app-reports.html" class="text-xs text-primary font-bold">View full audit &rarr;</a>
+            </div>
+
+            <div id="audit-list" class="flex flex-col gap-12">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MOBILE BOTTOM TAB BAR (5 ICONS) -->
+  <nav class="mobile-tab-bar">
+    <a href="app-dashboard.html" class="tab-item tab-item--active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="app-khata.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Khata</span>
+    </a>
+    <a href="app-orders.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>Orders</span>
+    </a>
+    <a href="app-inventory.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Stock</span>
+    </a>
+    <a href="app-reports.html" class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Reports</span>
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Bell notification click
+      document.getElementById('btn-bell').addEventListener('click', () => {
+        showToast('All store notifications are up to date.', 'primary');
+      });
+
+      // Render Dashboard Audit List
+      const auditList = document.getElementById('audit-list');
+      const auditData = DS_DATA.getAudit().slice(0, 4);
+      auditList.innerHTML = auditData.map(item => `
+        <div style="padding: 10px 12px; background: var(--surface-2); border-radius: var(--radius-sm);" class="flex justify-between items-center text-sm">
+          <div>
+            <div class="font-medium">${item.text}</div>
+            <div class="text-xs text-muted">${item.time}</div>
+          </div>
+          <span class="badge badge--role">${item.actor}</span>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>
