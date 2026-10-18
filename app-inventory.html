@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inventory Management – Dukaan Saathi App</title>
   <meta name="description" content="Manage products, PKR pricing and low-stock alerts.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
 
@@ -59,7 +61,7 @@
       <header class="app-topbar">
         <div class="flex items-center gap-12">
           <h2 class="text-lg font-bold">Inventory & Stock</h2>
-          <span class="badge badge--role">PKR Pricing</span>
+          <span class="badge badge--role">Shop Owner</span>
         </div>
 
         <div class="flex items-center gap-16">
@@ -68,11 +70,12 @@
           </button>
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
-              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
+              <span class="text-sm font-semibold" id="inv-topbar-user">Hamza Ali</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown">
-              <a href="login.html" class="dropdown-item dropdown-item--danger">Log Out</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
             </div>
           </div>
         </div>
@@ -116,7 +119,7 @@
               </tr>
             </thead>
             <tbody id="inv-tbody">
-              <!-- Dynamically populated -->
+              <!-- Dynamically populated safely -->
             </tbody>
           </table>
         </div>
@@ -135,7 +138,7 @@
         <div class="form-group">
           <label class="form-label" for="prod-name">Product Name</label>
           <input class="input" type="text" id="prod-name" placeholder="e.g. Mezan Cooking Oil 5L">
-          <div class="input-error-msg hidden" id="err-prod-name">Please enter a product name</div>
+          <div class="input-error-msg hidden" id="err-prod-name">Please enter a valid product name (2-50 chars)</div>
         </div>
 
         <div class="form-group">
@@ -202,6 +205,8 @@
   </nav>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     let products = DS_DATA.getProducts();
@@ -209,6 +214,11 @@
     let categoryFilter = 'All';
 
     document.addEventListener('DOMContentLoaded', () => {
+      const user = DS_AUTH.getUser();
+      if (user && document.getElementById('inv-topbar-user')) {
+        document.getElementById('inv-topbar-user').textContent = user.name;
+      }
+
       const params = new URLSearchParams(window.location.search);
       if (params.get('openModal') === 'true') {
         openAddProductModal();
@@ -240,22 +250,42 @@
       });
 
       const tbody = document.getElementById('inv-tbody');
-      tbody.innerHTML = filtered.map(p => {
+      tbody.innerHTML = '';
+
+      filtered.forEach(p => {
+        const tr = document.createElement('tr');
         const isLow = p.stock <= p.minStock;
-        return `
-          <tr>
-            <td class="font-bold">${p.name}</td>
-            <td class="text-muted text-sm">${p.category}</td>
-            <td class="tabular-nums font-semibold">${formatMoney(p.price)}</td>
-            <td class="tabular-nums">${p.stock} units</td>
-            <td>
-              ${isLow 
-                ? `<span class="badge badge--due">Low Stock (${p.stock} left)</span>` 
-                : `<span class="badge badge--settled">In Stock</span>`}
-            </td>
-          </tr>
-        `;
-      }).join('');
+
+        const tdName = document.createElement('td');
+        tdName.className = 'font-bold';
+        tdName.textContent = p.name;
+
+        const tdCat = document.createElement('td');
+        tdCat.className = 'text-muted text-sm';
+        tdCat.textContent = p.category;
+
+        const tdPrice = document.createElement('td');
+        tdPrice.className = 'tabular-nums font-semibold';
+        tdPrice.textContent = formatMoney(p.price);
+
+        const tdStock = document.createElement('td');
+        tdStock.className = 'tabular-nums';
+        tdStock.textContent = `${p.stock} units`;
+
+        const tdStatus = document.createElement('td');
+        const badge = document.createElement('span');
+        badge.className = `badge ${isLow ? 'badge--due' : 'badge--settled'}`;
+        badge.textContent = isLow ? `Low Stock (${p.stock} left)` : 'In Stock';
+        tdStatus.appendChild(badge);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdCat);
+        tr.appendChild(tdPrice);
+        tr.appendChild(tdStock);
+        tr.appendChild(tdStatus);
+
+        tbody.appendChild(tr);
+      });
     }
 
     function openAddProductModal() {
@@ -280,12 +310,12 @@
       const minStock = parseInt(document.getElementById('prod-min-stock').value, 10) || 5;
 
       let valid = true;
-      if (!name) {
+      if (!name || name.length < 2 || name.length > 50) {
         document.getElementById('err-prod-name').classList.remove('hidden');
         valid = false;
       } else document.getElementById('err-prod-name').classList.add('hidden');
 
-      if (!price || price <= 0) {
+      if (!price || price <= 0 || price > 500000) {
         document.getElementById('err-prod-price').classList.remove('hidden');
         valid = false;
       } else document.getElementById('err-prod-price').classList.add('hidden');

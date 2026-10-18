@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Directory & Approvals – Super Admin</title>
+  <meta name="description" content="Super Admin shop onboarding, verification and merchant suspension.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
+</head>
+<body class="page-fade">
+
+  <div class="app-layout">
+    <!-- SUPER ADMIN SIDEBAR -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="admin-dashboard.html" class="brand-logo mb-24">
+          <div class="brand-icon" style="background: var(--primary); color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span>Dukaan Saathi</span>
+        </a>
+
+        <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
+          <div class="text-xs text-muted">ROLE CONTEXT</div>
+          <div class="font-bold text-sm">Sara Khan</div>
+          <div class="badge badge--due mt-4" style="font-size: 0.7rem;">Super Admin</div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="admin-dashboard.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+          <a href="admin-shops.html" class="sidebar-link sidebar-link--active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Shop Approvals</span>
+          </a>
+          <a href="admin-plans.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span>Subscription Plans</span>
+          </a>
+          <a href="admin-disputes.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Disputes</span>
+          </a>
+          <a href="admin-audit.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Hash Chain Audit</span>
+          </a>
+          <a href="admin-security.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Security Center</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="text-xs text-muted text-center" style="padding: 10px; background: var(--surface-2); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <strong>Zero-Knowledge:</strong> Admin can approve or suspend, but cannot view individual credit entries.
+      </div>
+    </aside>
+
+    <!-- MAIN ADMIN CONTENT -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="flex items-center gap-12">
+          <h2 class="text-lg font-bold">Shop Lifecycle Management</h2>
+          <span class="badge badge--due">Super Admin Scope</span>
+        </div>
+
+        <div class="flex items-center gap-16">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+
+          <!-- User Menu Dropdown -->
+          <div class="user-menu-wrapper">
+            <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem; background: var(--primary); color: #fff;">SK</div>
+              <span class="text-sm font-semibold">Sara Khan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+
+            <div class="user-menu-dropdown">
+              <div style="padding: 8px 12px; border-bottom: 1px solid var(--border);" class="text-xs">
+                <div class="font-bold">Sara Khan</div>
+                <div class="text-muted">Platform Super Admin</div>
+              </div>
+              <a href="admin-security.html" class="dropdown-item">Security Center</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- HEADER -->
+        <div class="mb-24">
+          <h1 class="text-3xl font-extrabold">Merchant Shops & Approvals</h1>
+          <p class="text-muted text-sm mt-4">Approve new tenant registrations, review KYC credentials, and enforce platform compliance.</p>
+        </div>
+
+        <!-- SEPARATION OF DUTIES CALLOUT NOTICE -->
+        <div class="card mb-24" style="background: var(--surface-2); border-left: 4px solid var(--primary);">
+          <div class="flex items-center gap-12">
+            <div class="brand-icon" style="background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="font-bold text-sm" style="color: var(--primary);">Separation of Duties Enforced</div>
+              <p class="text-xs text-muted mt-2" style="font-weight: 500;">
+                <strong>Shop owners cannot approve their own shops.</strong> Only authorized Platform Super Admins can transition shop accounts to Active, Rejected, or Suspended states.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOOLBAR: FILTERS & SEARCH -->
+        <div class="card mb-24">
+          <div class="flex justify-between items-center flex-wrap gap-16">
+            <div class="chip-group" id="shop-filter-chips">
+              <button class="chip chip--active" data-status="all">All Shops (<span id="count-all">0</span>)</button>
+              <button class="chip" data-status="Pending Approval">Pending (<span id="count-pending">0</span>)</button>
+              <button class="chip" data-status="Active">Active (<span id="count-active">0</span>)</button>
+              <button class="chip" data-status="Suspended">Suspended (<span id="count-suspended">0</span>)</button>
+            </div>
+
+            <div class="input-wrapper" style="min-width: 280px;">
+              <input class="input" type="search" id="shop-search" placeholder="Search shop name, city, owner...">
+            </div>
+          </div>
+        </div>
+
+        <!-- SHOPS TABLE -->
+        <div class="table-container card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dukaan Name & City</th>
+                <th>Owner Name</th>
+                <th>KYC Documents</th>
+                <th>Plan Tier</th>
+                <th>Joined Date</th>
+                <th>Status</th>
+                <th>Admin Actions</th>
+              </tr>
+            </thead>
+            <tbody id="shops-tbody">
+              <!-- Dynamically rendered safely via DOM createElement -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SHOP DETAILS DRAWER -->
+  <div class="drawer-backdrop" id="shop-drawer-backdrop"></div>
+  <div class="drawer" id="shop-drawer">
+    <div class="drawer-header">
+      <div>
+        <h3 class="font-bold text-lg" id="drawer-shop-name">Shop Name</h3>
+        <span class="text-xs text-muted" id="drawer-shop-city">City, Pakistan</span>
+      </div>
+      <button class="btn btn--icon" id="btn-close-shop-drawer">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <div class="card mb-16" style="background: var(--surface-2);">
+        <div class="text-xs text-muted font-semibold uppercase mb-4">Registration & Status</div>
+        <div class="flex justify-between items-center mb-8">
+          <span class="text-xs text-muted">Shop Status:</span>
+          <span class="badge" id="drawer-shop-status">Active</span>
+        </div>
+        <div class="flex justify-between items-center mb-8">
+          <span class="text-xs text-muted">Subscription Tier:</span>
+          <span class="badge badge--role" id="drawer-shop-plan">Standard</span>
+        </div>
+        <div class="flex justify-between items-center mb-8">
+          <span class="text-xs text-muted">Merchant Owner:</span>
+          <span class="text-sm font-semibold" id="drawer-shop-owner">Hamza Ali</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-muted">Identity Verification:</span>
+          <span class="badge badge--settled" id="drawer-shop-doc">CNIC: Verified</span>
+        </div>
+      </div>
+
+      <div class="card mb-20" style="border: 1px dashed var(--border);">
+        <div class="font-bold text-sm mb-4">Tenant Isolation Boundary</div>
+        <p class="text-xs text-muted">
+          Customer names, credit transactions, and ledger balances for this shop are isolated inside the tenant store and are never rendered to platform admins.
+        </p>
+      </div>
+
+      <h4 class="font-bold text-sm mb-12">Lifecycle Actions</h4>
+      <div class="flex flex-col gap-10" id="drawer-action-buttons">
+        <!-- Dynamically populated based on status -->
+      </div>
+    </div>
+  </div>
+
+  <!-- REJECTION REASON MODAL -->
+  <div class="modal-backdrop" id="modal-reject-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg">Reject Shop Registration</h3>
+        <button class="btn btn--icon" id="btn-close-reject-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="reject-shop-id">
+        <div class="form-group">
+          <label class="form-label" for="reject-reason">Mandatory Rejection Justification</label>
+          <textarea class="input" id="reject-reason" rows="3" placeholder="Provide reason for rejection (e.g. Incomplete business address or unverified KYC)..."></textarea>
+          <div class="input-error-msg hidden" id="err-reject-reason">A rejection justification reason is mandatory.</div>
+        </div>
+        <p class="text-xs text-muted">This action will be permanently recorded in the SHA-256 tamper-evident audit log.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-cancel-reject">Cancel</button>
+        <button class="btn btn--primary" id="btn-confirm-reject" style="background: var(--danger); border-color: var(--danger);">Confirm Rejection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUSPEND CONFIRM MODAL -->
+  <div class="modal-backdrop" id="modal-suspend-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg">Confirm Account Suspension</h3>
+        <button class="btn btn--icon" id="btn-close-suspend-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="suspend-shop-id">
+        <p class="text-sm text-muted mb-16">
+          Are you sure you want to suspend this merchant account? The shopkeeper will lose access to operational storefront tools.
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="suspend-reason">Suspension Reason</label>
+          <input class="input" type="text" id="suspend-reason" placeholder="e.g. Unresolved policy violation or dispute spike">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-cancel-suspend">Cancel</button>
+        <button class="btn btn--primary" id="btn-confirm-suspend" style="background: var(--danger); border-color: var(--danger);">Suspend Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let shops = DS_DATA.getShops();
+      let currentFilter = 'all';
+      let searchQuery = '';
+      let selectedShop = null;
+
+      // Handle query param filter (e.g. from dashboard KPI card)
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('status')) {
+        currentFilter = params.get('status');
+        document.querySelectorAll('#shop-filter-chips .chip').forEach(c => {
+          if (c.getAttribute('data-status') === currentFilter) c.classList.add('chip--active');
+          else c.classList.remove('chip--active');
+        });
+      }
+
+      function updateCounts() {
+        shops = DS_DATA.getShops();
+        document.getElementById('count-all').textContent = shops.length;
+        document.getElementById('count-pending').textContent = shops.filter(s => s.status === 'Pending Approval').length;
+        document.getElementById('count-active').textContent = shops.filter(s => s.status === 'Active').length;
+        document.getElementById('count-suspended').textContent = shops.filter(s => s.status === 'Suspended').length;
+      }
+
+      function renderShops() {
+        updateCounts();
+        const tbody = document.getElementById('shops-tbody');
+        tbody.innerHTML = '';
+
+        const filtered = shops.filter(s => {
+          const matchesStatus = (currentFilter === 'all') || (s.status === currentFilter);
+          const matchesSearch = s.name.toLowerCase().includes(searchQuery) ||
+                                s.city.toLowerCase().includes(searchQuery) ||
+                                s.owner.toLowerCase().includes(searchQuery);
+          return matchesStatus && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+          const emptyRow = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 7;
+          td.className = 'text-center text-muted';
+          td.style.padding = '32px';
+          td.textContent = 'No merchant shops match the selected filter criteria.';
+          emptyRow.appendChild(td);
+          tbody.appendChild(emptyRow);
+          return;
+        }
+
+        filtered.forEach(shop => {
+          const tr = document.createElement('tr');
+
+          // Dukaan & City
+          const tdName = document.createElement('td');
+          const nameDiv = document.createElement('div');
+          nameDiv.className = 'font-bold';
+          nameDiv.textContent = shop.name;
+          const cityDiv = document.createElement('div');
+          cityDiv.className = 'text-xs text-muted';
+          cityDiv.textContent = `${shop.city}, Pakistan`;
+          tdName.appendChild(nameDiv);
+          tdName.appendChild(cityDiv);
+
+          // Owner
+          const tdOwner = document.createElement('td');
+          tdOwner.textContent = shop.owner;
+
+          // Document Status (words only, never actual numbers)
+          const tdDoc = document.createElement('td');
+          const docBadge = document.createElement('span');
+          docBadge.className = `badge ${shop.documentStatus === 'CNIC: Verified' ? 'badge--settled' : shop.documentStatus === 'CNIC: Rejected' ? 'badge--due' : 'badge--warning'}`;
+          docBadge.textContent = shop.documentStatus || 'CNIC: Verified';
+          tdDoc.appendChild(docBadge);
+
+          // Plan
+          const tdPlan = document.createElement('td');
+          const planBadge = document.createElement('span');
+          planBadge.className = 'badge badge--role';
+          planBadge.textContent = shop.plan;
+          tdPlan.appendChild(planBadge);
+
+          // Joined Date
+          const tdDate = document.createElement('td');
+          tdDate.className = 'text-sm text-muted';
+          tdDate.textContent = shop.joinedDate;
+
+          // Status Badge
+          const tdStatus = document.createElement('td');
+          const statusBadge = document.createElement('span');
+          statusBadge.className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending Approval' ? 'badge--warning' : 'badge--due'}`;
+          statusBadge.textContent = shop.status;
+          tdStatus.appendChild(statusBadge);
+
+          // Action Buttons
+          const tdActions = document.createElement('td');
+          const actionGroup = document.createElement('div');
+          actionGroup.className = 'flex gap-8';
+
+          const btnDetails = document.createElement('button');
+          btnDetails.className = 'btn btn--ghost btn--sm';
+          btnDetails.textContent = 'Details';
+          btnDetails.addEventListener('click', () => openShopDrawer(shop));
+          actionGroup.appendChild(btnDetails);
+
+          if (shop.status === 'Pending Approval') {
+            const btnApprove = document.createElement('button');
+            btnApprove.className = 'btn btn--primary btn--sm';
+            btnApprove.textContent = 'Approve';
+            btnApprove.addEventListener('click', () => {
+              DS_AUTH.approveShop(shop.id);
+              renderShops();
+            });
+
+            const btnReject = document.createElement('button');
+            btnReject.className = 'btn btn--outline btn--sm';
+            btnReject.textContent = 'Reject';
+            btnReject.style.color = 'var(--danger)';
+            btnReject.addEventListener('click', () => openRejectModal(shop.id));
+
+            actionGroup.appendChild(btnApprove);
+            actionGroup.appendChild(btnReject);
+          } else if (shop.status === 'Active') {
+            const btnSuspend = document.createElement('button');
+            btnSuspend.className = 'btn btn--outline btn--sm';
+            btnSuspend.textContent = 'Suspend';
+            btnSuspend.style.color = 'var(--danger)';
+            btnSuspend.addEventListener('click', () => openSuspendModal(shop.id));
+            actionGroup.appendChild(btnSuspend);
+          } else if (shop.status === 'Suspended' || shop.status === 'Rejected') {
+            const btnRestore = document.createElement('button');
+            btnRestore.className = 'btn btn--outline btn--sm';
+            btnRestore.textContent = 'Reactivate';
+            btnRestore.addEventListener('click', () => {
+              DS_AUTH.approveShop(shop.id);
+              renderShops();
+            });
+            actionGroup.appendChild(btnRestore);
+          }
+
+          tdActions.appendChild(actionGroup);
+
+          tr.appendChild(tdName);
+          tr.appendChild(tdOwner);
+          tr.appendChild(tdDoc);
+          tr.appendChild(tdPlan);
+          tr.appendChild(tdDate);
+          tr.appendChild(tdStatus);
+          tr.appendChild(tdActions);
+
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Shop Details Drawer
+      function openShopDrawer(shop) {
+        selectedShop = shop;
+        document.getElementById('drawer-shop-name').textContent = shop.name;
+        document.getElementById('drawer-shop-city').textContent = `${shop.city}, Pakistan`;
+        document.getElementById('drawer-shop-status').textContent = shop.status;
+        document.getElementById('drawer-shop-status').className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending Approval' ? 'badge--warning' : 'badge--due'}`;
+        document.getElementById('drawer-shop-plan').textContent = shop.plan;
+        document.getElementById('drawer-shop-owner').textContent = shop.owner;
+        document.getElementById('drawer-shop-doc').textContent = shop.documentStatus || 'CNIC: Verified';
+
+        const btnContainer = document.getElementById('drawer-action-buttons');
+        btnContainer.innerHTML = '';
+
+        if (shop.status === 'Pending Approval') {
+          const btnApprove = document.createElement('button');
+          btnApprove.className = 'btn btn--primary w-full';
+          btnApprove.textContent = 'Approve Shop Registration';
+          btnApprove.addEventListener('click', () => {
+            DS_AUTH.approveShop(shop.id);
+            closeShopDrawer();
+            renderShops();
+          });
+
+          const btnReject = document.createElement('button');
+          btnReject.className = 'btn btn--outline w-full';
+          btnReject.style.color = 'var(--danger)';
+          btnReject.textContent = 'Reject with Reason';
+          btnReject.addEventListener('click', () => {
+            closeShopDrawer();
+            openRejectModal(shop.id);
+          });
+
+          btnContainer.appendChild(btnApprove);
+          btnContainer.appendChild(btnReject);
+        } else if (shop.status === 'Active') {
+          const btnSuspend = document.createElement('button');
+          btnSuspend.className = 'btn btn--outline w-full';
+          btnSuspend.style.color = 'var(--danger)';
+          btnSuspend.textContent = 'Suspend Merchant Account';
+          btnSuspend.addEventListener('click', () => {
+            closeShopDrawer();
+            openSuspendModal(shop.id);
+          });
+          btnContainer.appendChild(btnSuspend);
+        } else {
+          const btnReactivate = document.createElement('button');
+          btnReactivate.className = 'btn btn--primary w-full';
+          btnReactivate.textContent = 'Reactivate Account';
+          btnReactivate.addEventListener('click', () => {
+            DS_AUTH.approveShop(shop.id);
+            closeShopDrawer();
+            renderShops();
+          });
+          btnContainer.appendChild(btnReactivate);
+        }
+
+        document.getElementById('shop-drawer-backdrop').classList.add('drawer-backdrop--open');
+        document.getElementById('shop-drawer').classList.add('drawer--open');
+      }
+
+      function closeShopDrawer() {
+        document.getElementById('shop-drawer-backdrop').classList.remove('drawer-backdrop--open');
+        document.getElementById('shop-drawer').classList.remove('drawer--open');
+      }
+
+      document.getElementById('btn-close-shop-drawer').addEventListener('click', closeShopDrawer);
+      document.getElementById('shop-drawer-backdrop').addEventListener('click', closeShopDrawer);
+
+      // Rejection Modal
+      function openRejectModal(id) {
+        document.getElementById('reject-shop-id').value = id;
+        document.getElementById('reject-reason').value = '';
+        document.getElementById('err-reject-reason').classList.add('hidden');
+        document.getElementById('modal-reject-backdrop').classList.add('modal-backdrop--open');
+      }
+
+      function closeRejectModal() {
+        document.getElementById('modal-reject-backdrop').classList.remove('modal-backdrop--open');
+      }
+
+      document.getElementById('btn-close-reject-modal').addEventListener('click', closeRejectModal);
+      document.getElementById('btn-cancel-reject').addEventListener('click', closeRejectModal);
+      document.getElementById('btn-confirm-reject').addEventListener('click', () => {
+        const id = document.getElementById('reject-shop-id').value;
+        const reason = document.getElementById('reject-reason').value.trim();
+        if (!reason) {
+          document.getElementById('err-reject-reason').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('err-reject-reason').classList.add('hidden');
+        DS_AUTH.rejectShop(id, reason);
+        closeRejectModal();
+        renderShops();
+      });
+
+      // Suspend Modal
+      function openSuspendModal(id) {
+        document.getElementById('suspend-shop-id').value = id;
+        document.getElementById('suspend-reason').value = 'Administrative suspension';
+        document.getElementById('modal-suspend-backdrop').classList.add('modal-backdrop--open');
+      }
+
+      function closeSuspendModal() {
+        document.getElementById('modal-suspend-backdrop').classList.remove('modal-backdrop--open');
+      }
+
+      document.getElementById('btn-close-suspend-modal').addEventListener('click', closeSuspendModal);
+      document.getElementById('btn-cancel-suspend').addEventListener('click', closeSuspendModal);
+      document.getElementById('btn-confirm-suspend').addEventListener('click', () => {
+        const id = document.getElementById('suspend-shop-id').value;
+        const reason = document.getElementById('suspend-reason').value.trim() || 'Administrative suspension';
+        DS_AUTH.suspendShop(id, reason);
+        closeSuspendModal();
+        renderShops();
+      });
+
+      // Filter Chips Listener
+      document.querySelectorAll('#shop-filter-chips .chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('#shop-filter-chips .chip').forEach(c => c.classList.remove('chip--active'));
+          chip.classList.add('chip--active');
+          currentFilter = chip.getAttribute('data-status');
+          renderShops();
+        });
+      });
+
+      // Search Listener
+      document.getElementById('shop-search').addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        renderShops();
+      });
+
+      renderShops();
+    });
+  </script>
+</body>
+</html>

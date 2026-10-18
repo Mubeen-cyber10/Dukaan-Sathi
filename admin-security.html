@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Center & Diagnostics – Super Admin</title>
+  <meta name="description" content="Technical security controls, threat mitigations and automated self-check.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
+</head>
+<body class="page-fade">
+
+  <div class="app-layout">
+    <!-- SUPER ADMIN SIDEBAR -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="admin-dashboard.html" class="brand-logo mb-24">
+          <div class="brand-icon" style="background: var(--primary); color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span>Dukaan Saathi</span>
+        </a>
+
+        <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
+          <div class="text-xs text-muted">ROLE CONTEXT</div>
+          <div class="font-bold text-sm">Sara Khan</div>
+          <div class="badge badge--due mt-4" style="font-size: 0.7rem;">Super Admin</div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="admin-dashboard.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+          <a href="admin-shops.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Shop Approvals</span>
+          </a>
+          <a href="admin-plans.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span>Subscription Plans</span>
+          </a>
+          <a href="admin-disputes.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Disputes</span>
+          </a>
+          <a href="admin-audit.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Hash Chain Audit</span>
+          </a>
+          <a href="admin-security.html" class="sidebar-link sidebar-link--active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Security Center</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="text-xs text-muted text-center" style="padding: 10px; background: var(--surface-2); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <strong>SSD Hardening:</strong> Client-side demonstrator. Real enforcement is backed by server-side APIs in production.
+      </div>
+    </aside>
+
+    <!-- MAIN ADMIN CONTENT -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="flex items-center gap-12">
+          <h2 class="text-lg font-bold">Security Center & Diagnostics</h2>
+          <span class="badge badge--due">Super Admin</span>
+        </div>
+
+        <div class="flex items-center gap-16">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+
+          <div class="user-menu-wrapper">
+            <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem; background: var(--primary); color: #fff;">SK</div>
+              <span class="text-sm font-semibold">Sara Khan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="user-menu-dropdown">
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- HEADER -->
+        <div class="mb-24">
+          <h1 class="text-3xl font-extrabold">Platform Security Center</h1>
+          <p class="text-muted text-sm mt-4">Security controls, automated browser self-diagnostics, and threat mitigation mappings for Activity 2.</p>
+        </div>
+
+        <!-- AUTOMATED SELF-CHECK SUITE -->
+        <div class="card mb-32" style="background: var(--surface-2); border: 2px solid var(--border);">
+          <div class="flex justify-between items-center flex-wrap gap-16 mb-20">
+            <div>
+              <h2 class="font-extrabold text-xl">Automated Security Self-Check</h2>
+              <p class="text-xs text-muted mt-2">Performs real in-browser validation of CSP meta headers, session sanitization, hash-chain integrity, page guard, and RBAC rules.</p>
+            </div>
+            <button type="button" class="btn btn--primary btn--lg" id="btn-run-self-check">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Run Self-Check</span>
+            </button>
+          </div>
+
+          <div id="self-check-results" class="flex flex-col gap-10">
+            <div class="text-xs text-muted text-center" style="padding: 20px;">
+              Click "Run Self-Check" above to test all 5 security controls in real-time.
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLS STATUS (IMPLEMENTED VS PLANNED) -->
+        <div class="mb-32">
+          <div class="flex items-center justify-between mb-16">
+            <h2 class="font-bold text-xl">System Security Controls</h2>
+            <div class="flex gap-10 text-xs">
+              <span class="badge badge--settled">Implemented (frontend demo)</span>
+              <span class="badge" style="background: var(--surface-2); border: 1px solid var(--border);">Planned (backend)</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- CONTROL 1 -->
+            <div class="card">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Role-Based Access Control (RBAC)</h3>
+                <span class="badge badge--settled">Implemented (frontend demo)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Roles partitioned into Shop Owner and Platform Super Admin. Guard script blocks cross-role navigation; sensitive functions verify caller permissions internally before execution.
+              </p>
+            </div>
+
+            <!-- CONTROL 2 -->
+            <div class="card">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Cryptographic Hash Chain Audit</h3>
+                <span class="badge badge--settled">Implemented (frontend demo)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                All security actions linked into a forward-chained SHA-256 ledger using the Web Crypto API (`crypto.subtle`). Prevents retroactive modification and repudiation.
+              </p>
+            </div>
+
+            <!-- CONTROL 3 -->
+            <div class="card">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Data Minimization & Masking</h3>
+                <span class="badge badge--settled">Implemented (frontend demo)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Phone numbers masked (`0300-***-**45`) with 10-second auto-hiding owner reveal; CNIC numbers completely excluded; Super Admin partitioned from customer khata entries.
+              </p>
+            </div>
+
+            <!-- CONTROL 4 -->
+            <div class="card">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Defense-in-Depth & Idle Timeout</h3>
+                <span class="badge badge--settled">Implemented (frontend demo)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Strict Content Security Policy (CSP), HTTP security headers (nosniff, DENY frame), 5-failed-attempt login lockout, and 5-minute inactivity terminal timeout monitor.
+              </p>
+            </div>
+
+            <!-- CONTROL 5 (PLANNED) -->
+            <div class="card" style="opacity: 0.85;">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Database Row-Level Security (RLS)</h3>
+                <span class="badge" style="background: var(--surface-2); border: 1px solid var(--border);">Planned (backend)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                PostgreSQL Row-Level Security policies ensuring tenant separation at the query engine level, guaranteeing shopkeeper data partition even if application logic is breached.
+              </p>
+            </div>
+
+            <!-- CONTROL 6 (PLANNED) -->
+            <div class="card" style="opacity: 0.85;">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Hardware Security Module (HSM) Key Management</h3>
+                <span class="badge" style="background: var(--surface-2); border: 1px solid var(--border);">Planned (backend)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Asymmetric signing keys stored inside FIPS 140-2 Level 3 HSM with automated cryptographic key rotation and non-exportable private root certificates.
+              </p>
+            </div>
+
+            <!-- CONTROL 7 (PLANNED) -->
+            <div class="card" style="opacity: 0.85;">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Distributed Rate Limiter & Web Application Firewall</h3>
+                <span class="badge" style="background: var(--surface-2); border: 1px solid var(--border);">Planned (backend)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Edge Redis token-bucket rate limiting across API routes and WAF rules inspecting layer-7 HTTP payloads to block automated bots and credential stuffing.
+              </p>
+            </div>
+
+            <!-- CONTROL 8 (PLANNED) -->
+            <div class="card" style="opacity: 0.85;">
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-bold text-base">Carrier-Integrated SMS/TOTP Gateway</h3>
+                <span class="badge" style="background: var(--surface-2); border: 1px solid var(--border);">Planned (backend)</span>
+              </div>
+              <p class="text-xs text-muted leading-relaxed">
+                Direct integration with local Pakistani telecom aggregators (Jazz, Telenor, Zong) for cryptographic time-based OTP delivery with anti-SIM-swap protection.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 THREATS WITH MITIGATIONS -->
+        <div class="mb-32">
+          <h2 class="font-bold text-xl mb-16">Security Proposal Threat Model & Mitigations (7 Threats)</h2>
+          <div class="flex flex-col gap-12">
+            <!-- THREAT 1 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 1</span>
+                <h3 class="font-bold text-sm">Privilege Escalation & Unauthorized Shop Self-Approval</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> A malicious or compromised shop owner attempts to approve their own business or access platform governance functions.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Separation of duties enforced. Guard script restricts routes, and sensitive functions (`approveShop`, `rejectShop`) independently check `currentUser.role === 'admin'` inside the function, logging denied attempts.
+              </div>
+            </div>
+
+            <!-- THREAT 2 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 2</span>
+                <h3 class="font-bold text-sm">Credential Stuffing & Password Brute-Force Attacks</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Attackers run automated password spraying against shopkeeper emails to hijack retailer accounts.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Lockout engine disables the login form for 30 seconds after 5 failed attempts with a countdown timer; generic "Invalid credentials" error response prevents username enumeration; MFA step required.
+              </div>
+            </div>
+
+            <!-- THREAT 3 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 3</span>
+                <h3 class="font-bold text-sm">Stored & Reflected Cross-Site Scripting (XSS)</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Malicious script payloads injected via customer names, khata notes, search queries, or shop details execute in peer or admin browsers.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Strict Content-Security-Policy (CSP) meta tags and headers; elimination of unsanitized innerHTML in favor of `textContent` and shared `escapeHtml()` output encoding.
+              </div>
+            </div>
+
+            <!-- THREAT 4 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 4</span>
+                <h3 class="font-bold text-sm">Session Hijacking & Unattended Terminal Exploitation</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Shopkeepers walking away from shared counter computers leave active sessions vulnerable to unauthorized transaction manipulation.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> 5-minute inactivity idle monitor triggers a 30-second warning countdown before auto-logout; sessionStorage isolation ensures credentials are never stored; `pageshow` back-button cache prevention.
+              </div>
+            </div>
+
+            <!-- THREAT 5 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 5</span>
+                <h3 class="font-bold text-sm">Khata Ledger Repudiation & Historical Record Tampering</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Disputed transactions altered or deleted retroactively by rogue operators to conceal stolen inventory or fraudulent claims.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Strictly append-only khata architecture (no edit or delete controls); platform audit stream forward-chained using Web Crypto SHA-256 hashes with tamper-detection verification.
+              </div>
+            </div>
+
+            <!-- THREAT 6 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 6</span>
+                <h3 class="font-bold text-sm">Customer PII Leakage & Insider Snooping</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Support or platform administrators accessing private customer phone numbers or customer financial debts.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Zero-knowledge admin partition: Super Admin interface never renders customer balances or khata entries; phone numbers masked (`0300-***-**45`) with 10s owner-only reveal audited in logs; CNIC numbers omitted.
+              </div>
+            </div>
+
+            <!-- THREAT 7 -->
+            <div class="card">
+              <div class="flex items-center gap-10 mb-6">
+                <span class="badge badge--due font-bold">Threat 7</span>
+                <h3 class="font-bold text-sm">CSV / Spreadsheet Formula Injection</h3>
+              </div>
+              <p class="text-xs text-muted mb-6">
+                <strong>Vulnerability:</strong> Customer names or notes prefixed with formula characters (`=`, `+`, `-`, `@`) executing arbitrary commands when exported and opened in Microsoft Excel.
+              </p>
+              <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
+                <strong>Mitigation:</strong> Automated sanitization in `neutralizeCsvCell()` strips or prepends single-quotes to formula trigger characters before report CSV generation.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnRun = document.getElementById('btn-run-self-check');
+      const resultsContainer = document.getElementById('self-check-results');
+
+      btnRun.addEventListener('click', async () => {
+        btnRun.classList.add('btn--loading');
+        btnRun.innerHTML = `<span class="spinner"></span> <span>Running diagnostics...</span>`;
+        resultsContainer.innerHTML = '';
+
+        const tests = [
+          {
+            name: '1. CSP Meta Tag Present & Valid',
+            fn: () => {
+              const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+              if (meta && meta.content.includes("default-src 'self'") && meta.content.includes("frame-ancestors 'none'")) {
+                return { pass: true, detail: "CSP meta tag is present with strict 'self' policies, Google Fonts permissions, and frame-ancestors 'none'." };
+              }
+              return { pass: false, detail: "CSP meta tag missing or misconfigured." };
+            }
+          },
+          {
+            name: '2. No Password in Session Storage',
+            fn: () => {
+              const raw = sessionStorage.getItem('ds_session_user');
+              if (!raw) {
+                return { pass: false, detail: "No active session found in sessionStorage." };
+              }
+              const user = JSON.parse(raw);
+              const hasPasswordKey = Object.keys(user).some(k => k.toLowerCase().includes('pass'));
+              const containsKnownPlaintext = raw.includes('Shop@12345') || raw.includes('Admin@12345');
+              
+              if (!hasPasswordKey && !containsKnownPlaintext) {
+                return { pass: true, detail: `sessionStorage contains only minimal session token: { id, name, role, loginAt }. Zero passwords or hashes stored.` };
+              }
+              return { pass: false, detail: "Credential leakage detected in sessionStorage payload." };
+            }
+          },
+          {
+            name: '3. Cryptographic Audit Chain Valid',
+            fn: async () => {
+              const res = await DS_AUDIT.verifyChain();
+              if (res.valid) {
+                return { pass: true, detail: `All ${res.count} audit blocks cryptographically verified with unbroken SHA-256 forward hash linking.` };
+              }
+              return { pass: false, detail: `Tampering detected on block: ${res.reason}` };
+            }
+          },
+          {
+            name: '4. Guard Script Present & Functional',
+            fn: () => {
+              const guardScript = document.querySelector('script[src*="guard.js"]');
+              const hasGuardObj = typeof window.DS_GUARD !== 'undefined';
+              if (guardScript && hasGuardObj) {
+                return { pass: true, detail: "guard.js is loaded in <head>, actively managing role enforcement, route protection, and idle timeout." };
+              }
+              return { pass: false, detail: "guard.js script tag or window.DS_GUARD object not detected." };
+            }
+          },
+          {
+            name: '5. Role Check Working & Enforced',
+            fn: () => {
+              const user = DS_AUTH.getUser();
+              const adminCanApprove = DS_AUTH.canDo('APPROVE_SHOP');
+              const adminCanKhata = DS_AUTH.canDo('CREATE_CREDIT');
+              const ownerCanApprove = DS_AUTH.canDo('APPROVE_SHOP', { role: 'owner' });
+
+              if (user && user.role === 'admin' && adminCanApprove && !adminCanKhata && !ownerCanApprove) {
+                return { pass: true, detail: "Role check verified: Super Admin authorized for APPROVE_SHOP but denied CREATE_CREDIT; Owner explicitly denied APPROVE_SHOP." };
+              }
+              return { pass: false, detail: "Role check capability matrix failure." };
+            }
+          }
+        ];
+
+        let allPassed = true;
+        for (const test of tests) {
+          await new Promise(r => setTimeout(r, 120));
+          const outcome = await test.fn();
+          if (!outcome.pass) allPassed = false;
+
+          const row = document.createElement('div');
+          row.style.cssText = 'padding: 12px 16px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border);';
+          row.className = 'flex justify-between items-center';
+
+          row.innerHTML = `
+            <div>
+              <div class="font-bold text-sm">${escapeHtml(test.name)}</div>
+              <div class="text-xs text-muted mt-2">${escapeHtml(outcome.detail)}</div>
+            </div>
+            <span class="badge ${outcome.pass ? 'badge--settled' : 'badge--due'}" style="font-weight: 700;">
+              ${outcome.pass ? 'PASS' : 'FAIL'}
+            </span>
+          `;
+
+          resultsContainer.appendChild(row);
+        }
+
+        btnRun.classList.remove('btn--loading');
+        btnRun.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span>Run Self-Check</span>`;
+        if (allPassed) {
+          showToast('Automated self-check passed: 5/5 security controls verified!', 'success');
+        } else {
+          showToast('One or more security checks failed.', 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

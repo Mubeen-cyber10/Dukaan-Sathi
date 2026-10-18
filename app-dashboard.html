@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard – Dukaan Saathi App</title>
   <meta name="description" content="Shop owner digital khata dashboard.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
 
@@ -62,7 +64,7 @@
       <header class="app-topbar">
         <div class="flex items-center gap-12">
           <h2 class="text-lg font-bold">Store Overview</h2>
-          <span class="badge badge--role">Multan Branch</span>
+          <span class="badge badge--role">Shop Owner</span>
         </div>
 
         <div class="flex items-center gap-16">
@@ -79,20 +81,20 @@
           <!-- User Menu Avatar Dropdown -->
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
-              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
+              <span class="text-sm font-semibold" id="topbar-user-name">Hamza Ali</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
 
             <div class="user-menu-dropdown">
               <div style="padding: 8px 12px; border-bottom: 1px solid var(--border);" class="text-xs">
-                <div class="font-bold">Hamza Sahab</div>
-                <div class="text-muted">Shop Owner Admin</div>
+                <div class="font-bold" id="dropdown-user-name">Hamza Ali</div>
+                <div class="text-muted">Shop Owner</div>
               </div>
               <a href="security.html" class="dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Security Settings
               </a>
-              <a href="login.html" class="dropdown-item dropdown-item--danger">
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Log Out
               </a>
             </div>
@@ -102,9 +104,19 @@
 
       <div class="app-content">
         <!-- GREETING BANNER -->
-        <div class="mb-32">
-          <h1 class="text-3xl font-extrabold" id="greeting-text">Assalam o Alaikum, Hamza Sahab</h1>
-          <p class="text-muted text-sm mt-4">Here is your daily khata summary and store status for Bismillah General Store.</p>
+        <div class="mb-24 flex justify-between items-center flex-wrap gap-16">
+          <div>
+            <h1 class="text-3xl font-extrabold" id="greeting-text">Welcome, Hamza Ali</h1>
+            <p class="text-muted text-sm mt-4">Here is your daily khata summary and store status for Bismillah General Store.</p>
+          </div>
+
+          <!-- RESTRICTED FUNCTION DEMO BUTTON -->
+          <div style="padding: 10px 16px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; gap: 12px;">
+            <div class="text-xs text-muted"><strong>Security Lab:</strong> Restricted function test:</div>
+            <button type="button" class="btn btn--outline btn--sm" id="btn-demo-restricted-action" style="color: var(--danger); border-color: var(--danger);">
+              Try approving a shop (demo)
+            </button>
+          </div>
         </div>
 
         <!-- 4 CLICKABLE SUMMARY CARDS -->
@@ -222,7 +234,7 @@
             </div>
 
             <div id="audit-list" class="flex flex-col gap-12">
-              <!-- Dynamically rendered -->
+              <!-- Dynamically rendered safely -->
             </div>
           </div>
         </div>
@@ -255,26 +267,63 @@
   </nav>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Set user name dynamically from session
+      const user = DS_AUTH.getUser();
+      if (user) {
+        document.getElementById('greeting-text').textContent = `Welcome, ${user.name}`;
+        document.getElementById('topbar-user-name').textContent = user.name;
+        document.getElementById('dropdown-user-name').textContent = user.name;
+      }
+
       // Bell notification click
       document.getElementById('btn-bell').addEventListener('click', () => {
         showToast('All store notifications are up to date.', 'primary');
       });
 
-      // Render Dashboard Audit List
+      // RESTRICTED FUNCTION DEMO
+      // Shop Owner tries to approve a shop -> Access Denied + Toast + Audit Logged
+      const demoBtn = document.getElementById('btn-demo-restricted-action');
+      if (demoBtn) {
+        demoBtn.addEventListener('click', () => {
+          approveShop('SHP-104');
+        });
+      }
+
+      // Render Dashboard Audit List SAFELY with DOM manipulation
       const auditList = document.getElementById('audit-list');
+      auditList.innerHTML = '';
       const auditData = DS_DATA.getAudit().slice(0, 4);
-      auditList.innerHTML = auditData.map(item => `
-        <div style="padding: 10px 12px; background: var(--surface-2); border-radius: var(--radius-sm);" class="flex justify-between items-center text-sm">
-          <div>
-            <div class="font-medium">${item.text}</div>
-            <div class="text-xs text-muted">${item.time}</div>
-          </div>
-          <span class="badge badge--role">${item.actor}</span>
-        </div>
-      `).join('');
+
+      auditData.forEach(item => {
+        const row = document.createElement('div');
+        row.style.cssText = 'padding: 10px 12px; background: var(--surface-2); border-radius: var(--radius-sm);';
+        row.className = 'flex justify-between items-center text-sm';
+
+        const left = document.createElement('div');
+        const text = document.createElement('div');
+        text.className = 'font-medium';
+        text.textContent = item.text;
+
+        const time = document.createElement('div');
+        time.className = 'text-xs text-muted';
+        time.textContent = item.time;
+
+        left.appendChild(text);
+        left.appendChild(time);
+
+        const badge = document.createElement('span');
+        badge.className = 'badge badge--role';
+        badge.textContent = item.actor;
+
+        row.appendChild(left);
+        row.appendChild(badge);
+        auditList.appendChild(row);
+      });
     });
   </script>
 </body>

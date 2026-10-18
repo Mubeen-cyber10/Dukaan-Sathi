@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders Management – Dukaan Saathi App</title>
   <meta name="description" content="Track walk-in & delivery order statuses.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
 
@@ -59,7 +61,7 @@
       <header class="app-topbar">
         <div class="flex items-center gap-12">
           <h2 class="text-lg font-bold">Order Tracking</h2>
-          <span class="badge badge--settled">6 State Transitions</span>
+          <span class="badge badge--role">Shop Owner</span>
         </div>
 
         <div class="flex items-center gap-16">
@@ -68,11 +70,12 @@
           </button>
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
-              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
+              <span class="text-sm font-semibold" id="orders-topbar-user">Hamza Ali</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown">
-              <a href="login.html" class="dropdown-item dropdown-item--danger">Log Out</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
             </div>
           </div>
         </div>
@@ -94,7 +97,7 @@
 
         <!-- ORDERS CARDS GRID -->
         <div class="grid-2" id="orders-grid">
-          <!-- Dynamically populated -->
+          <!-- Dynamically populated safely -->
         </div>
       </div>
     </main>
@@ -163,6 +166,8 @@
   </nav>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     let orders = DS_DATA.getOrders();
@@ -179,6 +184,11 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
+      const user = DS_AUTH.getUser();
+      if (user && document.getElementById('orders-topbar-user')) {
+        document.getElementById('orders-topbar-user').textContent = user.name;
+      }
+
       renderOrders();
 
       document.querySelectorAll('#order-tabs .chip').forEach(tab => {
@@ -202,33 +212,77 @@
     function renderOrders() {
       const filtered = orders.filter(o => currentStatusTab === 'All' || o.status === currentStatusTab);
       const grid = document.getElementById('orders-grid');
+      grid.innerHTML = '';
 
       if (!filtered.length) {
-        grid.innerHTML = `
-          <div class="card text-center" style="grid-column: 1 / -1; padding: 48px;">
-            <div class="font-bold text-lg mb-8">No Orders in "${currentStatusTab}"</div>
-            <div class="text-sm text-muted">Select another status tab above to inspect shop orders.</div>
-          </div>
-        `;
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'card text-center';
+        emptyDiv.style.cssText = 'grid-column: 1 / -1; padding: 48px;';
+        
+        const title = document.createElement('div');
+        title.className = 'font-bold text-lg mb-8';
+        title.textContent = `No Orders in "${currentStatusTab}"`;
+
+        const sub = document.createElement('div');
+        sub.className = 'text-sm text-muted';
+        sub.textContent = 'Select another status tab above to inspect shop orders.';
+
+        emptyDiv.appendChild(title);
+        emptyDiv.appendChild(sub);
+        grid.appendChild(emptyDiv);
         return;
       }
 
-      grid.innerHTML = filtered.map(o => `
-        <div class="card card--interactive flex flex-col justify-between" onclick="openOrderModal('${o.id}')">
-          <div>
-            <div class="flex justify-between items-center mb-12">
-              <span class="font-bold text-base">${o.id}</span>
-              <span class="badge ${getBadgeClass(o.status)}">${o.status}</span>
-            </div>
-            <div class="font-semibold text-sm mb-4">${o.customer}</div>
-            <div class="text-xs text-muted mb-16">${o.items}</div>
-          </div>
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-muted">${o.time}</span>
-            <span class="font-extrabold tabular-nums text-lg">${formatMoney(o.total)}</span>
-          </div>
-        </div>
-      `).join('');
+      filtered.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'card card--interactive flex flex-col justify-between';
+        card.addEventListener('click', () => openOrderModal(o.id));
+
+        const top = document.createElement('div');
+        const header = document.createElement('div');
+        header.className = 'flex justify-between items-center mb-12';
+
+        const idSpan = document.createElement('span');
+        idSpan.className = 'font-bold text-base';
+        idSpan.textContent = o.id;
+
+        const badge = document.createElement('span');
+        badge.className = `badge ${getBadgeClass(o.status)}`;
+        badge.textContent = o.status;
+
+        header.appendChild(idSpan);
+        header.appendChild(badge);
+
+        const cust = document.createElement('div');
+        cust.className = 'font-semibold text-sm mb-4';
+        cust.textContent = o.customer;
+
+        const items = document.createElement('div');
+        items.className = 'text-xs text-muted mb-16';
+        items.textContent = o.items;
+
+        top.appendChild(header);
+        top.appendChild(cust);
+        top.appendChild(items);
+
+        const bot = document.createElement('div');
+        bot.className = 'flex justify-between items-center text-sm';
+
+        const time = document.createElement('span');
+        time.className = 'text-muted';
+        time.textContent = o.time;
+
+        const total = document.createElement('span');
+        total.className = 'font-extrabold tabular-nums text-lg';
+        total.textContent = formatMoney(o.total);
+
+        bot.appendChild(time);
+        bot.appendChild(total);
+
+        card.appendChild(top);
+        card.appendChild(bot);
+        grid.appendChild(card);
+      });
     }
 
     function getBadgeClass(status) {

@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop Owner Sign In – Dukaan Saathi</title>
-  <meta name="description" content="Secure shop owner login with Multi-Factor Authentication (MFA).">
+  <title>Sign In – Dukaan Saathi</title>
+  <meta name="description" content="Secure role-based sign in for Dukaan Saathi with MFA and SHA-256 validation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
 </head>
@@ -26,20 +27,20 @@
       </div>
 
       <div style="position: relative; z-index: 2; max-width: 440px;">
-        <span class="badge mb-16" style="background: rgba(255,255,255,0.2); color: #fff; font-weight: 700;">Multi-Tenant SaaS</span>
+        <span class="badge mb-16" style="background: rgba(255,255,255,0.2); color: #fff; font-weight: 700;">Multi-Tenant FinTech SaaS</span>
         <h2 class="text-3xl font-extrabold mb-16" style="line-height: 1.2;">Your shop's trusted digital ledger partner</h2>
-        <p style="opacity: 0.9;" class="text-sm">Manage credit sales (udhaar), track customer repayments, check low inventory items, and log staff activity with audit-level security.</p>
+        <p style="opacity: 0.9;" class="text-sm">Manage credit sales (udhaar), track customer repayments, check low inventory items, and log activity with cryptographic audit-level security.</p>
       </div>
 
-      <div style="position: relative; z-index: 2;" class="text-xs" style="opacity: 0.8;">
+      <div style="position: relative; z-index: 2;" class="text-xs">
         &copy; 2026 Dukaan Saathi &bull; Secure Software Development Semester Project
       </div>
     </div>
 
     <!-- RIGHT LOGIN FORM WRAPPER -->
     <div style="flex: 1; padding: 40px 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--bg);">
-      <div class="w-full" style="max-width: 420px;">
-        <div class="flex justify-between items-center mb-32">
+      <div class="w-full" style="max-width: 440px;">
+        <div class="flex justify-between items-center mb-24">
           <a href="index.html" class="brand-logo" aria-label="Back to home">
             <div class="brand-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
@@ -55,22 +56,23 @@
         <div class="card" style="box-shadow: var(--shadow);">
           <!-- STEP 1: CREDENTIALS -->
           <div id="step-credentials">
-            <div class="badge badge--role mb-12">Shop Owner Sign In</div>
+            <div class="badge badge--role mb-12">Universal Role Sign In</div>
             <h1 class="text-2xl font-bold mb-8">Welcome Back</h1>
-            <p class="text-sm text-muted mb-24">Enter your registered email or Pakistani mobile number to sign in.</p>
+            <p class="text-sm text-muted mb-20">Sign in with your registered credentials. The system automatically routes you to your authorized portal.</p>
 
-            <div id="general-error" class="input-error-msg mb-16 hidden">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span id="general-error-text">Invalid login credentials. Please try again.</span>
+            <!-- LOCKOUT / GENERAL ERROR BANNER -->
+            <div id="general-error" class="input-error-msg mb-16 hidden" style="background: var(--danger-soft); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--danger); display: flex; align-items: center; gap: 8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="general-error-text" style="font-weight: 500;">Invalid credentials</span>
             </div>
 
-            <form id="login-form" novalidate>
+            <form id="login-form" novalidate autocomplete="on">
               <div class="form-group">
                 <label class="form-label" for="login-email">Email or Mobile Number</label>
                 <div class="input-wrapper">
-                  <input class="input" type="text" id="login-email" placeholder="0300-1234567 or owner@shop.pk" value="0300-1234567">
+                  <input class="input" type="text" id="login-email" name="username" autocomplete="username" placeholder="e.g. shopowner@dukaansaathi.pk or 0300-1234567" required>
                 </div>
-                <div class="input-error-msg hidden" id="email-error">Please enter a valid email or mobile number</div>
+                <div class="input-error-msg hidden" id="email-error">Please enter your email or mobile number</div>
               </div>
 
               <div class="form-group">
@@ -79,21 +81,42 @@
                   <button type="button" class="btn btn--ghost btn--sm" id="btn-forgot-password" style="font-size: 0.8rem; color: var(--primary);">Forgot password?</button>
                 </div>
                 <div class="input-wrapper">
-                  <input class="input" type="password" id="login-password" placeholder="Enter your password" value="password123">
+                  <input class="input" type="password" id="login-password" name="current-password" autocomplete="current-password" placeholder="Enter your password" required>
                   <button type="button" class="input-icon-right toggle-password-btn" data-target="login-password" aria-label="Toggle password visibility">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
-                <div class="input-error-msg hidden" id="password-error">Password must be at least 6 characters</div>
+                <div class="input-error-msg hidden" id="password-error">Password is required</div>
               </div>
 
               <button type="submit" class="btn btn--primary w-full btn--lg" id="btn-login-submit" style="margin-top: 8px;">
-                <span>Sign In & Continue &rarr;</span>
+                <span>Authenticate & Continue &rarr;</span>
               </button>
             </form>
 
-            <div class="text-xs text-muted text-center mt-20" style="padding: 10px; background-color: var(--surface-2); border-radius: 8px;">
-              <strong>Demo Prototype Notice:</strong> Enter any credentials and 6 digits for OTP verification.
+            <!-- DEMO CREDENTIALS BOX -->
+            <div style="margin-top: 24px; padding: 14px; background-color: var(--surface-2); border-radius: var(--radius-sm); border: 1px dashed var(--border);" class="text-xs">
+              <div class="font-bold text-muted mb-8" style="text-transform: uppercase; letter-spacing: 0.05em;">Demo Credentials</div>
+              
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="padding: 8px; background: var(--surface); border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <span class="badge badge--role" style="font-size: 0.7rem; padding: 2px 6px;">Shop Owner</span>
+                    <div style="margin-top: 2px; font-weight: 600;">Hamza Ali &bull; shopowner@dukaansaathi.pk</div>
+                    <div class="text-muted">Password: <code>Shop@12345</code></div>
+                  </div>
+                  <button type="button" class="btn btn--outline btn--sm demo-fill-btn" data-email="shopowner@dukaansaathi.pk" data-pass="Shop@12345" style="padding: 4px 8px; font-size: 0.75rem;">Fill</button>
+                </div>
+
+                <div style="padding: 8px; background: var(--surface); border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <span class="badge badge--due" style="font-size: 0.7rem; padding: 2px 6px;">Super Admin</span>
+                    <div style="margin-top: 2px; font-weight: 600;">Sara Khan &bull; admin@dukaansaathi.pk</div>
+                    <div class="text-muted">Password: <code>Admin@12345</code></div>
+                  </div>
+                  <button type="button" class="btn btn--outline btn--sm demo-fill-btn" data-email="admin@dukaansaathi.pk" data-pass="Admin@12345" style="padding: 4px 8px; font-size: 0.75rem;">Fill</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -103,7 +126,8 @@
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
             </div>
             <h2 class="text-xl font-bold mb-8">MFA Verification</h2>
-            <p class="text-sm text-muted mb-24">Enter the 6-digit verification code sent to your registered device.</p>
+            <p class="text-sm text-muted mb-8" id="mfa-subtext">Enter the 6-digit verification code sent to your registered device.</p>
+            <div class="text-xs text-primary font-medium mb-20" id="mfa-user-target">Authenticating user...</div>
 
             <div class="flex justify-center gap-8 mb-24" id="mfa-inputs-container">
               <input type="text" class="input mfa-box" maxlength="1" style="width: 44px; height: 50px; text-align: center; font-size: 1.25rem; font-weight: 700;" inputmode="numeric">
@@ -114,10 +138,10 @@
               <input type="text" class="input mfa-box" maxlength="1" style="width: 44px; height: 50px; text-align: center; font-size: 1.25rem; font-weight: 700;" inputmode="numeric">
             </div>
 
-            <div id="mfa-error" class="input-error-msg justify-center mb-16 hidden">Please enter all 6 digits</div>
+            <div id="mfa-error" class="input-error-msg justify-center mb-16 hidden">Please enter all 6 digits (Demo: any 6 digits)</div>
 
             <button type="button" class="btn btn--primary w-full btn--lg" id="btn-mfa-verify">
-              Verify OTP & Access App
+              Verify OTP & Access Portal
             </button>
             <button type="button" class="btn btn--ghost btn--sm w-full mt-12" id="btn-mfa-back">Back to Login</button>
           </div>
@@ -134,8 +158,8 @@
         <button class="btn btn--icon" id="modal-forgot-close">&times;</button>
       </div>
       <div class="modal-body">
-        <p class="text-sm text-muted mb-16">In a production build, password resets send an OTP to your registered phone number.</p>
-        <p class="text-xs text-muted" style="padding: 10px; background-color: var(--surface-2); border-radius: 6px;">Demo note: You can sign in using default test values.</p>
+        <p class="text-sm text-muted mb-16">In a production build, password resets send a cryptographic OTP token to your registered phone or email address.</p>
+        <p class="text-xs text-muted" style="padding: 10px; background-color: var(--surface-2); border-radius: 6px;">Demo note: Please use the demo credentials provided on the login card.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn--primary" id="modal-forgot-ok">Understood</button>
@@ -144,6 +168,8 @@
   </div>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     const loginForm = document.getElementById('login-form');
@@ -155,20 +181,86 @@
     const mfaBoxes = document.querySelectorAll('.mfa-box');
     const btnMfaVerify = document.getElementById('btn-mfa-verify');
     const btnMfaBack = document.getElementById('btn-mfa-back');
+    const generalError = document.getElementById('general-error');
+    const generalErrorText = document.getElementById('general-error-text');
+
+    let pendingAuthResult = null;
+    let lockoutTimerInterval = null;
+
+    // Check for guard notices (e.g. after logout or unauthorized attempt)
+    const notice = sessionStorage.getItem('ds_guard_notice');
+    if (notice) {
+      sessionStorage.removeItem('ds_guard_notice');
+      showToast(notice, notice.includes('denied') ? 'danger' : 'primary');
+    }
+
+    // Check for brute-force lockout status with countdown
+    function checkLockout() {
+      const status = DS_AUTH.getLockoutStatus();
+      if (status.locked) {
+        generalError.classList.remove('hidden');
+        generalErrorText.textContent = `Too many failed attempts. Form locked for ${status.remainingSec}s to prevent brute-force attacks.`;
+        btnSubmit.disabled = true;
+        loginEmail.disabled = true;
+        loginPassword.disabled = true;
+
+        if (!lockoutTimerInterval) {
+          lockoutTimerInterval = setInterval(() => {
+            const currentStatus = DS_AUTH.getLockoutStatus();
+            if (currentStatus.locked) {
+              generalErrorText.textContent = `Too many failed attempts. Form locked for ${currentStatus.remainingSec}s to prevent brute-force attacks.`;
+            } else {
+              clearInterval(lockoutTimerInterval);
+              lockoutTimerInterval = null;
+              generalError.classList.add('hidden');
+              btnSubmit.disabled = false;
+              loginEmail.disabled = false;
+              loginPassword.disabled = false;
+              showToast('Lockout period expired. You may now attempt to sign in again.', 'primary');
+            }
+          }, 1000);
+        }
+      } else {
+        if (lockoutTimerInterval) {
+          clearInterval(lockoutTimerInterval);
+          lockoutTimerInterval = null;
+        }
+        btnSubmit.disabled = false;
+        loginEmail.disabled = false;
+        loginPassword.disabled = false;
+        if (generalErrorText.textContent.includes('locked')) {
+          generalError.classList.add('hidden');
+        }
+      }
+    }
+    checkLockout();
+
+    // Demo Fill Buttons
+    document.querySelectorAll('.demo-fill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginEmail.value = btn.getAttribute('data-email');
+        loginPassword.value = btn.getAttribute('data-pass');
+        generalError.classList.add('hidden');
+      });
+    });
 
     // Credentials Submit
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      let valid = true;
+      generalError.classList.add('hidden');
 
-      if (!loginEmail.value.trim()) {
+      const emailVal = loginEmail.value.trim();
+      const passVal = loginPassword.value;
+
+      let valid = true;
+      if (!emailVal) {
         document.getElementById('email-error').classList.remove('hidden');
         valid = false;
       } else {
         document.getElementById('email-error').classList.add('hidden');
       }
 
-      if (!loginPassword.value || loginPassword.value.length < 6) {
+      if (!passVal) {
         document.getElementById('password-error').classList.remove('hidden');
         valid = false;
       } else {
@@ -177,17 +269,33 @@
 
       if (!valid) return;
 
-      // Loading state
       btnSubmit.classList.add('btn--loading');
       btnSubmit.innerHTML = `<span class="spinner"></span> <span>Verifying credentials...</span>`;
 
-      setTimeout(() => {
+      try {
+        const res = await DS_AUTH.login(emailVal, passVal);
         btnSubmit.classList.remove('btn--loading');
-        btnSubmit.innerHTML = `<span>Sign In & Continue &rarr;</span>`;
+        btnSubmit.innerHTML = `<span>Authenticate & Continue &rarr;</span>`;
+
+        if (!res.success) {
+          generalError.classList.remove('hidden');
+          generalErrorText.textContent = res.error;
+          checkLockout();
+          return;
+        }
+
+        // Successfully authenticated password -> proceed to MFA step
+        pendingAuthResult = res;
         stepCredentials.classList.add('hidden');
         stepMfa.classList.remove('hidden');
+        document.getElementById('mfa-user-target').textContent = `Authenticated: ${res.user.name} (${res.user.role === 'admin' ? 'Super Admin' : 'Shop Owner'})`;
         if (mfaBoxes.length > 0) mfaBoxes[0].focus();
-      }, 700);
+      } catch (err) {
+        btnSubmit.classList.remove('btn--loading');
+        btnSubmit.innerHTML = `<span>Authenticate & Continue &rarr;</span>`;
+        generalError.classList.remove('hidden');
+        generalErrorText.textContent = 'Invalid credentials';
+      }
     });
 
     // MFA Inputs Auto-Advance & Paste
@@ -216,7 +324,7 @@
       });
     });
 
-    // Verify MFA OTP
+    // Verify MFA OTP (Any 6 digits for the demo)
     btnMfaVerify.addEventListener('click', () => {
       let code = '';
       mfaBoxes.forEach(b => code += b.value);
@@ -227,11 +335,12 @@
       document.getElementById('mfa-error').classList.add('hidden');
 
       btnMfaVerify.classList.add('btn--loading');
-      btnMfaVerify.innerHTML = `<span class="spinner"></span> <span>Authenticating OTP...</span>`;
+      btnMfaVerify.innerHTML = `<span class="spinner"></span> <span>Validating MFA Code...</span>`;
 
       setTimeout(() => {
-        window.location.href = 'app-dashboard.html';
-      }, 800);
+        const dest = pendingAuthResult ? pendingAuthResult.redirect : 'app-dashboard.html';
+        window.location.href = dest;
+      }, 500);
     });
 
     btnMfaBack.addEventListener('click', () => {

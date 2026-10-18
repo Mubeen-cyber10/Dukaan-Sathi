@@ -1,7 +1,66 @@
+// Hiding UI is not a security control; real enforcement is done server-side in the backend phase.
+
 /**
- * Dukaan Saathi - Global UI Interactions & Controls Engine
- * Hiding UI is not a security control; real enforcement relies on server-side backend logic.
+ * Dukaan Saathi - Global UI Interactions & Sanitization Utilities
+ * Implements input validation, output encoding, CSV neutralization, and UI components.
  */
+
+/* ─── OUTPUT ENCODING & INPUT VALIDATION (Principle 7) ───────────────── */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function sanitizeNumber(val, fallback = 0) {
+  const parsed = Number(val);
+  return isNaN(parsed) ? fallback : parsed;
+}
+
+/**
+ * Shared Validators
+ */
+const DS_VALIDATORS = {
+  // Amount > 0 and <= Rs. 500,000
+  validateAmount(val) {
+    const num = Number(val);
+    return !isNaN(num) && num > 0 && num <= 500000;
+  },
+
+  // Pakistani mobile format e.g. 0300-1234567 or 03001234567
+  validatePhone(phone) {
+    if (!phone) return false;
+    const clean = phone.replace(/[\s-]/g, '');
+    return /^03\d{9}$/.test(clean);
+  },
+
+  // Customer or merchant name (2-50 characters)
+  validateName(name) {
+    if (!name || typeof name !== 'string') return false;
+    const clean = name.trim();
+    return clean.length >= 2 && clean.length <= 50;
+  },
+
+  // Ledger note (max 120 characters)
+  validateNote(note) {
+    if (!note) return true; // Optional
+    return String(note).trim().length <= 120;
+  },
+
+  // CSV Formula Injection Neutralization (=, +, -, @)
+  neutralizeCsvCell(val) {
+    if (val === null || val === undefined) return '';
+    const str = String(val);
+    if (/^[=+\-@]/.test(str)) {
+      return "'" + str;
+    }
+    return str;
+  }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
@@ -30,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 8. Password Eye Toggle
   initPasswordToggles();
 
-  // 9. User Menu Dropdown
+  // 9. User Menu Dropdown & Logout
   initUserMenu();
 });
 
@@ -189,7 +248,7 @@ function initPasswordToggles() {
   });
 }
 
-/* User Menu Dropdown */
+/* User Menu Dropdown & Global Logout */
 function initUserMenu() {
   const trigger = document.querySelector('.user-menu-trigger');
   const dropdown = document.querySelector('.user-menu-dropdown');
@@ -203,9 +262,22 @@ function initUserMenu() {
       dropdown.classList.remove('user-menu-dropdown--open');
     });
   }
+
+  // Hook logout buttons across pages
+  document.querySelectorAll('.logout-btn, a[href="login.html"].dropdown-item--danger').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof DS_AUTH !== 'undefined') {
+        DS_AUTH.logout();
+      } else {
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+      }
+    });
+  });
 }
 
-/* Global Toast Notification Helper */
+/* Global Toast Notification Helper (XSS-Safe via textContent) */
 function showToast(message, type = 'primary') {
   let container = document.querySelector('.toast-container');
   if (!container) {
@@ -216,17 +288,23 @@ function showToast(message, type = 'primary') {
 
   const toast = document.createElement('div');
   toast.className = `toast toast--${type}`;
-  toast.innerHTML = `
-    <span>${message}</span>
-    <button style="color:var(--text-muted); padding:4px;" aria-label="Close">&times;</button>
-  `;
+  
+  const span = document.createElement('span');
+  span.textContent = message; // Safe textContent preventing XSS
 
-  toast.querySelector('button').addEventListener('click', () => toast.remove());
+  const btn = document.createElement('button');
+  btn.style.cssText = 'color:var(--text-muted); padding:4px; background:none; border:none; cursor:pointer; font-size:16px; margin-left:8px;';
+  btn.setAttribute('aria-label', 'Close');
+  btn.textContent = '×';
+  btn.addEventListener('click', () => toast.remove());
+
+  toast.appendChild(span);
+  toast.appendChild(btn);
   container.appendChild(toast);
 
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateY(10px)';
     setTimeout(() => toast.remove(), 250);
-  }, 3500);
+  }, 4000);
 }

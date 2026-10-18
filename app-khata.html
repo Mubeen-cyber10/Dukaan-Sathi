@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Khata – Dukaan Saathi App</title>
   <meta name="description" content="Tamper-evident credit ledger management.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
 
@@ -68,11 +70,12 @@
           </button>
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
-              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
+              <span class="text-sm font-semibold" id="khata-topbar-user">Hamza Ali</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown">
-              <a href="login.html" class="dropdown-item dropdown-item--danger">Log Out</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
             </div>
           </div>
         </div>
@@ -128,7 +131,7 @@
               </tr>
             </thead>
             <tbody id="khata-tbody">
-              <!-- Dynamically rendered -->
+              <!-- Dynamically rendered safely -->
             </tbody>
           </table>
         </div>
@@ -156,7 +159,12 @@
     <div class="drawer-header">
       <div>
         <h3 class="font-bold text-lg" id="drawer-name">Customer Name</h3>
-        <span class="text-xs text-muted" id="drawer-phone">0300-***-**45</span>
+        <div class="flex items-center gap-8 mt-2">
+          <span class="text-xs text-muted" id="drawer-phone">0300-***-**45</span>
+          <button type="button" class="btn btn--outline btn--sm" id="btn-reveal-phone" style="padding: 2px 8px; font-size: 0.7rem;">
+            Reveal (10s)
+          </button>
+        </div>
       </div>
       <button class="btn btn--icon" id="btn-close-drawer">&times;</button>
     </div>
@@ -175,7 +183,7 @@
 
       <h4 class="font-bold text-sm mb-12">Transaction Timeline History</h4>
       <div class="timeline" id="drawer-timeline">
-        <!-- Dynamically rendered -->
+        <!-- Dynamically rendered safely -->
       </div>
     </div>
   </div>
@@ -193,7 +201,7 @@
         <div class="form-group">
           <label class="form-label" for="entry-customer-select">Select Customer</label>
           <select class="input" id="entry-customer-select">
-            <!-- Dynamically populated -->
+            <!-- Dynamically populated safely -->
           </select>
         </div>
 
@@ -262,6 +270,8 @@
   </nav>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     let customers = DS_DATA.getCustomers();
@@ -272,6 +282,11 @@
     let modalStep = 1;
 
     document.addEventListener('DOMContentLoaded', () => {
+      const user = DS_AUTH.getUser();
+      if (user && document.getElementById('khata-topbar-user')) {
+        document.getElementById('khata-topbar-user').textContent = user.name;
+      }
+
       // Check URL Query Parameters (e.g. ?filter=due or ?openModal=true)
       const params = new URLSearchParams(window.location.search);
       if (params.get('filter')) {
@@ -371,77 +386,135 @@
       document.getElementById('table-wrapper').classList.remove('hidden');
       document.getElementById('mobile-cards').classList.remove('hidden');
 
-      // Desktop Table Render
+      // Desktop Table Render - completely XSS-safe via escapeHtml
       const tbody = document.getElementById('khata-tbody');
       tbody.innerHTML = filtered.map(c => `
         <tr onclick="openDrawer(${c.id})">
           <td>
             <div class="flex items-center gap-12">
-              <div class="avatar">${getInitials(c.name)}</div>
-              <span class="font-bold">${c.name}</span>
+              <div class="avatar">${escapeHtml(getInitials(c.name))}</div>
+              <span class="font-bold">${escapeHtml(c.name)}</span>
             </div>
           </td>
-          <td class="text-muted text-sm">${c.phone}</td>
-          <td class="text-muted text-sm">${c.lastActivity}</td>
+          <td class="text-muted text-sm">${escapeHtml(c.phone)}</td>
+          <td class="text-muted text-sm">${escapeHtml(c.lastActivity)}</td>
           <td>
             ${c.balance > 0 
-              ? `<span class="badge badge--due tabular-nums">${formatMoney(c.balance)} due</span>` 
+              ? `<span class="badge badge--due tabular-nums">${escapeHtml(formatMoney(c.balance))} due</span>` 
               : `<span class="badge badge--settled">Settled</span>`}
           </td>
           <td><button class="btn btn--ghost btn--sm" style="color:var(--primary);">View Ledger &rarr;</button></td>
         </tr>
       `).join('');
 
-      // Mobile Cards Render
+      // Mobile Cards Render - safe
       const mobileCards = document.getElementById('mobile-cards');
       mobileCards.innerHTML = filtered.map(c => `
         <div class="card card--interactive" onclick="openDrawer(${c.id})">
           <div class="flex justify-between items-center mb-8">
             <div class="flex items-center gap-10">
-              <div class="avatar">${getInitials(c.name)}</div>
+              <div class="avatar">${escapeHtml(getInitials(c.name))}</div>
               <div>
-                <div class="font-bold text-sm">${c.name}</div>
-                <div class="text-xs text-muted">${c.phone}</div>
+                <div class="font-bold text-sm">${escapeHtml(c.name)}</div>
+                <div class="text-xs text-muted">${escapeHtml(c.phone)}</div>
               </div>
             </div>
             ${c.balance > 0 
-              ? `<span class="badge badge--due tabular-nums">${formatMoney(c.balance)} due</span>` 
+              ? `<span class="badge badge--due tabular-nums">${escapeHtml(formatMoney(c.balance))} due</span>` 
               : `<span class="badge badge--settled">Settled</span>`}
           </div>
-          <div class="text-xs text-muted">Last activity: ${c.lastActivity}</div>
+          <div class="text-xs text-muted">Last activity: ${escapeHtml(c.lastActivity)}</div>
         </div>
       `).join('');
     }
 
     /* SLIDE-OVER TIMELINE DRAWER */
+    let currentDrawerCustomer = null;
+    let phoneHideTimer = null;
+
     function openDrawer(id) {
       const c = customers.find(item => item.id === id);
       if (!c) return;
+      currentDrawerCustomer = c;
+
+      if (phoneHideTimer) clearTimeout(phoneHideTimer);
 
       document.getElementById('drawer-name').textContent = c.name;
-      document.getElementById('drawer-phone').textContent = c.phone;
+      document.getElementById('drawer-phone').textContent = c.phone; // Masked by default
       document.getElementById('drawer-balance').textContent = c.balance > 0 ? `${formatMoney(c.balance)} due` : 'Settled (Rs. 0)';
       document.getElementById('drawer-balance').style.color = c.balance > 0 ? 'var(--danger)' : 'var(--success)';
 
+      // Hook reveal button
+      const revealBtn = document.getElementById('btn-reveal-phone');
+      revealBtn.textContent = 'Reveal (10s)';
+      revealBtn.onclick = () => {
+        if (!currentDrawerCustomer) return;
+        document.getElementById('drawer-phone').textContent = currentDrawerCustomer.fullPhone || currentDrawerCustomer.phone;
+        revealBtn.textContent = 'Revealed (10s)';
+        
+        // Audit log the unmask event
+        DS_AUDIT.log('PHONE_UNMASKED', `Shop owner revealed full phone number for customer: ${currentDrawerCustomer.name}`);
+        showToast('Customer phone unmasked for 10 seconds. Action logged in audit chain.', 'primary');
+
+        if (phoneHideTimer) clearTimeout(phoneHideTimer);
+        phoneHideTimer = setTimeout(() => {
+          document.getElementById('drawer-phone').textContent = currentDrawerCustomer.phone;
+          revealBtn.textContent = 'Reveal (10s)';
+        }, 10000);
+      };
+
       const timeline = document.getElementById('drawer-timeline');
-      timeline.innerHTML = c.entries.slice().reverse().map(e => `
-        <div class="timeline-item">
-          <div class="timeline-dot ${e.type === 'credit' ? 'timeline-dot--danger' : 'timeline-dot--success'}"></div>
-          <div class="timeline-card">
-            <div class="flex justify-between items-center mb-4">
-              <span class="font-bold text-sm">${e.type === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)'}</span>
-              <span class="font-extrabold tabular-nums text-sm" style="color: ${e.type === 'credit' ? 'var(--danger)' : 'var(--success)'};">
-                ${formatMoney(e.amount)}
-              </span>
-            </div>
-            <div class="text-xs text-muted mb-4">${e.note || 'No transaction note'}</div>
-            <div class="flex justify-between items-center text-xs text-muted">
-              <span>${e.date} &bull; ${e.recordedBy}</span>
-              <span class="tabular-nums">Bal: ${formatMoney(e.runningBalance)}</span>
-            </div>
-          </div>
-        </div>
-      `).join('');
+      timeline.innerHTML = '';
+      c.entries.slice().reverse().forEach(e => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+
+        const dot = document.createElement('div');
+        dot.className = `timeline-dot ${e.type === 'credit' ? 'timeline-dot--danger' : 'timeline-dot--success'}`;
+
+        const card = document.createElement('div');
+        card.className = 'timeline-card';
+
+        const rowTop = document.createElement('div');
+        rowTop.className = 'flex justify-between items-center mb-4';
+
+        const typeSpan = document.createElement('span');
+        typeSpan.className = 'font-bold text-sm';
+        typeSpan.textContent = e.type === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)';
+
+        const amountSpan = document.createElement('span');
+        amountSpan.className = 'font-extrabold tabular-nums text-sm';
+        amountSpan.style.color = e.type === 'credit' ? 'var(--danger)' : 'var(--success)';
+        amountSpan.textContent = formatMoney(e.amount);
+
+        rowTop.appendChild(typeSpan);
+        rowTop.appendChild(amountSpan);
+
+        const noteDiv = document.createElement('div');
+        noteDiv.className = 'text-xs text-muted mb-4';
+        noteDiv.textContent = e.note || 'No transaction note'; // Safe textContent prevents XSS!
+
+        const rowBot = document.createElement('div');
+        rowBot.className = 'flex justify-between items-center text-xs text-muted';
+
+        const metaSpan = document.createElement('span');
+        metaSpan.textContent = `${e.date} • ${e.recordedBy}`;
+
+        const balSpan = document.createElement('span');
+        balSpan.className = 'tabular-nums';
+        balSpan.textContent = `Bal: ${formatMoney(e.runningBalance)}`;
+
+        rowBot.appendChild(metaSpan);
+        rowBot.appendChild(balSpan);
+
+        card.appendChild(rowTop);
+        card.appendChild(noteDiv);
+        card.appendChild(rowBot);
+
+        item.appendChild(dot);
+        item.appendChild(card);
+        timeline.appendChild(item);
+      });
 
       document.getElementById('drawer-backdrop').classList.add('drawer-backdrop--open');
       document.getElementById('customer-drawer').classList.add('drawer--open');
@@ -456,7 +529,13 @@
     function openNewEntryModal() {
       modalStep = 1;
       const select = document.getElementById('entry-customer-select');
-      select.innerHTML = customers.map(c => `<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+      select.innerHTML = '';
+      customers.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = `${c.name} (${c.phone})`;
+        select.appendChild(opt);
+      });
       document.getElementById('entry-amount').value = '';
       document.getElementById('entry-note').value = '';
       document.getElementById('note-counter').textContent = '0 / 120';

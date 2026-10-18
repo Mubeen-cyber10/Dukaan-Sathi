@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dispute Resolution – Super Admin</title>
+  <meta name="description" content="Super Admin platform customer and merchant dispute resolution.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
+</head>
+<body class="page-fade">
+
+  <div class="app-layout">
+    <!-- SUPER ADMIN SIDEBAR -->
+    <aside class="app-sidebar">
+      <div>
+        <a href="admin-dashboard.html" class="brand-logo mb-24">
+          <div class="brand-icon" style="background: var(--primary); color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span>Dukaan Saathi</span>
+        </a>
+
+        <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
+          <div class="text-xs text-muted">ROLE CONTEXT</div>
+          <div class="font-bold text-sm">Sara Khan</div>
+          <div class="badge badge--due mt-4" style="font-size: 0.7rem;">Platform Super Admin</div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="admin-dashboard.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Overview</span>
+          </a>
+          <a href="admin-shops.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Shop Approvals</span>
+          </a>
+          <a href="admin-plans.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span>Subscription Plans</span>
+          </a>
+          <a href="admin-disputes.html" class="sidebar-link sidebar-link--active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Disputes</span>
+          </a>
+          <a href="admin-audit.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Hash Chain Audit</span>
+          </a>
+          <a href="admin-security.html" class="sidebar-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Security Center</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="text-xs text-muted text-center" style="padding: 10px; background: var(--surface-2); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <strong>Impartial Arbiter:</strong> Admin resolves claims based on submitted receipts without unrestricted ledger browsing.
+      </div>
+    </aside>
+
+    <!-- MAIN ADMIN CONTENT -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="flex items-center gap-12">
+          <h2 class="text-lg font-bold">Dispute Arbitration</h2>
+          <span class="badge badge--due">Super Admin Scope</span>
+        </div>
+
+        <div class="flex items-center gap-16">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+
+          <div class="user-menu-wrapper">
+            <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem; background: var(--primary); color: #fff;">SK</div>
+              <span class="text-sm font-semibold">Sara Khan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="user-menu-dropdown">
+              <a href="admin-security.html" class="dropdown-item">Security Settings</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- HEADER -->
+        <div class="mb-24">
+          <h1 class="text-3xl font-extrabold">Platform Dispute Resolution</h1>
+          <p class="text-muted text-sm mt-4">Arbitrate transaction discrepancies between shopkeepers and customers with cryptographic audit trail.</p>
+        </div>
+
+        <!-- STATUS TABS -->
+        <div class="card mb-24">
+          <div class="chip-group" id="dispute-chips">
+            <button class="chip chip--active" data-status="all">All Disputes</button>
+            <button class="chip" data-status="Open">Open</button>
+            <button class="chip" data-status="Under Review">Under Review</button>
+            <button class="chip" data-status="Resolved">Resolved</button>
+          </div>
+        </div>
+
+        <!-- DISPUTES LIST CONTAINER -->
+        <div class="flex flex-col gap-16" id="disputes-list">
+          <!-- Dynamically populated safely -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DISPUTE RESOLUTION MODAL -->
+  <div class="modal-backdrop" id="modal-dispute-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg" id="modal-dispute-title">Arbitrate Dispute</h3>
+        <button class="btn btn--icon" id="btn-close-dispute-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="arbitrate-dispute-id">
+        <div class="card mb-16" style="background: var(--surface-2);">
+          <div class="text-xs text-muted mb-4">CLAIM DETAILS:</div>
+          <div class="font-bold text-sm mb-4" id="modal-dispute-summary">Dispute Details</div>
+          <p class="text-xs text-muted" id="modal-dispute-desc">Description</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="arbitration-notes">Super Admin Decision Notes</label>
+          <textarea class="input" id="arbitration-notes" rows="3" placeholder="Enter findings, verification proof, and reason for determination..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-cancel-dispute">Cancel</button>
+        <button class="btn btn--primary" id="btn-resolve-confirm">Resolve & Commit to Audit Chain</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let disputes = DS_DATA.getDisputes();
+      let currentFilter = 'all';
+
+      function renderDisputes() {
+        disputes = DS_DATA.getDisputes();
+        const list = document.getElementById('disputes-list');
+        list.innerHTML = '';
+
+        const filtered = disputes.filter(d => (currentFilter === 'all') || (d.status === currentFilter));
+
+        if (filtered.length === 0) {
+          list.innerHTML = `
+            <div class="card text-center text-muted" style="padding: 40px;">
+              No disputes found in this category.
+            </div>
+          `;
+          return;
+        }
+
+        filtered.forEach(d => {
+          const card = document.createElement('div');
+          card.className = 'card flex justify-between items-center flex-wrap gap-16';
+
+          const isResolved = d.status === 'Resolved';
+          const badgeClass = isResolved ? 'badge--settled' : d.status === 'Open' ? 'badge--due' : 'badge--warning';
+
+          const isKhataDispute = d.type.toLowerCase().includes('khata') || d.type.toLowerCase().includes('ledger') || d.type.toLowerCase().includes('overcharge');
+          card.innerHTML = `
+            <div style="flex: 1; min-width: 280px;">
+              <div class="flex items-center gap-10 mb-8">
+                <span class="badge ${badgeClass}">${escapeHtml(d.status)}</span>
+                <span class="font-bold text-sm">${escapeHtml(d.id)}</span>
+                <span class="text-xs text-muted">• Filed on ${escapeHtml(d.filedDate)}</span>
+              </div>
+              <h3 class="font-bold text-base mb-4">${escapeHtml(d.type)} - ${formatMoney(d.amount)}</h3>
+              <div class="text-xs text-muted mb-8">
+                Shop: <strong>${escapeHtml(d.shopName)}</strong> • Customer: <strong>${escapeHtml(d.customerName)}</strong>
+              </div>
+              <p class="text-xs text-muted mb-8" style="background:var(--surface-2); padding: 8px 12px; border-radius: 6px;">
+                "${escapeHtml(d.description)}"
+              </p>
+              ${isKhataDispute ? `
+                <div class="text-xs mb-8" style="padding: 6px 10px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 4px;">
+                  <strong style="color: #2563eb;">Read-Only Audit Summary:</strong> Discrepancy logged against external receipt reference. Super Admin role is partitioned from customer ledger balances and contact numbers.
+                </div>
+              ` : ''}
+              ${d.resolution ? `<div class="text-xs text-success mt-8 font-medium">Resolution: ${escapeHtml(d.resolution)}</div>` : ''}
+            </div>
+            <div>
+              ${!isResolved ? `
+                <button class="btn btn--primary btn--sm btn-open-resolve" data-id="${escapeHtml(d.id)}">
+                  Investigate & Resolve
+                </button>
+              ` : `
+                <span class="badge badge--settled">Case Closed</span>
+              `}
+            </div>
+          `;
+
+          list.appendChild(card);
+        });
+
+        // Attach listeners
+        document.querySelectorAll('.btn-open-resolve').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const item = disputes.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('arbitrate-dispute-id').value = item.id;
+            document.getElementById('modal-dispute-title').textContent = `Arbitrate ${item.id}`;
+            document.getElementById('modal-dispute-summary').textContent = `${item.shopName} vs ${item.customerName} (${formatMoney(item.amount)})`;
+            
+            const isKhata = item.type.toLowerCase().includes('khata') || item.type.toLowerCase().includes('ledger') || item.type.toLowerCase().includes('overcharge');
+            document.getElementById('modal-dispute-desc').innerHTML = `
+              ${escapeHtml(item.description)}
+              ${isKhata ? '<div class="mt-8 text-xs font-semibold text-primary">Partition Notice: Ledger entries remain protected under Owner privacy scope. Resolving records an impartial platform determination.</div>' : ''}
+            `;
+            document.getElementById('arbitration-notes').value = '';
+            document.getElementById('modal-dispute-backdrop').classList.add('modal-backdrop--open');
+          });
+        });
+      }
+
+      function closeModal() {
+        document.getElementById('modal-dispute-backdrop').classList.remove('modal-backdrop--open');
+      }
+      document.getElementById('btn-close-dispute-modal').addEventListener('click', closeModal);
+      document.getElementById('btn-cancel-dispute').addEventListener('click', closeModal);
+
+      // Resolve confirm - MANDATORY NOTE REQUIRED
+      document.getElementById('btn-resolve-confirm').addEventListener('click', () => {
+        const id = document.getElementById('arbitrate-dispute-id').value;
+        const notes = document.getElementById('arbitration-notes').value.trim();
+
+        if (!notes) {
+          showToast('Resolution rationale/notes are mandatory before closing a dispute.', 'error');
+          document.getElementById('arbitration-notes').focus();
+          return;
+        }
+
+        DS_DATA.resolveDispute(id, notes);
+        DS_AUDIT.log('DISPUTE_RESOLVED', `Admin resolved dispute #${id}: ${notes}`);
+
+        closeModal();
+        renderDisputes();
+        showToast(`Dispute #${id} resolved. Verdict logged into SHA-256 hash chain.`, 'success');
+      });
+
+      // Filter chips
+      document.querySelectorAll('#dispute-chips .chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('#dispute-chips .chip').forEach(c => c.classList.remove('chip--active'));
+          chip.classList.add('chip--active');
+          currentFilter = chip.getAttribute('data-status');
+          renderDisputes();
+        });
+      });
+
+      renderDisputes();
+    });
+  </script>
+</body>
+</html>

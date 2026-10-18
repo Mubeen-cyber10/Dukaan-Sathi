@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reports & Audit – Dukaan Saathi App</title>
   <meta name="description" content="Financial reports, KPI metrics & audit logs.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
 
@@ -58,8 +60,8 @@
     <main class="app-main">
       <header class="app-topbar">
         <div class="flex items-center gap-12">
-          <h2 class="text-lg font-bold">Reports & Audit Log</h2>
-          <span class="badge badge--settled">Analytics</span>
+          <h2 class="text-lg font-bold">Reports & Analytics</h2>
+          <span class="badge badge--role">Shop Owner</span>
         </div>
 
         <div class="flex items-center gap-16">
@@ -68,11 +70,12 @@
           </button>
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HS</div>
-              <span class="text-sm font-semibold">Hamza Sahab</span>
+              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
+              <span class="text-sm font-semibold" id="reports-topbar-user">Hamza Ali</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown">
-              <a href="login.html" class="dropdown-item dropdown-item--danger">Log Out</a>
+              <a href="#" class="dropdown-item dropdown-item--danger logout-btn">Log Out</a>
             </div>
           </div>
         </div>
@@ -82,12 +85,20 @@
         <!-- DATE RANGE CHIPS TOOLBAR -->
         <div class="card mb-24" style="padding: 16px 20px;">
           <div class="flex justify-between items-center flex-wrap gap-12">
-            <span class="font-bold text-sm">Select Analytics Date Window:</span>
-            <div class="chip-group" id="report-range-chips">
-              <button class="chip chip--active" data-days="7">Last 7 Days</button>
-              <button class="chip" data-days="30">Last 30 Days</button>
-              <button class="chip" data-days="90">Last 90 Days</button>
+            <div class="flex items-center gap-12">
+              <span class="font-bold text-sm">Select Analytics Date Window:</span>
+              <div class="chip-group" id="report-range-chips">
+                <button class="chip chip--active" data-days="7">Last 7 Days</button>
+                <button class="chip" data-days="30">Last 30 Days</button>
+                <button class="chip" data-days="90">Last 90 Days</button>
+              </div>
             </div>
+
+            <!-- CSV EXPORT BUTTON (Formulas neutralized against CSV injection) -->
+            <button type="button" class="btn btn--outline btn--sm" id="btn-export-csv">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Safe CSV
+            </button>
           </div>
         </div>
 
@@ -132,7 +143,7 @@
                 </tr>
               </thead>
               <tbody id="top-debtors-tbody">
-                <!-- Dynamically populated -->
+                <!-- Dynamically populated safely -->
               </tbody>
             </table>
           </div>
@@ -141,12 +152,12 @@
         <!-- FULL AUDIT LOG TABLE -->
         <div class="card">
           <div class="flex justify-between items-center mb-16">
-            <h3 class="font-bold text-lg">System Audit Log Stream</h3>
+            <h3 class="font-bold text-lg">System Activity Stream</h3>
             <span class="badge badge--role">Actor Tracked</span>
           </div>
 
           <div id="full-audit-stream" class="flex flex-col gap-8">
-            <!-- Dynamically populated -->
+            <!-- Dynamically populated safely -->
           </div>
         </div>
       </div>
@@ -178,9 +189,16 @@
   </nav>
 
   <script src="js/data.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const user = DS_AUTH.getUser();
+      if (user && document.getElementById('reports-topbar-user')) {
+        document.getElementById('reports-topbar-user').textContent = user.name;
+      }
+
       renderReports();
 
       document.querySelectorAll('#report-range-chips .chip').forEach(btn => {
@@ -190,6 +208,28 @@
           renderReports();
         });
       });
+
+      // Export Safe CSV (neutralizes =, +, -, @ to prevent Excel formula injection)
+      document.getElementById('btn-export-csv').addEventListener('click', () => {
+        const customers = DS_DATA.getCustomers();
+        const headers = ['Customer Name', 'Masked Phone', 'Balance (PKR)', 'Last Activity'];
+        const rows = customers.map(c => [
+          DS_VALIDATORS.neutralizeCsvCell(c.name),
+          DS_VALIDATORS.neutralizeCsvCell(c.phone),
+          c.balance,
+          DS_VALIDATORS.neutralizeCsvCell(c.lastActivity)
+        ]);
+
+        let csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'dukaan_saathi_debtors.csv');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        showToast('Safe CSV exported successfully with formula injection protection.', 'success');
+      });
     });
 
     function renderReports() {
@@ -197,37 +237,89 @@
       const debtors = customers.filter(c => c.balance > 0).sort((a,b) => b.balance - a.balance);
 
       const tbody = document.getElementById('top-debtors-tbody');
-      tbody.innerHTML = debtors.map(c => {
-        let riskBadge = '<span class="badge badge--settled">Low Risk</span>';
-        if (c.balance > 15000) riskBadge = '<span class="badge badge--due">High Risk (&gt;15k)</span>';
-        else if (c.balance > 5000) riskBadge = '<span class="badge badge--warning">Medium Risk</span>';
+      tbody.innerHTML = '';
 
-        return `
-          <tr onclick="window.location.href='app-khata.html'">
-            <td>
-              <div class="flex items-center gap-12">
-                <div class="avatar">${getInitials(c.name)}</div>
-                <span class="font-bold">${c.name}</span>
-              </div>
-            </td>
-            <td class="text-muted text-sm">${c.phone}</td>
-            <td class="tabular-nums font-extrabold text-danger">${formatMoney(c.balance)}</td>
-            <td>${riskBadge}</td>
-          </tr>
-        `;
-      }).join('');
+      debtors.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', () => {
+          window.location.href = 'app-khata.html';
+        });
+
+        const tdName = document.createElement('td');
+        const flex = document.createElement('div');
+        flex.className = 'flex items-center gap-12';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = getInitials(c.name);
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'font-bold';
+        nameSpan.textContent = c.name;
+
+        flex.appendChild(avatar);
+        flex.appendChild(nameSpan);
+        tdName.appendChild(flex);
+
+        const tdPhone = document.createElement('td');
+        tdPhone.className = 'text-muted text-sm';
+        tdPhone.textContent = c.phone;
+
+        const tdBalance = document.createElement('td');
+        tdBalance.className = 'tabular-nums font-extrabold text-danger';
+        tdBalance.textContent = formatMoney(c.balance);
+
+        const tdRisk = document.createElement('td');
+        const riskBadge = document.createElement('span');
+        if (c.balance > 15000) {
+          riskBadge.className = 'badge badge--due';
+          riskBadge.textContent = 'High Risk (>15k)';
+        } else if (c.balance > 5000) {
+          riskBadge.className = 'badge badge--warning';
+          riskBadge.textContent = 'Medium Risk';
+        } else {
+          riskBadge.className = 'badge badge--settled';
+          riskBadge.textContent = 'Low Risk';
+        }
+        tdRisk.appendChild(riskBadge);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdPhone);
+        tr.appendChild(tdBalance);
+        tr.appendChild(tdRisk);
+        tbody.appendChild(tr);
+      });
 
       const auditStream = document.getElementById('full-audit-stream');
+      auditStream.innerHTML = '';
       const auditData = DS_DATA.getAudit();
-      auditStream.innerHTML = auditData.map(item => `
-        <div style="padding: 12px 16px; background: var(--surface-2); border-radius: var(--radius-sm);" class="flex justify-between items-center">
-          <div>
-            <div class="font-medium text-sm">${item.text}</div>
-            <div class="text-xs text-muted">${item.time}</div>
-          </div>
-          <span class="badge badge--role">${item.actor}</span>
-        </div>
-      `).join('');
+
+      auditData.forEach(item => {
+        const row = document.createElement('div');
+        row.style.cssText = 'padding: 12px 16px; background: var(--surface-2); border-radius: var(--radius-sm);';
+        row.className = 'flex justify-between items-center';
+
+        const left = document.createElement('div');
+        const text = document.createElement('div');
+        text.className = 'font-medium text-sm';
+        text.textContent = item.text;
+
+        const time = document.createElement('div');
+        time.className = 'text-xs text-muted';
+        time.textContent = item.time;
+
+        left.appendChild(text);
+        left.appendChild(time);
+
+        const badge = document.createElement('span');
+        badge.className = 'badge badge--role';
+        badge.textContent = item.actor;
+
+        row.appendChild(left);
+        row.appendChild(badge);
+        auditStream.appendChild(row);
+      });
     }
   </script>
 </body>
