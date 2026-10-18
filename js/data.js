@@ -8,7 +8,6 @@ const STORAGE_KEYS = {
   ORDERS: 'ds_orders_data_v2',
   PRODUCTS: 'ds_products_data_v2',
   AUDIT: 'ds_audit_data_v2',
-  SHOPS: 'ds_shops_data_v2',
   DISPUTES: 'ds_disputes_data_v2',
   PLANS: 'ds_plans_data_v2'
 };
@@ -294,8 +293,11 @@ const DS_DATA = {
     } catch(e) {}
   },
   getShops: function() {
+    if (typeof window !== 'undefined' && window.DS_SHOPS_STORE) {
+      return window.DS_SHOPS_STORE.getAllShops();
+    }
     try {
-      const data = localStorage.getItem(STORAGE_KEYS.SHOPS);
+      const data = sessionStorage.getItem('ds-shops');
       return data ? JSON.parse(data) : INITIAL_SHOPS;
     } catch(e) {
       return INITIAL_SHOPS;
@@ -303,7 +305,6 @@ const DS_DATA = {
   },
   saveShops: function(shops) {
     try {
-      localStorage.setItem(STORAGE_KEYS.SHOPS, JSON.stringify(shops));
       sessionStorage.setItem('ds-shops', JSON.stringify(shops));
     } catch(e) {}
   },

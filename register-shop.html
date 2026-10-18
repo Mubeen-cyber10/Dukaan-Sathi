@@ -163,16 +163,16 @@
               </div>
             </div>
 
-            <!-- CNIC Number (With Demonstration Privacy Notice) -->
+            <!-- CNIC Number (Optional) -->
             <div class="form-group mb-16">
               <div class="flex justify-between items-center mb-4">
-                <label class="form-label" for="reg-cnic" style="margin-bottom:0;">Owner CNIC (KYC Document) <span style="color:var(--danger)">*</span></label>
-                <span class="text-xs text-muted">Masked / Demo Only</span>
+                <label class="form-label" for="reg-cnic" style="margin-bottom:0;">CNIC (optional, requested later during verification)</label>
+                <span class="text-xs text-muted">Optional</span>
               </div>
-              <input class="input" type="text" id="reg-cnic" placeholder="35201-1234567-1" maxlength="15" required>
+              <input class="input" type="text" id="reg-cnic" placeholder="35201-1234567-1 (optional)" maxlength="15">
               <div id="cnic-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
               <p class="text-xs text-muted mt-4" style="font-size: 0.72rem;">
-                Privacy Note: In production, CNIC data is encrypted in transit and at rest. In this prototype, data is retained in local session memory only.
+                Privacy Note: CNIC is never stored or logged in client storage. Formal verification is completed securely via platform compliance.
               </p>
             </div>
 

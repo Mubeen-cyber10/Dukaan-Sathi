@@ -3,15 +3,13 @@
 
 /**
  * Dukaan Saathi - Shared Shops Data Store
- * Activity 3 - Centralized store mirroring in-memory cache, sessionStorage ('ds-shops'),
- * and synchronized with localStorage ('ds_shops_data_v2') for real-time admin workflow.
+ * Activity 3 - Centralized store mirroring in-memory cache and sessionStorage ('ds-shops') only.
  */
 
 (function(window) {
   'use strict';
 
   const STORAGE_KEY_SESSION = 'ds-shops';
-  const STORAGE_KEY_LOCAL = 'ds_shops_data_v2';
   const RATE_LIMIT_KEY = 'ds-reg-ratelimit';
   const USER_SUBMISSIONS_KEY = 'ds-user-submissions';
 
@@ -239,7 +237,7 @@
   let inMemoryShops = null;
 
   function loadInitialData() {
-    // 1. Try sessionStorage first
+    // 1. Try sessionStorage
     try {
       const sess = sessionStorage.getItem(STORAGE_KEY_SESSION);
       if (sess) {
@@ -251,24 +249,7 @@
       }
     } catch(e) {}
 
-    // 2. Try localStorage second
-    try {
-      const local = localStorage.getItem(STORAGE_KEY_LOCAL);
-      if (local) {
-        const parsed = JSON.parse(local);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge rich baseline fields if missing
-          inMemoryShops = parsed.map(s => {
-            const def = DEFAULT_SHOPS.find(d => d.id === s.id);
-            return def ? Object.assign({}, def, s) : s;
-          });
-          persist(inMemoryShops);
-          return inMemoryShops;
-        }
-      }
-    } catch(e) {}
-
-    // 3. Fallback to default 12 shops
+    // 2. Fallback to default 12 shops
     inMemoryShops = JSON.parse(JSON.stringify(DEFAULT_SHOPS));
     persist(inMemoryShops);
     return inMemoryShops;
@@ -278,9 +259,6 @@
     inMemoryShops = shops;
     try {
       sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(shops));
-    } catch(e) {}
-    try {
-      localStorage.setItem(STORAGE_KEY_LOCAL, JSON.stringify(shops));
     } catch(e) {}
   }
 

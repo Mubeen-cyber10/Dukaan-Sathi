@@ -8,7 +8,7 @@
 
 ## 1. Architecture & Shared Store (`js/shops-store.js`)
 The shared store bridges the client-side lifecycle across isolated pages:
-- **State Flow:** In-memory object model &harr; `sessionStorage` (`ds-shops`) &harr; `localStorage` (`ds_shops_data_v2`).
+- **State Flow:** In-memory object model &harr; `sessionStorage` (`ds-shops`) only (no localStorage persistence for shop data).
 - **Separation of Duties:** Registrations enter `Pending Approval`. Shop owners cannot self-approve. Platforms Super Admins arbitrate state transitions in [`admin-shops.html`](../admin-shops.html). Once approved, shops immediately surface in [`browse-shops.html`](../browse-shops.html).
 - **Rate Limiting:** Enforces max 3 submissions per minute per browser session with countdown quota indicator.
 

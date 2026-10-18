@@ -33,7 +33,7 @@ Login URL: [`login.html`](login.html) (Single unified login page for both roles)
 
 ### Shared State & Pipeline
 - **File:** [`js/shops-store.js`](js/shops-store.js)
-- **Architecture:** Synchronizes in-memory cache with `sessionStorage` (`ds-shops`) and `localStorage` (`ds_shops_data_v2`). Applications submitted in Module 1 immediately flow to the Super Admin Merchant Queue ([`admin-shops.html`](admin-shops.html)). Upon Admin approval, shops immediately surface in the Public Directory ([`browse-shops.html`](browse-shops.html)).
+- **Architecture:** Keeps in-memory cache synchronized with `sessionStorage` (`ds-shops`) only. Applications submitted in Module 1 immediately flow to the Super Admin Merchant Queue ([`admin-shops.html`](admin-shops.html)). Upon Admin approval, shops immediately surface in the Public Directory ([`browse-shops.html`](browse-shops.html)).
 
 ---
 

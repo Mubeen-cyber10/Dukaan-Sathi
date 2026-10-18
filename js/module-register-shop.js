@@ -164,6 +164,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const val = cnicInput.value.trim();
     cnicError.style.display = 'none';
     const clean = val.replace(/\D/g, '');
+    // Optional field: valid if empty
+    if (clean.length === 0) {
+      return true;
+    }
+    // If entered, must contain exactly 13 digits
     if (clean.length !== 13) {
       cnicError.textContent = 'CNIC must contain exactly 13 digits (e.g. 35201-1234567-1).';
       cnicError.style.display = 'block';
