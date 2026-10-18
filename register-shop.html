@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Your Shop – Dukaan Saathi</title>
+  <meta name="description" content="Register your local dukaan on Dukaan Saathi. Digital khata, verified merchant listing, and customer storefront.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <!-- PUBLIC HEADER -->
+  <header class="pub-header">
+    <div class="container pub-navbar">
+      <a href="index.html" class="brand-logo" aria-label="Dukaan Saathi Home">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>Dukaan Saathi</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="browse-shops.html" class="nav-link">Browse Shops</a></li>
+          <li><a href="register-shop.html" class="nav-link nav-link--active">Register Shop</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="security.html" class="nav-link">Security</a></li>
+        </ul>
+      </nav>
+
+      <div class="pub-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <a href="login.html" class="btn btn--outline btn--sm">Log in</a>
+        <button class="hamburger" aria-label="Toggle mobile menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SLIDE-DOWN MENU -->
+  <div class="mobile-nav-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="browse-shops.html" class="nav-link">Browse Shops</a>
+    <a href="register-shop.html" class="nav-link nav-link--active">Register Shop</a>
+    <a href="features.html" class="nav-link">Features</a>
+    <a href="pricing.html" class="nav-link">Pricing</a>
+    <a href="security.html" class="nav-link">Security</a>
+    <hr style="border:none; border-top: 1px solid var(--border);">
+    <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Log in</a>
+  </div>
+
+  <!-- MAIN REGISTRATION CONTENT -->
+  <main style="padding: 40px 0 80px;">
+    <div class="container">
+      
+      <!-- PAGE HEADER -->
+      <div class="mb-32">
+        <div class="flex items-center gap-8 mb-8">
+          <span class="badge badge--due">Merchant Onboarding</span>
+          <span id="rate-limit-badge" class="badge badge--info">Quota: 3 / min</span>
+        </div>
+        <h1 class="text-3xl font-extrabold">Register Your Dukaan</h1>
+        <p class="text-muted mt-4">Submit your shop details for verification. Once approved by platform compliance, your storefront will be listed in the public directory and your digital khata activated.</p>
+      </div>
+
+      <!-- SEPARATION OF DUTIES & SECURITY NOTICE -->
+      <div class="card mb-32" style="background: var(--surface-2); border-left: 4px solid var(--primary);">
+        <div class="flex items-start gap-16">
+          <div class="brand-icon" style="background: var(--primary-soft); color: var(--primary); width: 38px; height: 38px; flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="font-bold text-sm" style="color: var(--primary);">Separation of Duties & Authorization Notice</div>
+            <p class="text-xs text-muted mt-4 leading-relaxed">
+              Submitting this registration application registers your shop in <strong>Pending Approval</strong> state. Shop owners cannot activate their own stores. Platform Super Administrators verify KYC documents and approve shops before they are published to customers. Real enforcement is handled server-side.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2-COLUMN LAYOUT -->
+      <div class="grid-2" style="gap: 32px; align-items: start;">
+        
+        <!-- COLUMN 1: REGISTRATION FORM -->
+        <div class="card" style="box-shadow: var(--shadow-md);">
+          <div class="card-header pb-16 mb-20" style="border-bottom: 1px solid var(--border);">
+            <h2 class="text-xl font-bold">Shop Application Form</h2>
+            <p class="text-xs text-muted mt-2">All fields marked with an asterisk (<span style="color:var(--danger)">*</span>) are mandatory.</p>
+          </div>
+
+          <form id="shop-registration-form" novalidate>
+            
+            <!-- Shop Name -->
+            <div class="form-group mb-16">
+              <label class="form-label" for="reg-shop-name">Shop / Dukaan Name <span style="color:var(--danger)">*</span></label>
+              <div class="input-wrapper">
+                <input class="input" type="text" id="reg-shop-name" placeholder="e.g. Madina Karyana Store" maxlength="60" required autocomplete="off">
+              </div>
+              <div id="shop-name-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
+              <div id="shop-duplicate-warning" class="text-xs mt-4" style="color: var(--warning); display: none;"></div>
+            </div>
+
+            <!-- Category & City Row -->
+            <div class="grid-2 gap-16 mb-16">
+              <div class="form-group">
+                <label class="form-label" for="reg-category">Business Category <span style="color:var(--danger)">*</span></label>
+                <select class="input" id="reg-category" required>
+                  <option value="Grocery & Kiryana">Grocery & Kiryana</option>
+                  <option value="Super Store">Super Store</option>
+                  <option value="Dairy & Bakery">Dairy & Bakery</option>
+                  <option value="Spices & Grains">Spices & Grains</option>
+                  <option value="General Merchant">General Merchant</option>
+                  <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                  <option value="Pharmacy & General">Pharmacy & General</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reg-city">City <span style="color:var(--danger)">*</span></label>
+                <select class="input" id="reg-city" required>
+                  <option value="Multan">Multan</option>
+                  <option value="Lahore">Lahore</option>
+                  <option value="Karachi">Karachi</option>
+                  <option value="Rawalpindi">Rawalpindi</option>
+                  <option value="Islamabad">Islamabad</option>
+                  <option value="Faisalabad">Faisalabad</option>
+                  <option value="Peshawar">Peshawar</option>
+                  <option value="Quetta">Quetta</option>
+                  <option value="Sialkot">Sialkot</option>
+                  <option value="Gujranwala">Gujranwala</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Larkana">Larkana</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Complete Shop Address -->
+            <div class="form-group mb-16">
+              <label class="form-label" for="reg-address">Complete Physical Address <span style="color:var(--danger)">*</span></label>
+              <textarea class="input" id="reg-address" rows="2" placeholder="Shop #, Street / Market name, Sector or Chowk" required style="resize: vertical;"></textarea>
+              <div id="address-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
+            </div>
+
+            <!-- Owner Name & Contact Phone Row -->
+            <div class="grid-2 gap-16 mb-16">
+              <div class="form-group">
+                <label class="form-label" for="reg-owner">Owner Full Name <span style="color:var(--danger)">*</span></label>
+                <input class="input" type="text" id="reg-owner" placeholder="e.g. Muhammad Usman" maxlength="50" required>
+                <div id="owner-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="reg-phone">Public Contact Phone <span style="color:var(--danger)">*</span></label>
+                <input class="input" type="tel" id="reg-phone" placeholder="0300-1234567" maxlength="12" required>
+                <div id="phone-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
+              </div>
+            </div>
+
+            <!-- CNIC Number (With Demonstration Privacy Notice) -->
+            <div class="form-group mb-16">
+              <div class="flex justify-between items-center mb-4">
+                <label class="form-label" for="reg-cnic" style="margin-bottom:0;">Owner CNIC (KYC Document) <span style="color:var(--danger)">*</span></label>
+                <span class="text-xs text-muted">Masked / Demo Only</span>
+              </div>
+              <input class="input" type="text" id="reg-cnic" placeholder="35201-1234567-1" maxlength="15" required>
+              <div id="cnic-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
+              <p class="text-xs text-muted mt-4" style="font-size: 0.72rem;">
+                Privacy Note: In production, CNIC data is encrypted in transit and at rest. In this prototype, data is retained in local session memory only.
+              </p>
+            </div>
+
+            <!-- Business Description with Character Counter -->
+            <div class="form-group mb-16">
+              <div class="flex justify-between items-center mb-4">
+                <label class="form-label" for="reg-description" style="margin-bottom:0;">Shop Summary / About</label>
+                <span id="char-counter" class="text-xs text-muted">0 / 250</span>
+              </div>
+              <textarea class="input" id="reg-description" rows="3" maxlength="250" placeholder="Briefly describe what your dukaan sells, specialty items, and delivery options..."></textarea>
+            </div>
+
+            <!-- Simulated Document Verification Upload -->
+            <div class="form-group mb-20">
+              <label class="form-label">Upload CNIC / Utility Bill (Proof of Dukaan) <span class="text-muted text-xs font-normal">(Optional Mock)</span></label>
+              <div style="border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; background: var(--surface-2);">
+                <input type="file" id="reg-file-upload" accept="image/*,.pdf" style="display:none;">
+                <button type="button" class="btn btn--outline btn--sm mb-8" id="btn-browse-file">Choose Document File</button>
+                <div id="file-name-display" class="text-xs text-muted">No document chosen (simulated upload)</div>
+                <p class="text-xs text-muted mt-4" style="font-size: 0.7rem;">
+                  Security Note: Client files in this demo are processed in-memory only. No binary payloads are transmitted without server-side virus scanning and tokenization.
+                </p>
+              </div>
+            </div>
+
+            <!-- Terms & Attestation Checkbox -->
+            <div class="flex items-start gap-8 mb-24">
+              <input type="checkbox" id="reg-terms" required style="margin-top: 3px; cursor: pointer;">
+              <label for="reg-terms" class="text-xs text-muted" style="cursor: pointer;">
+                I declare that the information provided is accurate. I understand that registration requires Super Admin KYC verification before this shop appears in the public directory.
+              </label>
+            </div>
+
+            <!-- Submit Button & Live Status Alert -->
+            <button type="submit" class="btn btn--primary w-full" id="btn-submit-registration">
+              <span>Submit Shop Application</span>
+            </button>
+            <div id="form-general-error" class="text-xs mt-8 text-center" style="color: var(--danger); display: none;"></div>
+          </form>
+        </div>
+
+        <!-- COLUMN 2: PENDING APPLICATIONS & VERIFICATION GUIDE -->
+        <div>
+          <!-- PENDING SUBMISSIONS LIST (FOR CURRENT USER SESSION) -->
+          <div class="card mb-24" style="box-shadow: var(--shadow-sm);">
+            <div class="flex justify-between items-center mb-16 pb-12" style="border-bottom: 1px solid var(--border);">
+              <div>
+                <h3 class="text-base font-bold">Your Pending Applications</h3>
+                <p class="text-xs text-muted">Submitted in this session awaiting admin approval</p>
+              </div>
+              <span id="pending-count-badge" class="badge badge--due">0 Pending</span>
+            </div>
+
+            <div id="pending-list-container">
+              <!-- Rendered dynamically via JS -->
+              <div class="text-center py-24 text-muted text-xs" id="no-pending-msg">
+                No active pending applications in this session. Fill out the form to register your shop.
+              </div>
+            </div>
+          </div>
+
+          <!-- VERIFICATION LIFECYCLE GUIDE -->
+          <div class="card mb-24" style="background: var(--surface);">
+            <h3 class="text-base font-bold mb-16">Onboarding & Verification Steps</h3>
+            
+            <div class="flex flex-col gap-16">
+              <div class="flex items-start gap-12">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; flex-shrink: 0;">1</div>
+                <div>
+                  <div class="text-sm font-semibold">Online Submission</div>
+                  <p class="text-xs text-muted mt-2">Submit shop location, contact phone, and owner KYC identity details via this form.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-12">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; flex-shrink: 0;">2</div>
+                <div>
+                  <div class="text-sm font-semibold">Admin Compliance Review</div>
+                  <p class="text-xs text-muted mt-2">Platform Super Admins review documentation in the Merchant Queue to prevent unauthorized or duplicate entities.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-12">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; flex-shrink: 0;">3</div>
+                <div>
+                  <div class="text-sm font-semibold">Directory Publishing & Khata Launch</div>
+                  <p class="text-xs text-muted mt-2">Upon approval, your dukaan goes live in the public directory and merchant khata is enabled.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLIENT-SIDE HONESTY NOTICE -->
+          <div class="card" style="background: var(--surface-2); border-left: 3px solid var(--info);">
+            <div class="text-xs font-bold mb-4" style="color: var(--info);">Prototype Integrity Note</div>
+            <p class="text-xs text-muted leading-relaxed">
+              Frontend input validation and character constraints enhance user experience. Real security checks, duplicate resolution, rate-limiting, and RBAC authorization are guaranteed in the server-side tier.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- WITHDRAW APPLICATION CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="modal-withdraw">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-withdraw-title">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg" id="modal-withdraw-title">Withdraw Application</h3>
+        <button class="btn btn--icon" id="btn-close-withdraw-modal" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-muted mb-16">
+          Are you sure you want to withdraw the application for <strong id="withdraw-shop-name" style="color:var(--text);"></strong>?
+        </p>
+        <div class="card" style="background: var(--surface-2); padding: 12px;">
+          <div class="text-xs text-muted">Application ID: <span id="withdraw-shop-id" class="font-bold" style="color:var(--text);"></span></div>
+          <div class="text-xs text-muted mt-2">Status: <span class="badge badge--due" style="font-size:0.7rem;">Pending Approval</span></div>
+        </div>
+        <p class="text-xs text-muted mt-12">
+          Withdrawing this application removes it from the platform review queue immediately.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-cancel-withdraw">Keep Application</button>
+        <button class="btn btn--danger" id="btn-confirm-withdraw">Withdraw Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="background-color: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: auto;">
+    <div class="container">
+      <div class="grid-4 mb-32" style="gap: 32px;">
+        <div>
+          <div class="brand-logo mb-16">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <span>Dukaan Saathi</span>
+          </div>
+          <p class="text-xs text-muted">Empowering Pakistani dukaandars with calm, tamper-evident digital khata, storefronts, and customer discovery.</p>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Dukaan Network</div>
+          <ul class="flex flex-col gap-8 text-xs text-muted">
+            <li><a href="browse-shops.html" class="nav-link" style="padding:0;">Browse Verified Shops</a></li>
+            <li><a href="register-shop.html" class="nav-link" style="padding:0;">Register Your Dukaan</a></li>
+            <li><a href="features.html" class="nav-link" style="padding:0;">Platform Features</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Governance & Trust</div>
+          <ul class="flex flex-col gap-8 text-xs text-muted">
+            <li><a href="security.html" class="nav-link" style="padding:0;">Security Principles</a></li>
+            <li><a href="pricing.html" class="nav-link" style="padding:0;">Subscription Plans</a></li>
+            <li><a href="login.html" class="nav-link" style="padding:0;">Portal Login</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Support & Safety</div>
+          <p class="text-xs text-muted">Multi-tenant data isolation and complete customer privacy protections.</p>
+          <div class="badge badge--success mt-8">KYC Compliance</div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-muted pt-24" style="border-top: 1px solid var(--border);">
+        &copy; 2026 Dukaan Saathi. Built with care for local communities.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/shops-store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/module-register-shop.js"></script>
+</body>
+</html>
