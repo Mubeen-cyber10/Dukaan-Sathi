@@ -304,6 +304,7 @@ const DS_DATA = {
   saveShops: function(shops) {
     try {
       localStorage.setItem(STORAGE_KEYS.SHOPS, JSON.stringify(shops));
+      sessionStorage.setItem('ds-shops', JSON.stringify(shops));
     } catch(e) {}
   },
   updateShopStatus: function(shopId, newStatus) {
@@ -319,6 +320,9 @@ const DS_DATA = {
         found.documentStatus = 'CNIC: Suspended';
       }
       this.saveShops(shops);
+      if (typeof window !== 'undefined' && window.DS_SHOPS_STORE) {
+        window.DS_SHOPS_STORE.updateStatus(shopId, newStatus);
+      }
       return true;
     }
     return false;
