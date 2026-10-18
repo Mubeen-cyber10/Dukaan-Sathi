@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Verified Shops – Dukaan Saathi</title>
+  <meta name="description" content="Discover verified neighborhood grocery stores, dukaans, bakeries, and merchants across Pakistan.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="page-fade">
+
+  <!-- PUBLIC HEADER -->
+  <header class="pub-header">
+    <div class="container pub-navbar">
+      <a href="index.html" class="brand-logo" aria-label="Dukaan Saathi Home">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span>Dukaan Saathi</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="browse-shops.html" class="nav-link nav-link--active">Browse Shops</a></li>
+          <li><a href="register-shop.html" class="nav-link">Register Shop</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="security.html" class="nav-link">Security</a></li>
+        </ul>
+      </nav>
+
+      <div class="pub-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <a href="login.html" class="btn btn--outline btn--sm">Log in</a>
+        <a href="register-shop.html" class="btn btn--primary btn--sm">Open a Dukaan</a>
+        <button class="hamburger" aria-label="Toggle mobile menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SLIDE-DOWN MENU -->
+  <div class="mobile-nav-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="browse-shops.html" class="nav-link nav-link--active">Browse Shops</a>
+    <a href="register-shop.html" class="nav-link">Register Shop</a>
+    <a href="features.html" class="nav-link">Features</a>
+    <a href="pricing.html" class="nav-link">Pricing</a>
+    <a href="security.html" class="nav-link">Security</a>
+    <hr style="border:none; border-top: 1px solid var(--border);">
+    <a href="login.html" class="btn btn--outline w-full" style="text-align:center;">Log in</a>
+    <a href="register-shop.html" class="btn btn--primary w-full" style="text-align:center;">Open a Dukaan</a>
+  </div>
+
+  <!-- DIRECTORY HERO & SEARCH SECTION -->
+  <section style="background-color: var(--surface-2); border-bottom: 1px solid var(--border); padding: 40px 0 32px;">
+    <div class="container">
+      <div style="max-width: 720px; margin: 0 auto; text-align: center;">
+        <span class="badge badge--success mb-12">Verified Merchant Network</span>
+        <h1 class="text-3xl font-extrabold mb-8">Discover Local Dukaans</h1>
+        <p class="text-muted text-sm mb-24">Explore trusted neighborhood grocers, kiryana stores, bakeries, and general merchants offering digital khata and home delivery across Pakistan.</p>
+
+        <!-- SEARCH BAR -->
+        <div class="card" style="padding: 8px 12px; box-shadow: var(--shadow-md);">
+          <div class="flex items-center gap-12">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted); flex-shrink: 0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="input" type="search" id="shop-search-input" placeholder="Search by shop name, city, items (e.g. flour, ghee), or market..." style="border:none; background:transparent; box-shadow:none; padding:8px 0; font-size: 0.95rem;">
+            <button class="btn btn--primary btn--sm" id="btn-clear-search" style="display:none;">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIRECTORY MAIN CONTENT -->
+  <main style="padding: 32px 0 64px;">
+    <div class="container">
+      
+      <!-- CONTROLS & FILTER ROW -->
+      <div class="card mb-24" style="padding: 16px;">
+        <div class="flex justify-between items-center flex-wrap gap-16">
+          
+          <!-- Category Filter Chips -->
+          <div class="chip-group" id="category-chips">
+            <button class="chip chip--active" data-category="all">All Shops</button>
+            <button class="chip" data-category="Grocery & Kiryana">Grocery & Kiryana</button>
+            <button class="chip" data-category="Super Store">Super Store</button>
+            <button class="chip" data-category="Dairy & Bakery">Dairy & Bakery</button>
+            <button class="chip" data-category="Spices & Grains">Spices & Grains</button>
+            <button class="chip" data-category="General Merchant">General Merchant</button>
+          </div>
+
+          <!-- Secondary Filters: City & Sort -->
+          <div class="flex items-center gap-12 flex-wrap">
+            <div class="flex items-center gap-6">
+              <label for="filter-city" class="text-xs text-muted font-bold">City:</label>
+              <select id="filter-city" class="input" style="padding: 6px 12px; font-size: 0.85rem; width: auto;">
+                <option value="all">All Cities</option>
+                <option value="Multan">Multan</option>
+                <option value="Lahore">Lahore</option>
+                <option value="Karachi">Karachi</option>
+                <option value="Rawalpindi">Rawalpindi</option>
+                <option value="Islamabad">Islamabad</option>
+                <option value="Faisalabad">Faisalabad</option>
+                <option value="Peshawar">Peshawar</option>
+                <option value="Quetta">Quetta</option>
+                <option value="Sialkot">Sialkot</option>
+                <option value="Gujranwala">Gujranwala</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Larkana">Larkana</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <label for="filter-sort" class="text-xs text-muted font-bold">Sort:</label>
+              <select id="filter-sort" class="input" style="padding: 6px 12px; font-size: 0.85rem; width: auto;">
+                <option value="rating">Highest Rated</option>
+                <option value="az">Name: A to Z</option>
+                <option value="za">Name: Z to A</option>
+                <option value="newest">Recently Joined</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RESULTS COUNT & PRIVACY CALLOUT -->
+      <div class="flex justify-between items-center mb-20 flex-wrap gap-12">
+        <div class="text-sm text-muted">
+          Showing <strong id="visible-count" style="color:var(--text);">0</strong> verified active dukaans
+        </div>
+        <div class="flex items-center gap-6 text-xs text-muted">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Privacy Protected: Owner PII masked from public view</span>
+        </div>
+      </div>
+
+      <!-- SHOPS GRID -->
+      <div class="grid-3" id="shops-grid" style="gap: 24px;">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div id="shops-empty-state" class="card text-center py-48" style="display:none;">
+        <div class="brand-icon mx-auto mb-16" style="background: var(--surface-2); color: var(--text-muted); width: 48px; height: 48px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <h3 class="text-lg font-bold mb-4">No shops found</h3>
+        <p class="text-muted text-xs max-w-sm mx-auto mb-16">No active shops matched your search filter. Try clearing filters or searching for another city.</p>
+        <button class="btn btn--outline btn--sm" id="btn-reset-filters">Reset All Filters</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SHOP DETAILS MODAL -->
+  <div class="modal-backdrop" id="modal-shop-details">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-shop-name" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="flex items-center gap-8">
+          <div class="brand-icon" style="background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg" id="modal-shop-name">Shop Name</h3>
+            <span class="badge badge--success" style="font-size:0.68rem;">Verified Merchant</span>
+          </div>
+        </div>
+        <button class="btn btn--icon" id="btn-close-shop-modal" aria-label="Close modal">×</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Category & Location Header -->
+        <div class="flex justify-between items-start mb-16 pb-12" style="border-bottom: 1px solid var(--border);">
+          <div>
+            <div class="text-xs text-muted">Category</div>
+            <div id="modal-shop-category" class="font-bold text-sm" style="color:var(--text);">Grocery & Kiryana</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="text-xs text-muted">City / Region</div>
+            <div id="modal-shop-city" class="font-bold text-sm" style="color:var(--text);">Multan</div>
+          </div>
+        </div>
+
+        <!-- Physical Address & Hours -->
+        <div class="grid-2 gap-16 mb-16">
+          <div class="card" style="background: var(--surface-2); padding: 12px;">
+            <div class="text-xs text-muted mb-2">Location & Address</div>
+            <div id="modal-shop-address" class="text-xs font-semibold" style="color:var(--text);">Shop #14, Ghanta Ghar Chowk</div>
+          </div>
+          <div class="card" style="background: var(--surface-2); padding: 12px;">
+            <div class="text-xs text-muted mb-2">Operating Hours</div>
+            <div id="modal-shop-timing" class="text-xs font-semibold" style="color:var(--text);">8:00 AM - 11:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-16">
+          <div class="text-xs text-muted mb-4 font-bold">About This Dukaan</div>
+          <p id="modal-shop-description" class="text-xs text-muted leading-relaxed" style="color:var(--text);"></p>
+        </div>
+
+        <!-- Services Available -->
+        <div class="mb-16">
+          <div class="text-xs text-muted mb-6 font-bold">Services Offered</div>
+          <div id="modal-shop-services" class="flex flex-wrap gap-6">
+            <!-- Services chips -->
+          </div>
+        </div>
+
+        <!-- Rating & Trust Banner -->
+        <div class="card" style="background: var(--surface-2); padding: 12px; border-left: 3px solid var(--success);">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-xs font-bold" style="color:var(--success);">Tamper-Evident Khata Enabled</div>
+              <div class="text-xs text-muted mt-2">All credit transactions at this dukaan are recorded on Dukaan Saathi's verified audit ledger.</div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0; margin-left: 12px;">
+              <div id="modal-shop-rating" class="font-bold text-base" style="color:var(--primary);">★ 4.9</div>
+              <div id="modal-shop-reviews" class="text-xs text-muted">142 reviews</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--outline" id="btn-close-shop-modal-footer">Close</button>
+        <button class="btn btn--primary" id="btn-contact-shop">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span id="contact-button-text">Contact Dukaan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="background-color: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: auto;">
+    <div class="container">
+      <div class="grid-4 mb-32" style="gap: 32px;">
+        <div>
+          <div class="brand-logo mb-16">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <span>Dukaan Saathi</span>
+          </div>
+          <p class="text-xs text-muted">Empowering Pakistani dukaandars with calm, tamper-evident digital khata, storefronts, and customer discovery.</p>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Dukaan Network</div>
+          <ul class="flex flex-col gap-8 text-xs text-muted">
+            <li><a href="browse-shops.html" class="nav-link" style="padding:0;">Browse Verified Shops</a></li>
+            <li><a href="register-shop.html" class="nav-link" style="padding:0;">Register Your Dukaan</a></li>
+            <li><a href="features.html" class="nav-link" style="padding:0;">Platform Features</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Governance & Trust</div>
+          <ul class="flex flex-col gap-8 text-xs text-muted">
+            <li><a href="security.html" class="nav-link" style="padding:0;">Security Principles</a></li>
+            <li><a href="pricing.html" class="nav-link" style="padding:0;">Subscription Plans</a></li>
+            <li><a href="login.html" class="nav-link" style="padding:0;">Portal Login</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-12">Support & Safety</div>
+          <p class="text-xs text-muted">Multi-tenant data isolation and complete customer privacy protections.</p>
+          <div class="badge badge--success mt-8">KYC Compliance</div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-muted pt-24" style="border-top: 1px solid var(--border);">
+        &copy; 2026 Dukaan Saathi. Built with care for local communities.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/shops-store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/module-browse-shops.js"></script>
+</body>
+</html>
