@@ -12,33 +12,6 @@ const STORAGE_KEYS = {
   PLANS: 'ds_plans_data_v2'
 };
 
-// DEMO USERS WITH PRE-COMPUTED SHA-256 PASSWORDS
-// Passwords hashed using Web Crypto SHA-256
-// Hamza Ali: Shop@12345 -> 58c92a1b723b116f5594ff3796cbbdc92ad0246555f7d70ecfc98ae88b87491d
-// Sara Khan: Admin@12345 -> 6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25
-const DEMO_USERS = [
-  {
-    id: 'user-001',
-    name: 'Hamza Ali',
-    email: 'shopowner@dukaansaathi.pk',
-    phone: '0300-1234567',
-    role: 'owner',
-    shopId: 'shop-101',
-    shopName: 'Bismillah General Store',
-    passwordHash: '58c92a1b723b116f5594ff3796cbbdc92ad0246555f7d70ecfc98ae88b87491d'
-  },
-  {
-    id: 'user-002',
-    name: 'Sara Khan',
-    email: 'admin@dukaansaathi.pk',
-    phone: '0311-9876543',
-    role: 'admin',
-    shopId: null,
-    shopName: 'Dukaan Saathi Platform Operations',
-    passwordHash: '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25'
-  }
-];
-
 const INITIAL_SHOP = {
   name: 'Bismillah General Store',
   location: 'Multan, Pakistan',

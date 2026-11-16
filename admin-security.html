@@ -8,6 +8,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
@@ -326,10 +328,10 @@
 
   <script src="js/data.js"></script>
   <script src="js/audit.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!await DS_AUTH.ready) return;
       const btnRun = document.getElementById('btn-run-self-check');
       const resultsContainer = document.getElementById('self-check-results');
 
@@ -361,7 +363,7 @@
               const containsKnownPlaintext = raw.includes('Shop@12345') || raw.includes('Admin@12345');
               
               if (!hasPasswordKey && !containsKnownPlaintext) {
-                return { pass: true, detail: `sessionStorage contains only minimal session token: { id, name, role, loginAt }. Zero passwords or hashes stored.` };
+                return { pass: true, detail: `sessionStorage contains only minimal session token: { name, role } plus the access token. Zero passwords or hashes stored.` };
               }
               return { pass: false, detail: "Credential leakage detected in sessionStorage payload." };
             }
@@ -380,11 +382,11 @@
             name: '4. Guard Script Present & Functional',
             fn: () => {
               const guardScript = document.querySelector('script[src*="guard.js"]');
-              const hasGuardObj = typeof window.DS_GUARD !== 'undefined';
+              const hasGuardObj = DS_AUTH.isAuthenticated();
               if (guardScript && hasGuardObj) {
                 return { pass: true, detail: "guard.js is loaded in <head>, actively managing role enforcement, route protection, and idle timeout." };
               }
-              return { pass: false, detail: "guard.js script tag or window.DS_GUARD object not detected." };
+              return { pass: false, detail: "The authenticated page guard is unavailable." };
             }
           },
           {

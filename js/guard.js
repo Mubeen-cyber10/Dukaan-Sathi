@@ -1,181 +1,88 @@
-// Hiding UI is not a security control; real enforcement is done server-side in the backend phase.
-
-/**
- * Dukaan Saathi - Page Access Guard & Idle Timeout Monitor
- * Runs synchronously in <head> to block unauthorized renders before DOM paint.
- * Enforces fail-safe defaults, role isolation (Owner vs Admin),
- * browser back-button caching prevention, and 5-minute inactivity session expiration.
- */
-
-(function() {
+(function () {
   'use strict';
 
-  // Extract page filename
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  const page = location.pathname.split('/').pop();
+  const role = page.startsWith('admin-') ? 'admin' : 'owner';
+  const root = document.documentElement;
+  let lastActivity = Date.now();
+  let countdownTimer;
 
-  // Public pages that do not require authentication
-  const PUBLIC_PAGES = [
-    'index.html',
-    'features.html',
-    'pricing.html',
-    'security.html',
-    'login.html',
-    ''
-  ];
-
-  const isPublic = PUBLIC_PAGES.includes(currentPath);
-
-  // If this is a protected page, prevent flash of protected content by hiding document root
-  if (!isPublic) {
-    document.documentElement.style.visibility = 'hidden';
-  }
-
-  function verifyAccess() {
-    if (isPublic) {
-      document.documentElement.style.visibility = '';
-      return true;
-    }
-
-    // Read session from sessionStorage
-    let user = null;
+  async function verifyAccess() {
+    root.style.visibility = 'hidden';
     try {
-      const raw = sessionStorage.getItem('ds_session_user');
-      if (raw) user = JSON.parse(raw);
-    } catch (e) {}
-
-    // 1. Not authenticated -> Fail-Safe Default: Redirect immediately to login.html
-    if (!user || !user.role) {
-      sessionStorage.setItem('ds_guard_notice', 'Access denied - please sign in');
-      sessionStorage.setItem('ds_redirect_after_login', currentPath);
-      window.location.replace('login.html');
+      if (!await DS_AUTH.verify() || !DS_AUTH.requireRole(role)) return false;
+      root.style.visibility = '';
+      return true;
+    } catch (error) {
+      if (error.status !== 401) DS_AUTH.endSession('unavailable');
       return false;
     }
-
-    // 2. Role-Based Page Access Enforcement (RBAC)
-    const isOwnerPage = currentPath.startsWith('app-');
-    const isAdminPage = currentPath.startsWith('admin-');
-
-    if (isOwnerPage && user.role !== 'owner') {
-      // Non-owner trying to access owner portal
-      sessionStorage.setItem('ds_guard_notice', 'Access denied: insufficient permissions');
-      window.location.replace('login.html');
-      return false;
-    }
-
-    if (isAdminPage && user.role !== 'admin') {
-      // Non-admin trying to access admin portal
-      sessionStorage.setItem('ds_guard_notice', 'Access denied: insufficient permissions');
-      window.location.replace('login.html');
-      return false;
-    }
-
-    // Access authorized: unhide DOM content
-    document.documentElement.style.visibility = '';
-    return true;
   }
 
-  // Execute immediate synchronous verification
-  const authorized = verifyAccess();
-
-  // Listen for pageshow event (handles browser back button navigation / bfcache)
-  window.addEventListener('pageshow', function(event) {
-    verifyAccess();
+  DS_AUTH.ready = verifyAccess();
+  window.addEventListener('pagehide', () => { root.style.visibility = 'hidden'; });
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) DS_AUTH.ready = verifyAccess();
   });
 
-  // If page is not authorized, stop further setup
-  if (!authorized && !isPublic) return;
+  function dismissIdleWarning() {
+    clearInterval(countdownTimer);
+    document.getElementById('ds-idle-modal')?.remove();
+  }
 
-  // 3. Idle Timeout Monitor (5 min warning, 30s countdown -> auto logout)
-  // Protects unattended counters / terminals
-  if (!isPublic) {
-    const IDLE_LIMIT_MS = 5 * 60 * 1000; // 5 minutes
-    const WARNING_COUNTDOWN_SEC = 30;
-    let lastActivity = Date.now();
-    let countdownTimer = null;
+  function resetActivity(event) {
+    if (event.target.closest?.('#ds-idle-modal')) return;
+    lastActivity = Date.now();
+    dismissIdleWarning();
+  }
 
-    function resetActivity() {
+  for (const event of ['mousedown', 'keydown', 'scroll', 'touchstart']) {
+    window.addEventListener(event, resetActivity, { passive: true });
+  }
+
+  setInterval(() => {
+    if (DS_AUTH.isAuthenticated() && Date.now() - lastActivity >= 5 * 60 * 1000 &&
+        !document.getElementById('ds-idle-modal')) showIdleWarning();
+  }, 5000);
+
+  function showIdleWarning() {
+    const backdrop = document.createElement('div');
+    backdrop.id = 'ds-idle-modal';
+    backdrop.className = 'modal-backdrop modal-backdrop--open';
+    backdrop.style.zIndex = '999999';
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.cssText = 'max-width: 420px; text-align: center; padding: 24px;';
+    const title = document.createElement('h3');
+    title.className = 'font-bold text-lg mb-8';
+    title.textContent = 'Session Expiring Soon';
+    const message = document.createElement('p');
+    message.className = 'text-sm text-muted mb-16';
+    const stay = document.createElement('button');
+    stay.className = 'btn btn--primary';
+    stay.textContent = 'Stay Signed In';
+    const logout = document.createElement('button');
+    logout.className = 'btn btn--ghost';
+    logout.textContent = 'Log Out Now';
+    stay.addEventListener('click', () => {
       lastActivity = Date.now();
       dismissIdleWarning();
-    }
-
-    // Activity listeners
-    ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
-      window.addEventListener(evt, resetActivity, { passive: true });
     });
+    logout.addEventListener('click', () => DS_AUTH.logout());
+    modal.append(title, message, stay, logout);
+    backdrop.append(modal);
+    document.body.append(backdrop);
 
-    // Check idle interval every 5 seconds
-    setInterval(() => {
-      const elapsed = Date.now() - lastActivity;
-      if (elapsed >= IDLE_LIMIT_MS && !document.getElementById('ds-idle-modal')) {
-        showIdleWarning();
-      }
-    }, 5000);
-
-    function showIdleWarning() {
-      let remaining = WARNING_COUNTDOWN_SEC;
-
-      const backdrop = document.createElement('div');
-      backdrop.id = 'ds-idle-modal';
-      backdrop.className = 'modal-backdrop modal-backdrop--open';
-      backdrop.style.zIndex = '999999';
-
-      backdrop.innerHTML = `
-        <div class="modal" style="max-width: 420px; text-align: center;">
-          <div class="modal-header" style="justify-content: center;">
-            <div class="brand-icon" style="background: var(--warning-soft); color: var(--warning); width: 48px; height: 48px; margin: 0 auto 12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-          </div>
-          <h3 class="font-bold text-lg mb-8">Session Expiring Soon</h3>
-          <p class="text-sm text-muted mb-16">
-            You have been inactive. For security against unattended terminals, your session will automatically terminate in 
-            <strong id="ds-idle-seconds" class="text-danger" style="font-size: 1.1rem;">${remaining}</strong> seconds.
-          </p>
-          <div class="flex gap-12 justify-center">
-            <button type="button" class="btn btn--primary" id="ds-idle-extend">Stay Signed In</button>
-            <button type="button" class="btn btn--ghost" id="ds-idle-logout">Log Out Now</button>
-          </div>
-        </div>
-      `;
-
-      document.body.appendChild(backdrop);
-
-      countdownTimer = setInterval(() => {
-        remaining--;
-        const secEl = document.getElementById('ds-idle-seconds');
-        if (secEl) secEl.textContent = remaining;
-
-        if (remaining <= 0) {
-          clearInterval(countdownTimer);
-          if (typeof DS_AUTH !== 'undefined') {
-            DS_AUTH.logout();
-          } else {
-            sessionStorage.clear();
-            sessionStorage.setItem('ds_guard_notice', 'Session expired due to inactivity.');
-            window.location.replace('login.html');
-          }
-        }
-      }, 1000);
-
-      document.getElementById('ds-idle-extend').addEventListener('click', () => {
+    const deadline = Date.now() + 30000;
+    function update() {
+      const remaining = Math.ceil((deadline - Date.now()) / 1000);
+      message.textContent = 'Your session will end in ' + remaining + ' seconds due to inactivity.';
+      if (remaining <= 0) {
         dismissIdleWarning();
-        lastActivity = Date.now();
-      });
-
-      document.getElementById('ds-idle-logout').addEventListener('click', () => {
-        if (typeof DS_AUTH !== 'undefined') {
-          DS_AUTH.logout();
-        } else {
-          sessionStorage.clear();
-          window.location.replace('login.html');
-        }
-      });
+        DS_AUTH.endSession('idle');
+      }
     }
-
-    function dismissIdleWarning() {
-      if (countdownTimer) clearInterval(countdownTimer);
-      const modal = document.getElementById('ds-idle-modal');
-      if (modal) modal.remove();
-    }
+    update();
+    countdownTimer = setInterval(update, 1000);
   }
 })();

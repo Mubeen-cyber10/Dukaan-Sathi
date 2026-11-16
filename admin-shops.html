@@ -8,6 +8,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
@@ -256,10 +258,10 @@
   <script src="js/data.js"></script>
   <script src="js/shops-store.js"></script>
   <script src="js/audit.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!await DS_AUTH.ready) return;
       let shops = DS_DATA.getShops();
       let currentFilter = 'all';
       let searchQuery = '';
