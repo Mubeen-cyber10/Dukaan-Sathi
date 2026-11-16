@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders Management – Dukaan Saathi App</title>
   <meta name="description" content="Track walk-in & delivery order statuses.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
@@ -167,7 +170,6 @@
 
   <script src="js/data.js"></script>
   <script src="js/audit.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     let orders = DS_DATA.getOrders();
@@ -183,7 +185,8 @@
       'Cancelled': null
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!await DS_AUTH.ready) return;
       const user = DS_AUTH.getUser();
       if (user && document.getElementById('orders-topbar-user')) {
         document.getElementById('orders-topbar-user').textContent = user.name;

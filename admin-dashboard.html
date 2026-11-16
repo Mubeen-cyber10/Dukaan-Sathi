@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Super Admin Overview – Dukaan Saathi</title>
   <meta name="description" content="Dukaan Saathi Super Admin platform governance overview.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
@@ -258,28 +261,34 @@
 
   <script src="js/data.js"></script>
   <script src="js/audit.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      if (!await DS_AUTH.ready) return;
       const user = DS_AUTH.getUser();
       if (user) {
         document.getElementById('admin-greeting').textContent = `Welcome, ${user.name}`;
         document.getElementById('admin-user-display').textContent = user.name;
       }
 
-      const shops = DS_DATA.getShops();
-      const pending = shops.filter(s => s.status === 'Pending Approval');
       const disputes = DS_DATA.getDisputes().filter(d => d.status !== 'Resolved');
-
-      document.getElementById('stat-shops-count').textContent = shops.length;
-      document.getElementById('stat-pending-count').textContent = pending.length;
       document.getElementById('stat-disputes-count').textContent = disputes.length;
+
+      const shops = await apiFetch('/api/admin/shops').catch(error => {
+        if (error.status !== 401) showToast(error.message, 'danger');
+        return null;
+      });
+      const pending = shops?.filter(shop => shop.status === 'Pending') || [];
+
+      document.getElementById('stat-shops-count').textContent = shops?.length ?? '—';
+      document.getElementById('stat-pending-count').textContent = shops ? pending.length : '—';
 
       // Populate Queue
       const queueList = document.getElementById('shops-queue-list');
-      queueList.innerHTML = '';
-      shops.filter(s => s.status === 'Pending Approval').concat(shops.filter(s => s.status !== 'Pending Approval')).slice(0, 4).forEach(shop => {
+      queueList.replaceChildren();
+      const queue = pending.concat(shops?.filter(shop => shop.status !== 'Pending') || []);
+      if (!queue.length) queueList.textContent = shops ? 'No shops in the queue.' : 'The shop queue could not be loaded.';
+      queue.slice(0, 4).forEach(shop => {
         const item = document.createElement('div');
         item.style.cssText = 'padding: 12px; background: var(--surface-2); border-radius: var(--radius-sm); border: 1px solid var(--border);';
         item.className = 'flex justify-between items-center';
@@ -291,13 +300,13 @@
 
         const meta = document.createElement('div');
         meta.className = 'text-xs text-muted';
-        meta.textContent = `${shop.city} • Owner: ${shop.owner} • ${shop.plan} Tier`;
+        meta.textContent = `${shop.city} • Owner: ${shop.owner_name}`;
 
         left.appendChild(name);
         left.appendChild(meta);
 
         const badge = document.createElement('span');
-        badge.className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending Approval' ? 'badge--warning' : 'badge--due'}`;
+        badge.className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending' ? 'badge--warning' : 'badge--due'}`;
         badge.textContent = shop.status;
 
         item.appendChild(left);

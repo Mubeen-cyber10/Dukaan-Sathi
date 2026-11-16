@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Architecture – Dukaan Saathi</title>
   <meta name="description" content="Explore the security controls, tenant isolation, and audit-trail integrity of Dukaan Saathi.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
 </head>
@@ -102,9 +103,9 @@
           <div class="brand-icon mb-20" style="width:48px; height:48px; background: var(--primary-soft); color: var(--primary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
           </div>
-          <h3 class="text-xl font-bold mb-8">4. Multi-Factor Authentication (MFA)</h3>
-          <p class="text-muted text-sm mb-16">Shop Owner logins require a 6-digit OTP verification code step to safeguard administrative capabilities against password spray attacks.</p>
-          <div class="badge badge--role">6-Digit OTP MFA</div>
+          <h3 class="text-xl font-bold mb-8">4. Sign-in Protection</h3>
+          <p class="text-muted text-sm mb-16">Passwords are hashed with bcrypt. The server rate-limits sign-in attempts and locks an account for five minutes after five consecutive failures.</p>
+          <div class="badge badge--role">Rate-Limited Sign-In</div>
         </div>
       </div>
 

@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard – Dukaan Saathi App</title>
   <meta name="description" content="Shop owner digital khata dashboard.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
 </head>
 <body class="page-fade">
@@ -25,7 +28,7 @@
 
         <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
           <div class="text-xs text-muted">ACTIVE SHOP</div>
-          <div class="font-bold text-sm" id="sb-shop-name">Bismillah General Store</div>
+          <div class="font-bold text-sm" id="sb-shop-name">Your shop</div>
           <div class="badge badge--role mt-4">Shop Owner</div>
         </div>
 
@@ -63,7 +66,7 @@
       </div>
 
       <div class="text-xs text-muted text-center">
-        Multan Tenant Isolated &bull; v2.4
+        Dukaan Saathi &bull; v2.4
       </div>
     </aside>
 
@@ -90,14 +93,14 @@
           <!-- User Menu Avatar Dropdown -->
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
-              <span class="text-sm font-semibold" id="topbar-user-name">Hamza Ali</span>
+              <div class="avatar" id="dashboard-user-avatar" style="width:34px; height:34px; font-size:0.8rem;"></div>
+              <span class="text-sm font-semibold" id="topbar-user-name">Shop Owner</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
 
             <div class="user-menu-dropdown">
               <div style="padding: 8px 12px; border-bottom: 1px solid var(--border);" class="text-xs">
-                <div class="font-bold" id="dropdown-user-name">Hamza Ali</div>
+                <div class="font-bold" id="dropdown-user-name">Shop Owner</div>
                 <div class="text-muted">Shop Owner</div>
               </div>
               <a href="security.html" class="dropdown-item">
@@ -115,8 +118,8 @@
         <!-- GREETING BANNER -->
         <div class="mb-24 flex justify-between items-center flex-wrap gap-16">
           <div>
-            <h1 class="text-3xl font-extrabold" id="greeting-text">Welcome, Hamza Ali</h1>
-            <p class="text-muted text-sm mt-4">Here is your daily khata summary and store status for Bismillah General Store.</p>
+            <h1 class="text-3xl font-extrabold" id="greeting-text">Welcome</h1>
+            <p class="text-muted text-sm mt-4" id="greeting-summary">Here is your daily khata summary and store status.</p>
           </div>
 
           <!-- RESTRICTED FUNCTION DEMO BUTTON -->
@@ -138,8 +141,8 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
               </div>
             </div>
-            <div class="text-2xl font-extrabold tabular-nums text-danger" id="stat-total-due">Rs. 55,800</div>
-            <div class="text-xs text-muted mt-8">Click to view 7 debtor accounts &rarr;</div>
+            <div class="text-2xl font-extrabold tabular-nums text-danger" id="stat-total-due">&mdash;</div>
+            <div class="text-xs text-muted mt-8">View accounts with balances due &rarr;</div>
           </a>
 
           <!-- Card 2: Navigates to app-khata.html?filter=settled -->
@@ -150,7 +153,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
             </div>
-            <div class="text-2xl font-extrabold tabular-nums text-success" id="stat-received-today">Rs. 4,000</div>
+            <div class="text-2xl font-extrabold tabular-nums text-success" id="stat-received-today">&mdash;</div>
             <div class="text-xs text-muted mt-8">Click to view settled accounts &rarr;</div>
           </a>
 
@@ -162,20 +165,20 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               </div>
             </div>
-            <div class="text-2xl font-extrabold tabular-nums" id="stat-customer-dues">7</div>
-            <div class="text-xs text-muted mt-8">Out of 10 total registered &rarr;</div>
+            <div class="text-2xl font-extrabold tabular-nums" id="stat-customer-dues">&mdash;</div>
+            <div class="text-xs text-muted mt-8" id="stat-customer-count">View customer accounts &rarr;</div>
           </a>
 
           <!-- Card 4: Navigates to app-khata.html -->
           <a href="app-khata.html" class="card card--interactive flex flex-col justify-between">
             <div class="flex justify-between items-center mb-12">
-              <span class="text-xs text-muted font-semibold uppercase">Entries Logged</span>
+              <span class="text-xs text-muted font-semibold uppercase">Entries Logged Today</span>
               <div class="brand-icon" style="width:32px; height:32px; background: var(--surface-2); color: var(--text);">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               </div>
             </div>
-            <div class="text-2xl font-extrabold tabular-nums" id="stat-entries-today">5</div>
-            <div class="text-xs text-muted mt-8">3 credit sales, 2 payments &rarr;</div>
+            <div class="text-2xl font-extrabold tabular-nums" id="stat-entries-today">&mdash;</div>
+            <div class="text-xs text-muted mt-8" id="stat-entry-breakdown">View ledger &rarr;</div>
           </a>
         </div>
 
@@ -277,17 +280,32 @@
 
   <script src="js/data.js"></script>
   <script src="js/audit.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Set user name dynamically from session
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!await DS_AUTH.ready) return;
       const user = DS_AUTH.getUser();
-      if (user) {
-        document.getElementById('greeting-text').textContent = `Welcome, ${user.name}`;
-        document.getElementById('topbar-user-name').textContent = user.name;
-        document.getElementById('dropdown-user-name').textContent = user.name;
+      document.getElementById('greeting-text').textContent = `Welcome, ${user.name}`;
+      document.getElementById('topbar-user-name').textContent = user.name;
+      document.getElementById('dropdown-user-name').textContent = user.name;
+      document.getElementById('dashboard-user-avatar').textContent = getInitials(user.name);
+
+      function showLoadError(error) {
+        if (error.status !== 401) showToast(error.message, 'danger');
       }
+      apiFetch('/api/shops/mine').then(shop => {
+        document.getElementById('sb-shop-name').textContent = shop.name;
+        document.getElementById('greeting-summary').textContent = `Here is your daily khata summary and store status for ${shop.name}.`;
+      }).catch(showLoadError);
+      apiFetch('/api/khata/customers?view=summary').then(summary => {
+        document.getElementById('stat-total-due').textContent = formatMoney(summary.totalDue);
+        document.getElementById('stat-received-today').textContent = formatMoney(summary.paymentsToday);
+        document.getElementById('stat-customer-dues').textContent = summary.customersWithDues;
+        document.getElementById('stat-customer-count').textContent = `Out of ${summary.customerCount} total registered →`;
+        document.getElementById('stat-entries-today').textContent = summary.creditsToday + summary.paymentsCountToday;
+        document.getElementById('stat-entry-breakdown').textContent =
+          `${summary.creditsToday} credit sales, ${summary.paymentsCountToday} payments →`;
+      }).catch(showLoadError);
 
       // Bell notification click
       document.getElementById('btn-bell').addEventListener('click', () => {
@@ -299,13 +317,13 @@
       const demoBtn = document.getElementById('btn-demo-restricted-action');
       if (demoBtn) {
         demoBtn.addEventListener('click', () => {
-          approveShop('SHP-104');
+          approveShop(4);
         });
       }
 
       // Render Dashboard Audit List SAFELY with DOM manipulation
       const auditList = document.getElementById('audit-list');
-      auditList.innerHTML = '';
+      auditList.replaceChildren();
       const auditData = DS_DATA.getAudit().slice(0, 4);
 
       auditData.forEach(item => {

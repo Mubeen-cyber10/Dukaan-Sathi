@@ -12,33 +12,6 @@ const STORAGE_KEYS = {
   PLANS: 'ds_plans_data_v2'
 };
 
-// DEMO USERS WITH PRE-COMPUTED SHA-256 PASSWORDS
-// Passwords hashed using Web Crypto SHA-256
-// Hamza Ali: Shop@12345 -> 58c92a1b723b116f5594ff3796cbbdc92ad0246555f7d70ecfc98ae88b87491d
-// Sara Khan: Admin@12345 -> 6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25
-const DEMO_USERS = [
-  {
-    id: 'user-001',
-    name: 'Hamza Ali',
-    email: 'shopowner@dukaansaathi.pk',
-    phone: '0300-1234567',
-    role: 'owner',
-    shopId: 'shop-101',
-    shopName: 'Bismillah General Store',
-    passwordHash: '58c92a1b723b116f5594ff3796cbbdc92ad0246555f7d70ecfc98ae88b87491d'
-  },
-  {
-    id: 'user-002',
-    name: 'Sara Khan',
-    email: 'admin@dukaansaathi.pk',
-    phone: '0311-9876543',
-    role: 'admin',
-    shopId: null,
-    shopName: 'Dukaan Saathi Platform Operations',
-    passwordHash: '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25'
-  }
-];
-
 const INITIAL_SHOP = {
   name: 'Bismillah General Store',
   location: 'Multan, Pakistan',
@@ -200,21 +173,6 @@ const INITIAL_AUDIT = [
 
 // 12 REALISTIC PAKISTANI SHOPS FOR SUPER ADMIN PORTAL
 // Data minimization: Document status shown as words only ("CNIC: Verified"), never actual or masked numbers
-const INITIAL_SHOPS = [
-  { id: 'SHP-101', name: 'Bismillah General Store', city: 'Multan', owner: 'Hamza Ali', documentStatus: 'CNIC: Verified', plan: 'Standard', status: 'Active', joinedDate: '2026-08-15' },
-  { id: 'SHP-102', name: 'Madina Karyana Store', city: 'Faisalabad', owner: 'Muhammad Usman', documentStatus: 'CNIC: Verified', plan: 'Free', status: 'Active', joinedDate: '2026-08-20' },
-  { id: 'SHP-103', name: 'Al-Rehman Super Store', city: 'Lahore', owner: 'Rehman Malik', documentStatus: 'CNIC: Verified', plan: 'Pro', status: 'Active', joinedDate: '2026-08-25' },
-  { id: 'SHP-104', name: 'Khyber Spices & Kiryana', city: 'Peshawar', owner: 'Gul Khan', documentStatus: 'CNIC: Pending Verification', plan: 'Standard', status: 'Pending Approval', joinedDate: '2026-09-28' },
-  { id: 'SHP-105', name: 'Karachi Mart Gulshan', city: 'Karachi', owner: 'Farhan Siddiqui', documentStatus: 'CNIC: Pending Verification', plan: 'Pro', status: 'Pending Approval', joinedDate: '2026-09-29' },
-  { id: 'SHP-106', name: 'Subhanallah Dairy & Bakers', city: 'Rawalpindi', owner: 'Naveed Akhtar', documentStatus: 'CNIC: Pending Verification', plan: 'Free', status: 'Pending Approval', joinedDate: '2026-09-30' },
-  { id: 'SHP-107', name: 'Chaudhry & Sons Traders', city: 'Sialkot', owner: 'Tariq Chaudhry', documentStatus: 'CNIC: Verified', plan: 'Standard', status: 'Active', joinedDate: '2026-09-02' },
-  { id: 'SHP-108', name: 'Bolan Provision Store', city: 'Quetta', owner: 'Abdul Wahab', documentStatus: 'CNIC: Suspended', plan: 'Free', status: 'Suspended', joinedDate: '2026-07-10' },
-  { id: 'SHP-109', name: 'Mehran Sweet & Bakers', city: 'Hyderabad', owner: 'Zulfiqar Ali', documentStatus: 'CNIC: Verified', plan: 'Standard', status: 'Active', joinedDate: '2026-09-12' },
-  { id: 'SHP-110', name: 'Al-Barkat Mart', city: 'Gujranwala', owner: 'Shahid Butt', documentStatus: 'CNIC: Verified', plan: 'Free', status: 'Active', joinedDate: '2026-09-18' },
-  { id: 'SHP-111', name: 'Ittefaq General Merchant', city: 'Sahiwal', owner: 'Kashif Rasool', documentStatus: 'CNIC: Rejected', plan: 'Standard', status: 'Rejected', joinedDate: '2026-09-22' },
-  { id: 'SHP-112', name: 'Qalandar Foods & Ration', city: 'Larkana', owner: 'Ghulam Mustafa', documentStatus: 'CNIC: Verified', plan: 'Free', status: 'Active', joinedDate: '2026-09-24' }
-];
-
 // SUBSCRIPTION PLANS MOCK DATA
 const INITIAL_PLANS = [
   { id: 'plan-free', name: 'Free Starter', price: 0, period: 'Forever', shopsLimit: 1, staffLimit: 1, activeSubscribers: 420, features: ['1 Shop Storefront', 'Up to 25 Customers', 'Digital Khata', 'Basic Reports'] },
@@ -291,42 +249,6 @@ const DS_DATA = {
     try {
       localStorage.setItem(STORAGE_KEYS.AUDIT, JSON.stringify(audit.slice(0, 15)));
     } catch(e) {}
-  },
-  getShops: function() {
-    if (typeof window !== 'undefined' && window.DS_SHOPS_STORE) {
-      return window.DS_SHOPS_STORE.getAllShops();
-    }
-    try {
-      const data = sessionStorage.getItem('ds-shops');
-      return data ? JSON.parse(data) : INITIAL_SHOPS;
-    } catch(e) {
-      return INITIAL_SHOPS;
-    }
-  },
-  saveShops: function(shops) {
-    try {
-      sessionStorage.setItem('ds-shops', JSON.stringify(shops));
-    } catch(e) {}
-  },
-  updateShopStatus: function(shopId, newStatus) {
-    const shops = this.getShops();
-    const found = shops.find(s => s.id === shopId);
-    if (found) {
-      found.status = newStatus;
-      if (newStatus === 'Active') {
-        found.documentStatus = 'CNIC: Verified';
-      } else if (newStatus === 'Rejected') {
-        found.documentStatus = 'CNIC: Rejected';
-      } else if (newStatus === 'Suspended') {
-        found.documentStatus = 'CNIC: Suspended';
-      }
-      this.saveShops(shops);
-      if (typeof window !== 'undefined' && window.DS_SHOPS_STORE) {
-        window.DS_SHOPS_STORE.updateStatus(shopId, newStatus);
-      }
-      return true;
-    }
-    return false;
   },
   getPlans: function() {
     try {
