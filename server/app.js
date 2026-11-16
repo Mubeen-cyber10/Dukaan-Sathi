@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const { openDb } = require('./db');
 const { HttpError, notFound } = require('./http');
 const { authRoutes } = require('./routes/auth');
+const { shopRoutes, adminShopRoutes } = require('./routes/shops');
+const { khataRoutes } = require('./routes/khata');
 
 const root = path.join(__dirname, '..');
 const csp = {
@@ -37,6 +39,9 @@ function createApp({ jwtSecret = process.env.JWT_SECRET, db } = {}) {
     next();
   }, express.json({ limit: '10kb' }));
   app.use('/api/auth', authRoutes());
+  app.use('/api/shops', shopRoutes());
+  app.use('/api/admin/shops', adminShopRoutes());
+  app.use('/api/khata', khataRoutes());
   app.use('/api', (req, res, next) => next(notFound()));
 
   for (const folder of ['css', 'js', 'assets']) {
@@ -76,7 +81,14 @@ if (require.main === module) {
   require('dotenv').config();
   try {
     const port = Number(process.env.PORT || 3000);
-    createApp().listen(port, '127.0.0.1', () => console.log('Dukaan Saathi running at http://localhost:' + port));
+    const app = createApp();
+    const server = app.listen(port, '127.0.0.1');
+    server.once('listening', () => console.log('Dukaan Saathi running at http://localhost:' + port));
+    server.once('error', error => {
+      app.locals.db.close();
+      console.error(error.message);
+      process.exitCode = 1;
+    });
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

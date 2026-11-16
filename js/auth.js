@@ -11,6 +11,7 @@ const DS_AUTH = {
 
   async login(email, password) {
     const { token, user } = await apiFetch('/api/auth/login', { method: 'POST', body: { email, password } });
+    sessionStorage.clear();
     sessionStorage.setItem(TOKEN_KEY, token);
     this.setUser(user);
     return user.role === 'admin' ? 'admin-dashboard.html' : 'app-dashboard.html';

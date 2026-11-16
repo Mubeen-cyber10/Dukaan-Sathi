@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In – Dukaan Saathi</title>
   <meta name="description" content="Secure role-based sign in for Dukaan Saathi.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
 </head>
@@ -66,7 +67,7 @@
               <span id="general-error-text" style="font-weight: 500;">Invalid credentials</span>
             </div>
 
-            <form id="login-form" novalidate autocomplete="on">
+            <form id="login-form" method="post" novalidate autocomplete="on">
               <div class="form-group">
                 <label class="form-label" for="login-email">Email address</label>
                 <div class="input-wrapper">

@@ -11,6 +11,13 @@ const LOCK_MS = 5 * 60 * 1000;
 // Cost-12 hash used only for constant-work comparisons for unknown accounts.
 const dummyHash = '$2b$12$3Egc8M7yiwqKbQLSahT.BuvthvaBij5XgbjEjmKoifMQoyboPSjPy';
 
+function loginPassword(value) {
+  if (typeof value !== 'string' || !value || value.length > 64 || Buffer.byteLength(value) > 72) {
+    throw new TypeError('Enter your password');
+  }
+  return value;
+}
+
 function authRoutes() {
   const router = express.Router();
   const loginLimit = rateLimit({
@@ -21,7 +28,7 @@ function authRoutes() {
     const invalid = new HttpError(401, 'INVALID_CREDENTIALS', 'Invalid credentials');
     let credentials;
     try {
-      credentials = v.validate(req.body, { email: v.email, password: v.password });
+      credentials = v.validate(req.body, { email: v.email, password: loginPassword });
     } catch (error) {
       if (error.code !== 'VALIDATION_ERROR' || error.fields.body) throw error;
       await bcrypt.compare('invalid', dummyHash);

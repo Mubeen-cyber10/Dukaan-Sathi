@@ -19,7 +19,7 @@ async function apiFetch(path, { method = 'GET', body } = {}) {
   } catch {
     throw new Error('Could not reach Dukaan Saathi. Please try again.');
   }
-  if (response.status === 401 && !login && url.pathname !== '/api/shops/public') {
+  if (response.status === 401 && !login) {
     DS_AUTH.endSession('signin');
   }
   const data = await response.json().catch(() => null);

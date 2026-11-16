@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Center & Diagnostics – Super Admin</title>
   <meta name="description" content="Technical security controls, threat mitigations and automated self-check.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
@@ -232,7 +233,7 @@
                 <strong>Vulnerability:</strong> A malicious or compromised shop owner attempts to approve their own business or access platform governance functions.
               </p>
               <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
-                <strong>Mitigation:</strong> Separation of duties enforced. Guard script restricts routes, and sensitive functions (`approveShop`, `rejectShop`) independently check `currentUser.role === 'admin'` inside the function, logging denied attempts.
+                <strong>Mitigation</strong> The API requires the admin role for shop approvals and logs denied requests in SQLite.
               </div>
             </div>
 
@@ -246,7 +247,7 @@
                 <strong>Vulnerability:</strong> Attackers run automated password spraying against shopkeeper emails to hijack retailer accounts.
               </p>
               <div class="text-xs" style="padding: 8px 12px; background: var(--surface-2); border-left: 3px solid var(--success); border-radius: 4px;">
-                <strong>Mitigation:</strong> Lockout engine disables the login form for 30 seconds after 5 failed attempts with a countdown timer; generic "Invalid credentials" error response prevents username enumeration; MFA step required.
+                <strong>Mitigation</strong> The server rate-limits login by IP and locks accounts for five minutes after five consecutive failures. The sign-in page displays the server's retry countdown.
               </div>
             </div>
 
@@ -345,8 +346,8 @@
             name: '1. CSP Meta Tag Present & Valid',
             fn: () => {
               const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-              if (meta && meta.content.includes("default-src 'self'") && meta.content.includes("frame-ancestors 'none'")) {
-                return { pass: true, detail: "CSP meta tag is present with strict 'self' policies, Google Fonts permissions, and frame-ancestors 'none'." };
+              if (meta && meta.content.includes("default-src 'self'")) {
+                return { pass: true, detail: "The page declares a same-origin content security policy." };
               }
               return { pass: false, detail: "CSP meta tag missing or misconfigured." };
             }
