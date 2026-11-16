@@ -170,10 +170,18 @@
             </div>
 
             <div class="form-group mb-16">
-              <label class="form-label" for="reg-password">Password <span style="color:var(--danger)">*</span></label>
+              <label class="form-label" for="reg-password">Create password <span style="color:var(--danger)">*</span></label>
               <input class="input" type="password" id="reg-password" minlength="8" maxlength="64" autocomplete="new-password" required>
+              <button type="button" class="btn btn--ghost btn--sm" id="reg-password-toggle" aria-label="Show password">Show</button>
               <div id="reg-password-strength" class="text-xs mt-4" aria-live="polite"></div>
               <div id="reg-password-error" class="input-error-msg" style="display:none;" role="alert"></div>
+            </div>
+
+            <div class="form-group mb-16">
+              <label class="form-label" for="reg-confirm-password">Confirm password <span style="color:var(--danger)">*</span></label>
+              <input class="input" type="password" id="reg-confirm-password" minlength="8" maxlength="64" autocomplete="new-password" required>
+              <button type="button" class="btn btn--ghost btn--sm" id="reg-confirm-password-toggle" aria-label="Show confirmation password">Show</button>
+              <div id="reg-confirm-password-error" class="input-error-msg" style="display:none;" role="alert"></div>
             </div>
 
             <!-- CNIC Format Check (Optional) -->
@@ -182,7 +190,7 @@
                 <label class="form-label" for="reg-cnic" style="margin-bottom:0;">CNIC Format Check</label>
                 <span class="text-xs text-muted">Optional</span>
               </div>
-              <input class="input" type="text" id="reg-cnic" placeholder="35201-1234567-1 (optional)" maxlength="15">
+              <input class="input" type="text" id="reg-cnic" placeholder="35201-1234567-1 (optional)" maxlength="15" autocomplete="off">
               <div id="cnic-error" class="text-xs mt-4" style="color: var(--danger); display: none;"></div>
               <p class="text-xs text-muted mt-4" style="font-size: 0.72rem;">
                 This check runs locally in your browser.
@@ -199,15 +207,15 @@
               <div id="reg-description-error" class="input-error-msg" style="display:none;" role="alert"></div>
             </div>
 
-            <!-- Simulated Document Verification Upload -->
+            <!-- Optional local document screening -->
             <div class="form-group mb-20">
               <label class="form-label">Document File Check <span class="text-muted text-xs font-normal">(optional)</span></label>
               <div style="border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; background: var(--surface-2);">
-                <input type="file" id="reg-file-upload" accept="image/*,.pdf" style="display:none;">
+                <input type="file" id="reg-file-upload" accept=".jpg,.jpeg,.png,.pdf" style="display:none;">
                 <button type="button" class="btn btn--outline btn--sm mb-8" id="btn-browse-file">Choose Document File</button>
                 <div id="file-name-display" class="text-xs text-muted" aria-live="polite">No document chosen (local check only)</div>
                 <p class="text-xs text-muted mt-4" style="font-size: 0.7rem;">
-                  Your browser checks PDF or image files up to 5 MB locally.
+                  Your browser checks JPG, PNG, or PDF files up to 2 MB locally. The server must re-check content before any future upload.
                 </p>
               </div>
             </div>
@@ -336,6 +344,7 @@
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/password_strength_helper.js"></script>
   <script src="js/module-register-shop.js"></script>
 </body>
 </html>

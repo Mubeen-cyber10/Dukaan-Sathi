@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobile = element('reg-phone');
   const email = element('reg-email');
   const password = element('reg-password');
+  const confirmPassword = element('reg-confirm-password');
   const cnic = element('reg-cnic');
   const description = element('reg-description');
   const fileInput = element('reg-file-upload');
@@ -51,9 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const valid = value.length >= 8 && value.length <= 64 && new TextEncoder().encode(value).length <= 72 &&
       kinds >= 3 && !/[<>\u0000-\u001f\u007f]/.test(value);
     const strength = element('reg-password-strength');
-    strength.textContent = value ? (valid ? 'Strength: ' + (kinds === 4 && value.length >= 12 ? 'Strong' : 'Good') : 'Strength: Weak') : '';
-    strength.style.color = valid ? 'var(--success)' : 'var(--warning)';
+    if (typeof checkPasswordStrength === 'function') {
+      const result = checkPasswordStrength(value);
+      strength.textContent = value ? 'Strength: ' + result.level + '. ' + result.message : '';
+      strength.style.color = result.level === 'Strong' ? 'var(--success)' :
+        result.level === 'Moderate' ? 'var(--warning)' : 'var(--danger)';
+    } else {
+      strength.textContent = 'Password checker file not found';
+      strength.style.color = 'var(--danger)';
+    }
     return valid;
+  }
+
+  function validateConfirmation() {
+    return showError('reg-confirm-password-error', confirmPassword.value === password.value && confirmPassword.value ? '' :
+      'Passwords must match.');
   }
 
   function validatePassword() {
@@ -92,7 +105,15 @@ document.addEventListener('DOMContentLoaded', () => {
   password.addEventListener('input', () => {
     showError('reg-password-error');
     updatePassword();
+    if (confirmPassword.value) validateConfirmation();
   });
+  confirmPassword.addEventListener('input', validateConfirmation);
+  for (const [field, buttonId] of [[password, 'reg-password-toggle'], [confirmPassword, 'reg-confirm-password-toggle']]) {
+    element(buttonId).addEventListener('click', () => {
+      field.type = field.type === 'password' ? 'text' : 'password';
+      element(buttonId).textContent = field.type === 'password' ? 'Show' : 'Hide';
+    });
+  }
   mobile.addEventListener('input', formatPhone);
   cnic.addEventListener('input', formatCnic);
   description.addEventListener('input', () => {
@@ -112,16 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
       setFileNotice('No document chosen (local check only)', 'var(--text-muted)');
       return;
     }
-    const typeAllowed = file.type === 'application/pdf' || file.type.startsWith('image/') ||
-      (!file.type && /\.(pdf|png|jpe?g|gif|webp|bmp|tiff?|heic)$/i.test(file.name));
-    const message = file.size > 5 * 1024 * 1024 ? 'File too large (maximum 5 MB).' :
-      !typeAllowed ? 'Choose a PDF or image file.' : '';
+    const extension = file.name.split('.').pop().toLowerCase();
+    const expectedType = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', pdf: 'application/pdf' }[extension];
+    const doubleExtension = /\.(?:exe|php|js|html?|bat|cmd|ps1|sh)\.(?:jpe?g|png|pdf)$/i.test(file.name);
+    const message = file.name.length > 100 ? 'Filename must be 100 characters or fewer.' :
+      file.size === 0 ? 'Choose a non-empty file.' :
+      file.size > 2 * 1024 * 1024 ? 'File is larger than 2 MB.' :
+      !expectedType || doubleExtension || file.type !== expectedType ? 'Unsupported file type. Allowed: JPG, PNG, PDF.' : '';
     if (message) {
       fileInput.value = '';
       setFileNotice(message, 'var(--danger)');
       return;
     }
-    setFileNotice('Checked: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)', 'var(--success)');
+    setFileNotice('Checked locally: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB). The server must re-check content.', 'var(--success)');
   });
 
   function showApplication(id, status) {
@@ -167,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showError('form-general-error');
     const valid = [
       checkName(), checkOwner(), checkAddress(), validatePhone(), validateCnic(),
-      validateEmail(), validatePassword(), checkDescription()
+      validateEmail(), validatePassword(), validateConfirmation(), checkDescription()
     ].every(Boolean);
     if (!valid) return;
     if (!terms.checked) {
@@ -188,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       password.value = '';
+      confirmPassword.value = '';
       updatePassword();
       const { shopId, status } = await request;
       showApplication(shopId, status);

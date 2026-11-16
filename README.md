@@ -29,7 +29,7 @@ Sign in at [the local login page](http://localhost:3000/login.html).
 - **Shop registration and approval** connects the registration form, admin queue, and public directory through SQLite. The directory lists active shops.
 - **Digital Khata** uses shop-scoped customers and an append-only ledger for credit sales and payments. Balance calculations run on the server.
 
-See [Activity 6](docs/ACTIVITY6.md) for the API, tests, and implementation limits. [Activity 2](docs/ACTIVITY2.md) and [Activity 3](docs/ACTIVITY3.md) document the earlier prototype.
+See [Activity 5](docs/ACTIVITY5.md) for frontend validation, file checks, and password feedback. See [Activity 6](docs/ACTIVITY6.md) for the API, tests, and implementation limits. [Activity 2](docs/ACTIVITY2.md) and [Activity 3](docs/ACTIVITY3.md) document the earlier prototype.
 
 ---
 
