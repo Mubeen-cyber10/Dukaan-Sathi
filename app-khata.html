@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Khata – Dukaan Saathi App</title>
   <meta name="description" content="Tamper-evident credit ledger management.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
@@ -27,7 +28,7 @@
 
         <div style="padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm);" class="mb-16">
           <div class="text-xs text-muted">ACTIVE SHOP</div>
-          <div class="font-bold text-sm">Bismillah General Store</div>
+          <div class="font-bold text-sm" id="khata-shop-name">Your shop</div>
           <div class="badge badge--role mt-4">Shop Owner</div>
         </div>
 
@@ -55,7 +56,7 @@
         </nav>
       </div>
 
-      <div class="text-xs text-muted text-center">Multan Tenant Isolated &bull; v2.4</div>
+      <div class="text-xs text-muted text-center">Dukaan Saathi &bull; v2.4</div>
     </aside>
 
     <!-- MAIN APP CONTENT -->
@@ -72,8 +73,8 @@
           </button>
           <div class="user-menu-wrapper">
             <button class="user-menu-trigger flex items-center gap-8 btn btn--ghost" style="padding: 4px 8px;">
-              <div class="avatar" style="width:34px; height:34px; font-size:0.8rem;">HA</div>
-              <span class="text-sm font-semibold" id="khata-topbar-user">Hamza Ali</span>
+              <div class="avatar" id="khata-user-avatar" style="width:34px; height:34px; font-size:0.8rem;"></div>
+              <span class="text-sm font-semibold" id="khata-topbar-user">Shop Owner</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown">
@@ -107,12 +108,13 @@
                 <option value="name-asc">Name A-Z</option>
               </select>
 
-              <button class="btn btn--primary" id="btn-open-new-entry">+ New Entry</button>
+              <button class="btn btn--outline" id="btn-open-new-customer">+ New Customer</button>
+              <button class="btn btn--primary" id="btn-open-new-entry" disabled>+ New Entry</button>
             </div>
           </div>
         </div>
 
-        <!-- SKELETON SHIMMER CONTAINER (Simulates 500ms load) -->
+        <!-- CUSTOMER LIST LOADING STATE -->
         <div id="skeleton-loader" class="flex flex-col gap-12 mb-24">
           <div class="skeleton" style="height: 54px;"></div>
           <div class="skeleton" style="height: 54px;"></div>
@@ -148,8 +150,8 @@
           <div class="brand-icon mb-16" style="margin: 0 auto; width: 48px; height: 48px; background: var(--surface-2); color: var(--text-muted);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
-          <h3 class="font-bold text-lg mb-8">No Matching Customers Found</h3>
-          <p class="text-sm text-muted">Try adjusting your search query or filter chip selection.</p>
+          <h3 class="font-bold text-lg mb-8" id="khata-empty-title">No Matching Customers Found</h3>
+          <p class="text-sm text-muted" id="khata-empty-message">Try adjusting your search query or filter chip selection.</p>
         </div>
       </div>
     </main>
@@ -217,8 +219,8 @@
 
         <div class="form-group">
           <label class="form-label" for="entry-amount">Amount (PKR)</label>
-          <input class="input tabular-nums" type="number" id="entry-amount" placeholder="e.g. 1500" min="1" max="500000">
-          <div class="input-error-msg hidden" id="entry-amount-err">Enter a valid positive amount up to Rs. 500,000</div>
+          <input class="input tabular-nums" type="number" id="entry-amount" placeholder="e.g. 1500" min="1" max="500000" step="1">
+          <div class="input-error-msg hidden" id="entry-amount-err">Enter a whole amount from Rs. 1 to Rs. 500,000.</div>
         </div>
 
         <div class="form-group">
@@ -247,6 +249,28 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="modal-customer-backdrop">
+    <form class="modal" id="new-customer-form">
+      <div class="modal-header">
+        <h3 class="font-bold text-lg">Add Customer</h3>
+        <button type="button" class="btn btn--icon" id="btn-close-customer-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="customer-name">Customer Name</label>
+          <input class="input" id="customer-name" minlength="2" maxlength="50" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="customer-phone">Pakistani Mobile Number</label>
+          <input class="input" id="customer-phone" type="tel" pattern="03[0-9]{2}-?[0-9]{7}" placeholder="0300-1234567" maxlength="12" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary" id="btn-save-customer">Add Customer</button>
+      </div>
+    </form>
+  </div>
+
   <!-- MOBILE BOTTOM TAB BAR -->
   <nav class="mobile-tab-bar">
     <a href="app-dashboard.html" class="tab-item">
@@ -272,365 +296,7 @@
   </nav>
 
   <script src="js/data.js"></script>
-  <script src="js/audit.js"></script>
   <script src="js/ui.js"></script>
-  <script>
-    let customers = DS_DATA.getCustomers();
-    let currentFilter = 'all';
-    let currentSort = 'due-desc';
-    let searchQuery = '';
-    let selectedType = 'credit'; // 'credit' | 'payment'
-    let modalStep = 1;
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (!await DS_AUTH.ready) return;
-      const user = DS_AUTH.getUser();
-      if (user && document.getElementById('khata-topbar-user')) {
-        document.getElementById('khata-topbar-user').textContent = user.name;
-      }
-
-      // Check URL Query Parameters (e.g. ?filter=due or ?openModal=true)
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('filter')) {
-        currentFilter = params.get('filter');
-        document.querySelectorAll('#khata-chips .chip').forEach(c => {
-          if (c.getAttribute('data-filter') === currentFilter) {
-            c.classList.add('chip--active');
-          } else {
-            c.classList.remove('chip--active');
-          }
-        });
-      }
-
-      // Simulate 500ms Skeleton Loader
-      setTimeout(() => {
-        document.getElementById('skeleton-loader').classList.add('hidden');
-        document.getElementById('table-wrapper').classList.remove('hidden');
-        document.getElementById('mobile-cards').classList.remove('hidden');
-        renderCustomerList();
-
-        if (params.get('openModal') === 'true') {
-          openNewEntryModal();
-        }
-      }, 500);
-
-      // Event Listeners for Toolbar
-      document.getElementById('khata-search').addEventListener('input', (e) => {
-        searchQuery = e.target.value.toLowerCase().trim();
-        renderCustomerList();
-      });
-
-      document.querySelectorAll('#khata-chips .chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#khata-chips .chip').forEach(c => c.classList.remove('chip--active'));
-          btn.classList.add('chip--active');
-          currentFilter = btn.getAttribute('data-filter');
-          renderCustomerList();
-        });
-      });
-
-      document.getElementById('khata-sort').addEventListener('change', (e) => {
-        currentSort = e.target.value;
-        renderCustomerList();
-      });
-
-      document.getElementById('btn-open-new-entry').addEventListener('click', openNewEntryModal);
-      document.getElementById('btn-close-drawer').addEventListener('click', closeDrawer);
-      document.getElementById('drawer-backdrop').addEventListener('click', closeDrawer);
-      document.getElementById('btn-close-entry-modal').addEventListener('click', closeNewEntryModal);
-      document.getElementById('modal-entry-backdrop').addEventListener('click', (e) => {
-        if (e.target.id === 'modal-entry-backdrop') closeNewEntryModal();
-      });
-
-      // Segmented Type Selector inside Modal
-      document.getElementById('type-credit').addEventListener('click', () => {
-        selectedType = 'credit';
-        document.getElementById('type-credit').classList.add('chip--active');
-        document.getElementById('type-payment').classList.remove('chip--active');
-      });
-      document.getElementById('type-payment').addEventListener('click', () => {
-        selectedType = 'payment';
-        document.getElementById('type-payment').classList.add('chip--active');
-        document.getElementById('type-credit').classList.remove('chip--active');
-      });
-
-      // Character counter
-      document.getElementById('entry-note').addEventListener('input', (e) => {
-        document.getElementById('note-counter').textContent = `${e.target.value.length} / 120`;
-      });
-
-      // Next / Confirm Button Click
-      document.getElementById('btn-entry-next-confirm').addEventListener('click', handleModalNextConfirm);
-      document.getElementById('btn-entry-back-cancel').addEventListener('click', handleModalBackCancel);
-    });
-
-    function renderCustomerList() {
-      let filtered = customers.filter(c => {
-        const matchesSearch = c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery);
-        if (!matchesSearch) return false;
-        if (currentFilter === 'due') return c.balance > 0;
-        if (currentFilter === 'settled') return c.balance === 0;
-        return true;
-      });
-
-      if (currentSort === 'due-desc') filtered.sort((a,b) => b.balance - a.balance);
-      else if (currentSort === 'recent') filtered.sort((a,b) => b.lastActivity.localeCompare(a.lastActivity));
-      else if (currentSort === 'name-asc') filtered.sort((a,b) => a.name.localeCompare(b.name));
-
-      const emptyState = document.getElementById('khata-empty-state');
-      if (!filtered.length) {
-        emptyState.classList.remove('hidden');
-        document.getElementById('table-wrapper').classList.add('hidden');
-        document.getElementById('mobile-cards').classList.add('hidden');
-        return;
-      }
-      emptyState.classList.add('hidden');
-      document.getElementById('table-wrapper').classList.remove('hidden');
-      document.getElementById('mobile-cards').classList.remove('hidden');
-
-      // Desktop Table Render - completely XSS-safe via escapeHtml
-      const tbody = document.getElementById('khata-tbody');
-      tbody.innerHTML = filtered.map(c => `
-        <tr onclick="openDrawer(${c.id})">
-          <td>
-            <div class="flex items-center gap-12">
-              <div class="avatar">${escapeHtml(getInitials(c.name))}</div>
-              <span class="font-bold">${escapeHtml(c.name)}</span>
-            </div>
-          </td>
-          <td class="text-muted text-sm">${escapeHtml(c.phone)}</td>
-          <td class="text-muted text-sm">${escapeHtml(c.lastActivity)}</td>
-          <td>
-            ${c.balance > 0 
-              ? `<span class="badge badge--due tabular-nums">${escapeHtml(formatMoney(c.balance))} due</span>` 
-              : `<span class="badge badge--settled">Settled</span>`}
-          </td>
-          <td><button class="btn btn--ghost btn--sm" style="color:var(--primary);">View Ledger &rarr;</button></td>
-        </tr>
-      `).join('');
-
-      // Mobile Cards Render - safe
-      const mobileCards = document.getElementById('mobile-cards');
-      mobileCards.innerHTML = filtered.map(c => `
-        <div class="card card--interactive" onclick="openDrawer(${c.id})">
-          <div class="flex justify-between items-center mb-8">
-            <div class="flex items-center gap-10">
-              <div class="avatar">${escapeHtml(getInitials(c.name))}</div>
-              <div>
-                <div class="font-bold text-sm">${escapeHtml(c.name)}</div>
-                <div class="text-xs text-muted">${escapeHtml(c.phone)}</div>
-              </div>
-            </div>
-            ${c.balance > 0 
-              ? `<span class="badge badge--due tabular-nums">${escapeHtml(formatMoney(c.balance))} due</span>` 
-              : `<span class="badge badge--settled">Settled</span>`}
-          </div>
-          <div class="text-xs text-muted">Last activity: ${escapeHtml(c.lastActivity)}</div>
-        </div>
-      `).join('');
-    }
-
-    /* SLIDE-OVER TIMELINE DRAWER */
-    let currentDrawerCustomer = null;
-    let phoneHideTimer = null;
-
-    function openDrawer(id) {
-      const c = customers.find(item => item.id === id);
-      if (!c) return;
-      currentDrawerCustomer = c;
-
-      if (phoneHideTimer) clearTimeout(phoneHideTimer);
-
-      document.getElementById('drawer-name').textContent = c.name;
-      document.getElementById('drawer-phone').textContent = c.phone; // Masked by default
-      document.getElementById('drawer-balance').textContent = c.balance > 0 ? `${formatMoney(c.balance)} due` : 'Settled (Rs. 0)';
-      document.getElementById('drawer-balance').style.color = c.balance > 0 ? 'var(--danger)' : 'var(--success)';
-
-      // Hook reveal button
-      const revealBtn = document.getElementById('btn-reveal-phone');
-      revealBtn.textContent = 'Reveal (10s)';
-      revealBtn.onclick = () => {
-        if (!currentDrawerCustomer) return;
-        document.getElementById('drawer-phone').textContent = currentDrawerCustomer.fullPhone || currentDrawerCustomer.phone;
-        revealBtn.textContent = 'Revealed (10s)';
-        
-        // Audit log the unmask event
-        DS_AUDIT.log('PHONE_UNMASKED', `Shop owner revealed full phone number for customer: ${currentDrawerCustomer.name}`);
-        showToast('Customer phone unmasked for 10 seconds. Action logged in audit chain.', 'primary');
-
-        if (phoneHideTimer) clearTimeout(phoneHideTimer);
-        phoneHideTimer = setTimeout(() => {
-          document.getElementById('drawer-phone').textContent = currentDrawerCustomer.phone;
-          revealBtn.textContent = 'Reveal (10s)';
-        }, 10000);
-      };
-
-      const timeline = document.getElementById('drawer-timeline');
-      timeline.innerHTML = '';
-      c.entries.slice().reverse().forEach(e => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-
-        const dot = document.createElement('div');
-        dot.className = `timeline-dot ${e.type === 'credit' ? 'timeline-dot--danger' : 'timeline-dot--success'}`;
-
-        const card = document.createElement('div');
-        card.className = 'timeline-card';
-
-        const rowTop = document.createElement('div');
-        rowTop.className = 'flex justify-between items-center mb-4';
-
-        const typeSpan = document.createElement('span');
-        typeSpan.className = 'font-bold text-sm';
-        typeSpan.textContent = e.type === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)';
-
-        const amountSpan = document.createElement('span');
-        amountSpan.className = 'font-extrabold tabular-nums text-sm';
-        amountSpan.style.color = e.type === 'credit' ? 'var(--danger)' : 'var(--success)';
-        amountSpan.textContent = formatMoney(e.amount);
-
-        rowTop.appendChild(typeSpan);
-        rowTop.appendChild(amountSpan);
-
-        const noteDiv = document.createElement('div');
-        noteDiv.className = 'text-xs text-muted mb-4';
-        noteDiv.textContent = e.note || 'No transaction note'; // Safe textContent prevents XSS!
-
-        const rowBot = document.createElement('div');
-        rowBot.className = 'flex justify-between items-center text-xs text-muted';
-
-        const metaSpan = document.createElement('span');
-        metaSpan.textContent = `${e.date} • ${e.recordedBy}`;
-
-        const balSpan = document.createElement('span');
-        balSpan.className = 'tabular-nums';
-        balSpan.textContent = `Bal: ${formatMoney(e.runningBalance)}`;
-
-        rowBot.appendChild(metaSpan);
-        rowBot.appendChild(balSpan);
-
-        card.appendChild(rowTop);
-        card.appendChild(noteDiv);
-        card.appendChild(rowBot);
-
-        item.appendChild(dot);
-        item.appendChild(card);
-        timeline.appendChild(item);
-      });
-
-      document.getElementById('drawer-backdrop').classList.add('drawer-backdrop--open');
-      document.getElementById('customer-drawer').classList.add('drawer--open');
-    }
-
-    function closeDrawer() {
-      document.getElementById('drawer-backdrop').classList.remove('drawer-backdrop--open');
-      document.getElementById('customer-drawer').classList.remove('drawer--open');
-    }
-
-    /* 2-STEP NEW ENTRY MODAL */
-    function openNewEntryModal() {
-      modalStep = 1;
-      const select = document.getElementById('entry-customer-select');
-      select.innerHTML = '';
-      customers.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.textContent = `${c.name} (${c.phone})`;
-        select.appendChild(opt);
-      });
-      document.getElementById('entry-amount').value = '';
-      document.getElementById('entry-note').value = '';
-      document.getElementById('note-counter').textContent = '0 / 120';
-      document.getElementById('entry-amount-err').classList.add('hidden');
-
-      showModalStep(1);
-      document.getElementById('modal-entry-backdrop').classList.add('modal-backdrop--open');
-    }
-
-    function closeNewEntryModal() {
-      document.getElementById('modal-entry-backdrop').classList.remove('modal-backdrop--open');
-    }
-
-    function showModalStep(step) {
-      modalStep = step;
-      if (step === 1) {
-        document.getElementById('modal-entry-title').textContent = 'Record New Khata Entry';
-        document.getElementById('entry-step-1').classList.remove('hidden');
-        document.getElementById('entry-step-2').classList.add('hidden');
-        document.getElementById('btn-entry-back-cancel').textContent = 'Cancel';
-        document.getElementById('btn-entry-next-confirm').textContent = 'Review Entry \u2192';
-      } else {
-        document.getElementById('modal-entry-title').textContent = 'Confirm Transaction';
-        document.getElementById('entry-step-1').classList.add('hidden');
-        document.getElementById('entry-step-2').classList.remove('hidden');
-
-        const custId = parseInt(document.getElementById('entry-customer-select').value, 10);
-        const cust = customers.find(c => c.id === custId);
-        const amount = parseFloat(document.getElementById('entry-amount').value);
-        const note = document.getElementById('entry-note').value.trim();
-
-        document.getElementById('confirm-badge').textContent = selectedType === 'credit' ? '+ Credit Sale (Give)' : '- Payment Received (Get)';
-        document.getElementById('confirm-badge').className = `badge ${selectedType === 'credit' ? 'badge--due' : 'badge--settled'} mb-12`;
-        document.getElementById('confirm-amount-display').textContent = formatMoney(amount);
-        document.getElementById('confirm-customer-display').textContent = cust ? cust.name : '';
-        document.getElementById('confirm-note-display').textContent = note ? `Note: ${note}` : 'No note provided';
-
-        document.getElementById('btn-entry-back-cancel').textContent = '\u2190 Back';
-        document.getElementById('btn-entry-next-confirm').textContent = 'Confirm & Lock Entry';
-      }
-    }
-
-    function handleModalNextConfirm() {
-      if (modalStep === 1) {
-        const amountVal = parseFloat(document.getElementById('entry-amount').value);
-        if (!amountVal || amountVal <= 0 || amountVal > 500000) {
-          document.getElementById('entry-amount-err').classList.remove('hidden');
-          return;
-        }
-        document.getElementById('entry-amount-err').classList.add('hidden');
-        showModalStep(2);
-      } else {
-        // Submit entry
-        const custId = parseInt(document.getElementById('entry-customer-select').value, 10);
-        const cust = customers.find(c => c.id === custId);
-        const amount = parseFloat(document.getElementById('entry-amount').value);
-        const note = document.getElementById('entry-note').value.trim();
-        const now = new Date().toISOString().split('T')[0];
-
-        if (selectedType === 'credit') {
-          cust.balance += amount;
-        } else {
-          cust.balance = Math.max(0, cust.balance - amount);
-        }
-        cust.lastActivity = now;
-
-        const newEntry = {
-          id: Date.now(),
-          date: now,
-          type: selectedType,
-          amount: amount,
-          note: note,
-          runningBalance: cust.balance,
-          recordedBy: 'Shop Owner'
-        };
-        cust.entries.push(newEntry);
-
-        DS_DATA.saveCustomers(customers);
-        DS_DATA.addAudit(`${selectedType === 'credit' ? 'Credit sale' : 'Payment'} ${formatMoney(amount)} logged for ${cust.name}`);
-
-        closeNewEntryModal();
-        renderCustomerList();
-        showToast(`${selectedType === 'credit' ? 'Credit sale' : 'Payment'} ${formatMoney(amount)} recorded successfully!`, 'success');
-      }
-    }
-
-    function handleModalBackCancel() {
-      if (modalStep === 2) {
-        showModalStep(1);
-      } else {
-        closeNewEntryModal();
-      }
-    }
-  </script>
+  <script src="js/module-khata.js"></script>
 </body>
 </html>
