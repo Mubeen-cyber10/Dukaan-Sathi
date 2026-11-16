@@ -2,13 +2,16 @@
   "name": "dukaan-saathi",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "setup": "node db/setup.js --env",
     "db:setup": "node db/setup.js",
     "db:backup": "node db/backup.js",
     "start": "node server/app.js",
-    "test": "node --test tests/api.test.js"
+    "test": "node --test tests/api.test.js",
+    "package:submission": "node scripts/make-submission.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -20,5 +23,8 @@
   },
   "optionalDependencies": {
     "better-sqlite3": "^11.10.0"
+  },
+  "devDependencies": {
+    "archiver": "^8.0.0"
   }
 }

@@ -1,0 +1,44 @@
+
+> dukaan-saathi@1.0.0 test
+> node --test tests/api.test.js
+
+✔ 01 Owner and admin login issue 30-minute HS256 JWTs (630.7974ms)
+✔ 02 Wrong password returns generic invalid credentials (304.0507ms)
+✔ 03 SQL injection regression fixtures cannot sign in or expose shop data (284.286ms)
+✔ 04 A valid token can load the current user (2.6456ms)
+✔ 05 Protected API requires a token (2.1531ms)
+✔ 06 A garbage token receives the generic authentication error (2.5372ms)
+✔ 07 Editing a token payload invalidates its signature (3.6118ms)
+✔ 08 An unsigned alg=none token is rejected (2.2848ms)
+✔ 09 An expired HS256 token is rejected (3.2148ms)
+✔ 10 An owner cannot change an admin shop status (20.9253ms)
+✔ 11 Khata routes deny the admin role (24.6901ms)
+✔ 12 Khata enforces tenant isolation on listings, ledgers, reveals and writes (319.4678ms)
+✔ 13 Validation rejects empty names, long notes, invalid amounts and unknown fields (12.4037ms)
+✔ 14 Credit and payment persist with correct running balances (24.1225ms)
+✔ 15 SQLite rejects updates and deletes on the append-only tables (1.6007ms)
+✔ 16 Registration stays private and blocks login until admin approval (1336.2925ms)
+Request failed: Error: database is not open
+    at C:\Users\alfat\Downloads\Dukaan-Sathi-main\server\routes\shops.js:60:37
+    at Layer.handleRequest (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\index.js:295:15
+    at processParams (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\index.js:582:12)
+    at next (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\index.js:291:5)
+    at router.handle (C:\Users\alfat\Downloads\Dukaan-Sathi-main\node_modules\router\index.js:186:3) {
+  code: 'ERR_INVALID_STATE'
+}
+✔ 17 A forced database failure returns a generic 500 response (10.9161ms)
+✔ 18 Static whitelist returns 404 for configuration and backend files (28.6558ms)
+✔ 19 Five failed passwords lock the account for five minutes (1859.155ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7833.4123
