@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop Directory & Approvals – Super Admin</title>
   <meta name="description" content="Super Admin shop onboarding, verification and merchant suspension.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
   <script src="js/api.js"></script>
@@ -106,7 +107,7 @@
         <!-- HEADER -->
         <div class="mb-24">
           <h1 class="text-3xl font-extrabold">Merchant Shops & Approvals</h1>
-          <p class="text-muted text-sm mt-4">Approve new tenant registrations, review KYC credentials, and enforce platform compliance.</p>
+          <p class="text-muted text-sm mt-4">Review new applications and manage shop access.</p>
         </div>
 
         <!-- SEPARATION OF DUTIES CALLOUT NOTICE -->
@@ -129,7 +130,7 @@
           <div class="flex justify-between items-center flex-wrap gap-16">
             <div class="chip-group" id="shop-filter-chips">
               <button class="chip chip--active" data-status="all">All Shops (<span id="count-all">0</span>)</button>
-              <button class="chip" data-status="Pending Approval">Pending (<span id="count-pending">0</span>)</button>
+              <button class="chip" data-status="Pending">Pending (<span id="count-pending">0</span>)</button>
               <button class="chip" data-status="Active">Active (<span id="count-active">0</span>)</button>
               <button class="chip" data-status="Suspended">Suspended (<span id="count-suspended">0</span>)</button>
             </div>
@@ -147,8 +148,8 @@
               <tr>
                 <th>Dukaan Name & City</th>
                 <th>Owner Name</th>
-                <th>KYC Documents</th>
-                <th>Plan Tier</th>
+                <th>Owner Mobile</th>
+                <th>Category</th>
                 <th>Joined Date</th>
                 <th>Status</th>
                 <th>Admin Actions</th>
@@ -181,17 +182,18 @@
           <span class="badge" id="drawer-shop-status">Active</span>
         </div>
         <div class="flex justify-between items-center mb-8">
-          <span class="text-xs text-muted">Subscription Tier:</span>
-          <span class="badge badge--role" id="drawer-shop-plan">Standard</span>
+          <span class="text-xs text-muted">Category:</span>
+          <span class="badge badge--role" id="drawer-shop-category"></span>
         </div>
         <div class="flex justify-between items-center mb-8">
           <span class="text-xs text-muted">Merchant Owner:</span>
           <span class="text-sm font-semibold" id="drawer-shop-owner">Hamza Ali</span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-xs text-muted">Identity Verification:</span>
-          <span class="badge badge--settled" id="drawer-shop-doc">CNIC: Verified</span>
+          <span class="text-xs text-muted">Owner Mobile:</span>
+          <span class="text-sm font-semibold" id="drawer-shop-phone"></span>
         </div>
+        <p class="text-xs text-muted mt-8" id="drawer-reject-reason"></p>
       </div>
 
       <div class="card mb-20" style="border: 1px dashed var(--border);">
@@ -219,7 +221,7 @@
         <input type="hidden" id="reject-shop-id">
         <div class="form-group">
           <label class="form-label" for="reject-reason">Mandatory Rejection Justification</label>
-          <textarea class="input" id="reject-reason" rows="3" placeholder="Provide reason for rejection (e.g. Incomplete business address or unverified KYC)..."></textarea>
+          <textarea class="input" id="reject-reason" rows="3" maxlength="250" placeholder="Provide reason for rejection (e.g. incomplete business address)..."></textarea>
           <div class="input-error-msg hidden" id="err-reject-reason">A rejection justification reason is mandatory.</div>
         </div>
         <p class="text-xs text-muted">This action will be permanently recorded in the SHA-256 tamper-evident audit log.</p>
@@ -245,7 +247,7 @@
         </p>
         <div class="form-group">
           <label class="form-label" for="suspend-reason">Suspension Reason</label>
-          <input class="input" type="text" id="suspend-reason" placeholder="e.g. Unresolved policy violation or dispute spike">
+          <input class="input" type="text" id="suspend-reason" maxlength="250" placeholder="e.g. Unresolved policy violation or dispute spike">
         </div>
       </div>
       <div class="modal-footer">
@@ -255,298 +257,180 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/shops-store.js"></script>
-  <script src="js/audit.js"></script>
   <script src="js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       if (!await DS_AUTH.ready) return;
-      let shops = DS_DATA.getShops();
-      let currentFilter = 'all';
+      const element = id => document.getElementById(id);
+      const body = element('shops-tbody');
+      const chips = [...document.querySelectorAll('#shop-filter-chips .chip')];
+      const statusParam = new URLSearchParams(location.search).get('status');
+      const initialFilter = statusParam === 'Pending Approval' ? 'Pending' : statusParam;
+      let currentFilter = chips.some(chip => chip.dataset.status === initialFilter) ? initialFilter : 'all';
       let searchQuery = '';
-      let selectedShop = null;
+      let shops = [];
+      let updating = false;
+      let loaded = false;
 
-      // Handle query param filter (e.g. from dashboard KPI card)
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('status')) {
-        currentFilter = params.get('status');
-        document.querySelectorAll('#shop-filter-chips .chip').forEach(c => {
-          if (c.getAttribute('data-status') === currentFilter) c.classList.add('chip--active');
-          else c.classList.remove('chip--active');
-        });
+      function node(tag, className, text = '') {
+        const item = document.createElement(tag);
+        item.className = className;
+        item.textContent = text;
+        return item;
       }
 
-      function updateCounts() {
-        shops = DS_DATA.getShops();
-        document.getElementById('count-all').textContent = shops.length;
-        document.getElementById('count-pending').textContent = shops.filter(s => s.status === 'Pending Approval').length;
-        document.getElementById('count-active').textContent = shops.filter(s => s.status === 'Active').length;
-        document.getElementById('count-suspended').textContent = shops.filter(s => s.status === 'Suspended').length;
+      function badgeClass(status) {
+        return 'badge ' + (status === 'Active' ? 'badge--settled' :
+          status === 'Pending' ? 'badge--warning' : 'badge--due');
+      }
+
+      function button(text, style, action, inDrawer = false) {
+        const result = node('button', 'btn btn--' + style + (inDrawer ? ' w-full' : ' btn--sm'), text);
+        result.type = 'button';
+        result.addEventListener('click', () => action(result));
+        return result;
+      }
+
+      function actionButtons(shop, inDrawer = false) {
+        if (shop.status === 'Active') {
+          return [button('Suspend', 'outline', () => openStatusModal('suspend', shop.id), inDrawer)];
+        }
+        const approve = button(shop.status === 'Pending' ? 'Approve' : 'Reactivate', 'primary', async control => {
+          if (await changeStatus(shop.id, 'Active', undefined, control)) closeShopDrawer();
+        }, inDrawer);
+        const actions = [approve];
+        if (shop.status === 'Pending') {
+          actions.push(button('Reject', 'outline', () => openStatusModal('reject', shop.id), inDrawer));
+        }
+        return actions;
       }
 
       function renderShops() {
-        updateCounts();
-        const tbody = document.getElementById('shops-tbody');
-        tbody.innerHTML = '';
-
-        const filtered = shops.filter(s => {
-          const matchesStatus = (currentFilter === 'all') || (s.status === currentFilter);
-          const matchesSearch = s.name.toLowerCase().includes(searchQuery) ||
-                                s.city.toLowerCase().includes(searchQuery) ||
-                                s.owner.toLowerCase().includes(searchQuery);
-          return matchesStatus && matchesSearch;
-        });
-
-        if (filtered.length === 0) {
-          const emptyRow = document.createElement('tr');
-          const td = document.createElement('td');
-          td.colSpan = 7;
-          td.className = 'text-center text-muted';
-          td.style.padding = '32px';
-          td.textContent = 'No merchant shops match the selected filter criteria.';
-          emptyRow.appendChild(td);
-          tbody.appendChild(emptyRow);
-          return;
+        element('count-all').textContent = shops.length;
+        for (const status of ['Pending', 'Active', 'Suspended']) {
+          element('count-' + status.toLowerCase()).textContent = shops.filter(shop => shop.status === status).length;
         }
-
-        filtered.forEach(shop => {
+        for (const chip of chips) {
+          const selected = chip.dataset.status === currentFilter;
+          chip.classList.toggle('chip--active', selected);
+          chip.setAttribute('aria-pressed', String(selected));
+        }
+        const rows = shops.filter(shop => {
+          const statusMatch = currentFilter === 'all' || shop.status === currentFilter;
+          return statusMatch && [shop.name, shop.city, shop.owner_name].some(value => value.toLowerCase().includes(searchQuery));
+        }).map(shop => {
           const tr = document.createElement('tr');
-
-          // Dukaan & City
-          const tdName = document.createElement('td');
-          const nameDiv = document.createElement('div');
-          nameDiv.className = 'font-bold';
-          nameDiv.textContent = shop.name;
-          const cityDiv = document.createElement('div');
-          cityDiv.className = 'text-xs text-muted';
-          cityDiv.textContent = `${shop.city}, Pakistan`;
-          tdName.appendChild(nameDiv);
-          tdName.appendChild(cityDiv);
-
-          // Owner
-          const tdOwner = document.createElement('td');
-          tdOwner.textContent = shop.owner;
-
-          // Document Status (words only, never actual numbers)
-          const tdDoc = document.createElement('td');
-          const docBadge = document.createElement('span');
-          docBadge.className = `badge ${shop.documentStatus === 'CNIC: Verified' ? 'badge--settled' : shop.documentStatus === 'CNIC: Rejected' ? 'badge--due' : 'badge--warning'}`;
-          docBadge.textContent = shop.documentStatus || 'CNIC: Verified';
-          tdDoc.appendChild(docBadge);
-
-          // Plan
-          const tdPlan = document.createElement('td');
-          const planBadge = document.createElement('span');
-          planBadge.className = 'badge badge--role';
-          planBadge.textContent = shop.plan;
-          tdPlan.appendChild(planBadge);
-
-          // Joined Date
-          const tdDate = document.createElement('td');
-          tdDate.className = 'text-sm text-muted';
-          tdDate.textContent = shop.joinedDate;
-
-          // Status Badge
-          const tdStatus = document.createElement('td');
-          const statusBadge = document.createElement('span');
-          statusBadge.className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending Approval' ? 'badge--warning' : 'badge--due'}`;
-          statusBadge.textContent = shop.status;
-          tdStatus.appendChild(statusBadge);
-
-          // Action Buttons
-          const tdActions = document.createElement('td');
-          const actionGroup = document.createElement('div');
-          actionGroup.className = 'flex gap-8';
-
-          const btnDetails = document.createElement('button');
-          btnDetails.className = 'btn btn--ghost btn--sm';
-          btnDetails.textContent = 'Details';
-          btnDetails.addEventListener('click', () => openShopDrawer(shop));
-          actionGroup.appendChild(btnDetails);
-
-          if (shop.status === 'Pending Approval') {
-            const btnApprove = document.createElement('button');
-            btnApprove.className = 'btn btn--primary btn--sm';
-            btnApprove.textContent = 'Approve';
-            btnApprove.addEventListener('click', () => {
-              DS_AUTH.approveShop(shop.id);
-              renderShops();
-            });
-
-            const btnReject = document.createElement('button');
-            btnReject.className = 'btn btn--outline btn--sm';
-            btnReject.textContent = 'Reject';
-            btnReject.style.color = 'var(--danger)';
-            btnReject.addEventListener('click', () => openRejectModal(shop.id));
-
-            actionGroup.appendChild(btnApprove);
-            actionGroup.appendChild(btnReject);
-          } else if (shop.status === 'Active') {
-            const btnSuspend = document.createElement('button');
-            btnSuspend.className = 'btn btn--outline btn--sm';
-            btnSuspend.textContent = 'Suspend';
-            btnSuspend.style.color = 'var(--danger)';
-            btnSuspend.addEventListener('click', () => openSuspendModal(shop.id));
-            actionGroup.appendChild(btnSuspend);
-          } else if (shop.status === 'Suspended' || shop.status === 'Rejected') {
-            const btnRestore = document.createElement('button');
-            btnRestore.className = 'btn btn--outline btn--sm';
-            btnRestore.textContent = 'Reactivate';
-            btnRestore.addEventListener('click', () => {
-              DS_AUTH.approveShop(shop.id);
-              renderShops();
-            });
-            actionGroup.appendChild(btnRestore);
-          }
-
-          tdActions.appendChild(actionGroup);
-
-          tr.appendChild(tdName);
-          tr.appendChild(tdOwner);
-          tr.appendChild(tdDoc);
-          tr.appendChild(tdPlan);
-          tr.appendChild(tdDate);
-          tr.appendChild(tdStatus);
-          tr.appendChild(tdActions);
-
-          tbody.appendChild(tr);
+          const name = document.createElement('td');
+          name.append(node('div', 'font-bold', shop.name), node('div', 'text-xs text-muted', shop.city + ', Pakistan'));
+          const status = document.createElement('td');
+          status.append(node('span', badgeClass(shop.status), shop.status));
+          const actions = document.createElement('td');
+          const group = node('div', 'flex gap-8');
+          group.append(button('Details', 'ghost', () => openShopDrawer(shop)), ...actionButtons(shop));
+          actions.append(group);
+          tr.append(name, node('td', '', shop.owner_name), node('td', '', shop.owner_phone),
+            node('td', '', shop.category), node('td', 'text-sm text-muted', shop.created_at.slice(0, 10)),
+            status, actions);
+          return tr;
         });
+        if (!rows.length) {
+          const row = document.createElement('tr');
+          const cell = node('td', 'text-center text-muted', loaded ?
+            'No merchant shops match the selected filters.' : 'Could not load the approval queue.');
+          cell.colSpan = 7;
+          cell.style.padding = '32px';
+          row.append(cell);
+          rows.push(row);
+        }
+        body.replaceChildren(...rows);
       }
 
-      // Shop Details Drawer
-      function openShopDrawer(shop) {
-        selectedShop = shop;
-        document.getElementById('drawer-shop-name').textContent = shop.name;
-        document.getElementById('drawer-shop-city').textContent = `${shop.city}, Pakistan`;
-        document.getElementById('drawer-shop-status').textContent = shop.status;
-        document.getElementById('drawer-shop-status').className = `badge ${shop.status === 'Active' ? 'badge--settled' : shop.status === 'Pending Approval' ? 'badge--warning' : 'badge--due'}`;
-        document.getElementById('drawer-shop-plan').textContent = shop.plan;
-        document.getElementById('drawer-shop-owner').textContent = shop.owner;
-        document.getElementById('drawer-shop-doc').textContent = shop.documentStatus || 'CNIC: Verified';
-
-        const btnContainer = document.getElementById('drawer-action-buttons');
-        btnContainer.innerHTML = '';
-
-        if (shop.status === 'Pending Approval') {
-          const btnApprove = document.createElement('button');
-          btnApprove.className = 'btn btn--primary w-full';
-          btnApprove.textContent = 'Approve Shop Registration';
-          btnApprove.addEventListener('click', () => {
-            DS_AUTH.approveShop(shop.id);
-            closeShopDrawer();
-            renderShops();
+      async function changeStatus(id, status, reason, control) {
+        if (updating) return false;
+        updating = true;
+        control.disabled = true;
+        try {
+          const changed = await apiFetch('/api/admin/shops/' + encodeURIComponent(id) + '/status', {
+            method: 'PATCH', body: { status, reason }
           });
-
-          const btnReject = document.createElement('button');
-          btnReject.className = 'btn btn--outline w-full';
-          btnReject.style.color = 'var(--danger)';
-          btnReject.textContent = 'Reject with Reason';
-          btnReject.addEventListener('click', () => {
-            closeShopDrawer();
-            openRejectModal(shop.id);
-          });
-
-          btnContainer.appendChild(btnApprove);
-          btnContainer.appendChild(btnReject);
-        } else if (shop.status === 'Active') {
-          const btnSuspend = document.createElement('button');
-          btnSuspend.className = 'btn btn--outline w-full';
-          btnSuspend.style.color = 'var(--danger)';
-          btnSuspend.textContent = 'Suspend Merchant Account';
-          btnSuspend.addEventListener('click', () => {
-            closeShopDrawer();
-            openSuspendModal(shop.id);
-          });
-          btnContainer.appendChild(btnSuspend);
-        } else {
-          const btnReactivate = document.createElement('button');
-          btnReactivate.className = 'btn btn--primary w-full';
-          btnReactivate.textContent = 'Reactivate Account';
-          btnReactivate.addEventListener('click', () => {
-            DS_AUTH.approveShop(shop.id);
-            closeShopDrawer();
-            renderShops();
-          });
-          btnContainer.appendChild(btnReactivate);
+          const shop = shops.find(item => item.id === changed.shopId);
+          shop.status = changed.status;
+          shop.reject_reason = changed.status === 'Rejected' ? reason.trim().replace(/\s+/g, ' ') : null;
+          renderShops();
+          showToast('Shop status updated to ' + changed.status + '.', 'success');
+          return true;
+        } catch (error) {
+          if (error.status !== 401) showToast(error.message, 'danger');
+          return false;
+        } finally {
+          updating = false;
+          control.disabled = false;
         }
+      }
 
-        document.getElementById('shop-drawer-backdrop').classList.add('drawer-backdrop--open');
-        document.getElementById('shop-drawer').classList.add('drawer--open');
+      function openShopDrawer(shop) {
+        element('drawer-shop-name').textContent = shop.name;
+        element('drawer-shop-city').textContent = shop.city + ', Pakistan';
+        element('drawer-shop-status').textContent = shop.status;
+        element('drawer-shop-status').className = badgeClass(shop.status);
+        element('drawer-shop-category').textContent = shop.category;
+        element('drawer-shop-owner').textContent = shop.owner_name;
+        element('drawer-shop-phone').textContent = shop.owner_phone;
+        element('drawer-reject-reason').textContent = shop.reject_reason ? 'Rejection reason: ' + shop.reject_reason : '';
+        element('drawer-action-buttons').replaceChildren(...actionButtons(shop, true));
+        element('shop-drawer-backdrop').classList.add('drawer-backdrop--open');
+        element('shop-drawer').classList.add('drawer--open');
       }
 
       function closeShopDrawer() {
-        document.getElementById('shop-drawer-backdrop').classList.remove('drawer-backdrop--open');
-        document.getElementById('shop-drawer').classList.remove('drawer--open');
+        element('shop-drawer-backdrop').classList.remove('drawer-backdrop--open');
+        element('shop-drawer').classList.remove('drawer--open');
       }
 
-      document.getElementById('btn-close-shop-drawer').addEventListener('click', closeShopDrawer);
-      document.getElementById('shop-drawer-backdrop').addEventListener('click', closeShopDrawer);
+      element('btn-close-shop-drawer').addEventListener('click', closeShopDrawer);
+      element('shop-drawer-backdrop').addEventListener('click', closeShopDrawer);
 
-      // Rejection Modal
-      function openRejectModal(id) {
-        document.getElementById('reject-shop-id').value = id;
-        document.getElementById('reject-reason').value = '';
-        document.getElementById('err-reject-reason').classList.add('hidden');
-        document.getElementById('modal-reject-backdrop').classList.add('modal-backdrop--open');
+      function openStatusModal(kind, id) {
+        closeShopDrawer();
+        element(kind + '-shop-id').value = id;
+        element(kind + '-reason').value = kind === 'suspend' ? 'Administrative suspension' : '';
+        element('err-reject-reason').classList.add('hidden');
+        element('modal-' + kind + '-backdrop').classList.add('modal-backdrop--open');
+        element(kind + '-reason').focus();
       }
 
-      function closeRejectModal() {
-        document.getElementById('modal-reject-backdrop').classList.remove('modal-backdrop--open');
+      for (const [kind, status] of [['reject', 'Rejected'], ['suspend', 'Suspended']]) {
+        const modal = element('modal-' + kind + '-backdrop');
+        const close = () => modal.classList.remove('modal-backdrop--open');
+        element('btn-close-' + kind + '-modal').addEventListener('click', close);
+        element('btn-cancel-' + kind).addEventListener('click', close);
+        element('btn-confirm-' + kind).addEventListener('click', async event => {
+          const reason = element(kind + '-reason').value.trim();
+          const missing = kind === 'reject' && !reason;
+          element('err-reject-reason').classList.toggle('hidden', !missing);
+          if (missing) return;
+          const id = element(kind + '-shop-id').value;
+          if (await changeStatus(id, status, reason, event.currentTarget)) close();
+        });
       }
 
-      document.getElementById('btn-close-reject-modal').addEventListener('click', closeRejectModal);
-      document.getElementById('btn-cancel-reject').addEventListener('click', closeRejectModal);
-      document.getElementById('btn-confirm-reject').addEventListener('click', () => {
-        const id = document.getElementById('reject-shop-id').value;
-        const reason = document.getElementById('reject-reason').value.trim();
-        if (!reason) {
-          document.getElementById('err-reject-reason').classList.remove('hidden');
-          return;
-        }
-        document.getElementById('err-reject-reason').classList.add('hidden');
-        DS_AUTH.rejectShop(id, reason);
-        closeRejectModal();
-        renderShops();
-      });
-
-      // Suspend Modal
-      function openSuspendModal(id) {
-        document.getElementById('suspend-shop-id').value = id;
-        document.getElementById('suspend-reason').value = 'Administrative suspension';
-        document.getElementById('modal-suspend-backdrop').classList.add('modal-backdrop--open');
-      }
-
-      function closeSuspendModal() {
-        document.getElementById('modal-suspend-backdrop').classList.remove('modal-backdrop--open');
-      }
-
-      document.getElementById('btn-close-suspend-modal').addEventListener('click', closeSuspendModal);
-      document.getElementById('btn-cancel-suspend').addEventListener('click', closeSuspendModal);
-      document.getElementById('btn-confirm-suspend').addEventListener('click', () => {
-        const id = document.getElementById('suspend-shop-id').value;
-        const reason = document.getElementById('suspend-reason').value.trim() || 'Administrative suspension';
-        DS_AUTH.suspendShop(id, reason);
-        closeSuspendModal();
-        renderShops();
-      });
-
-      // Filter Chips Listener
-      document.querySelectorAll('#shop-filter-chips .chip').forEach(chip => {
+      for (const chip of chips) {
         chip.addEventListener('click', () => {
-          document.querySelectorAll('#shop-filter-chips .chip').forEach(c => c.classList.remove('chip--active'));
-          chip.classList.add('chip--active');
-          currentFilter = chip.getAttribute('data-status');
+          currentFilter = chip.dataset.status;
           renderShops();
         });
-      });
-
-      // Search Listener
-      document.getElementById('shop-search').addEventListener('input', (e) => {
-        searchQuery = e.target.value.toLowerCase().trim();
+      }
+      element('shop-search').addEventListener('input', event => {
+        searchQuery = event.target.value.toLowerCase().trim();
         renderShops();
       });
 
+      try {
+        shops = await apiFetch('/api/admin/shops');
+        loaded = true;
+      } catch (error) {
+        if (error.status !== 401) showToast(error.message, 'danger');
+      }
       renderShops();
     });
   </script>
